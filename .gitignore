@@ -11,3 +11,11 @@ batch-app/markers/*
 /loadlib/
 /work/
 /datasets/
+
+# Java and operations console build/test artefacts
+java/**/target/
+ui/node_modules/
+ui/dist/
+ui/playwright-report/
+ui/test-results/
+ui/tsconfig.tsbuildinfo

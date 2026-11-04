@@ -87,3 +87,58 @@ baseline:
 reset:
 	rm -rf datasets loadlib work
 	$(COMPOSE) down -v
+
+# ------------------------------------------------------------ Java foundation
+JAVA_HOME ?= /usr/lib/jvm/java-21-openjdk-amd64
+export JAVA_HOME
+export PYTHONDONTWRITEBYTECODE := 1
+JAVA_COMPOSE = $(COMPOSE) -f docker-compose.yml -f docker-compose.java.yml
+
+.PHONY: java-db java-build test-unit parity-java java-run ui-install ui-dev ui-build test-functional test-all
+
+java-db:
+	$(JAVA_COMPOSE) up -d --wait db
+	@$(JAVA_COMPOSE) exec -T db sh -c 'psql -U carddemo -d postgres -tAc "SELECT 1 FROM pg_database WHERE datname='\''carddemo_java'\''" | grep -q 1 || createdb -U carddemo -O carddemo carddemo_java'
+
+java-build:
+	JAVA_HOME=$(JAVA_HOME) mvn -U -q -f java/pom.xml -DskipTests package
+
+test-unit:
+	@if $(JAVA_COMPOSE) exec -T db psql -U carddemo -d carddemo_java -c 'SELECT 1' >/dev/null 2>&1; then \
+	  CARDDEMO_DB_TESTS=true JAVA_HOME=$(JAVA_HOME) mvn -U -f java/pom.xml test; \
+	else \
+	  JAVA_HOME=$(JAVA_HOME) mvn -U -f java/pom.xml test; \
+	fi
+
+parity-java: java-db java-build
+	@set -e; \
+	handlers=$$(java -jar java/app/target/app-1.0.0-SNAPSHOT.jar --logging.level.root=OFF --carddemo.cli=list-chains); \
+	if [ -z "$$handlers" ] && [ -z "$(CHAIN)" ]; then echo "no Java chains registered yet"; exit 0; fi; \
+	mkdir -p work/parity; rm -f work/parity/report-java.md; \
+	output=$$(java -jar java/app/target/app-1.0.0-SNAPSHOT.jar --logging.level.root=OFF --carddemo.cli=run-all $(if $(CHAIN),--carddemo.chain=$(CHAIN),)); \
+	printf '%s\n' "$$output" > work/parity/java-cases.txt; \
+	passed=0; total=0; \
+	while IFS=' ' read -r chain case_name; do \
+	  [ -n "$$chain" ] || continue; \
+	  total=$$((total + 1)); \
+	  if $(PY) tools/parity/compare.py $$chain $$case_name --actual work/parity-java/$$chain/$$case_name/actual --label java --report work/parity/report-java.md; then passed=$$((passed + 1)); fi; \
+	done < work/parity/java-cases.txt; \
+	echo "$$passed/$$total cases passed"; \
+	test "$$passed" -eq "$$total"
+
+java-run: java-build
+	JAVA_HOME=$(JAVA_HOME) java -jar java/app/target/app-1.0.0-SNAPSHOT.jar
+
+ui-install:
+	cd ui && npm ci
+
+ui-dev:
+	cd ui && npm run dev -- --host 0.0.0.0
+
+ui-build:
+	cd ui && npm run build
+
+test-functional: java-db java-build ui-build
+	cd ui && npx playwright test $(if $(SLICE),e2e/$(SLICE).spec.ts,)
+
+test-all: java-db java-build test-unit ui-install ui-build test-functional parity-java

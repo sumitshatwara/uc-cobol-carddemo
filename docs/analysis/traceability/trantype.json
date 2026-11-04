@@ -1,0 +1,387 @@
+{
+  "BR-TRT-001": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt001_inpfileRecordLayout"
+    ]
+  },
+  "BR-TRT-002": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt002_shortCardsAreSpacePadded"
+    ]
+  },
+  "BR-TRT-003": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt003_sequentialReadLoop"
+    ]
+  },
+  "BR-TRT-004": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt004_processingEcho"
+    ]
+  },
+  "BR-TRT-005": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt005_openStatus"
+    ]
+  },
+  "BR-TRT-006": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt006_caseSensitiveDispatch"
+    ]
+  },
+  "BR-TRT-007": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt007_commentCardsAreSkipped"
+    ]
+  },
+  "BR-TRT-008": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt008_invalidActionSetsRc4"
+    ]
+  },
+  "BR-TRT-009": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt009_blankCardIsInvalid"
+    ]
+  },
+  "BR-TRT-010": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt010_addRows"
+    ]
+  },
+  "BR-TRT-011": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt011_dbPreservesDescriptionPadding"
+    ]
+  },
+  "BR-TRT-012": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt012_acceptsUnvalidatedTypeAndDescription"
+    ]
+  },
+  "BR-TRT-013": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/SqlCodeTranslator.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt013_duplicateAddFails",
+      "TrantypeDatabaseTest#brTrt013_duplicateKeyMapsToMinus403"
+    ]
+  },
+  "BR-TRT-014": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/SqlCodeTranslator.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt014_sqlErrorMessageFormat"
+    ]
+  },
+  "BR-TRT-015": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt015_returnMessageResidue"
+    ]
+  },
+  "BR-TRT-016": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt016_positiveInsertCode"
+    ]
+  },
+  "BR-TRT-017": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt017_updateExisting"
+    ]
+  },
+  "BR-TRT-018": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt018_updateMissing",
+      "TrantypeDatabaseTest#brTrt018_updateOfMissingTypeReportsSuccess"
+    ]
+  },
+  "BR-TRT-019": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt019_updateError"
+    ]
+  },
+  "BR-TRT-020": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt020_deleteExisting"
+    ]
+  },
+  "BR-TRT-021": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt021_deleteMissing",
+      "TrantypeDatabaseTest#brTrt021_deleteOfMissingTypeReportsSuccess"
+    ]
+  },
+  "BR-TRT-022": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/SqlCodeTranslator.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt022_deleteError",
+      "TrantypeDatabaseTest#brTrt022_foreignKeyDeleteUsesProbeSqlcode"
+    ]
+  },
+  "BR-TRT-023": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt023_errorsDoNotStopBatch"
+    ]
+  },
+  "BR-TRT-024": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt024_laterSqlResetsReturnCode"
+    ]
+  },
+  "BR-TRT-025": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt025_emptyFileStops"
+    ]
+  },
+  "BR-TRT-026": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TrantypeChainSupport.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TrantypeUpdateHandler.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt026_mnttrdb2StepAndRcMatchGolden"
+    ]
+  },
+  "BR-TRT-027": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DsnRunService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/SqlCodeTranslator.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt027_dsnConnectFailure"
+    ]
+  },
+  "BR-TRT-028": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DsnRunService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt028_commitAtEndOfTask",
+      "TrantypeRuleTest#brTrt028_commitFailureDoesNotChangeBodyRc"
+    ]
+  },
+  "BR-TRT-029": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DsnRunService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt029_failedStatementRollsBackUnitOfWork"
+    ]
+  },
+  "BR-TRT-030": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TrantypeDynamicHandler.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt030_dynamicJobSetup"
+    ]
+  },
+  "BR-TRT-031": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt031_dynamicCardsAndComments"
+    ]
+  },
+  "BR-TRT-032": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt032_sqlLinesRead"
+    ]
+  },
+  "BR-TRT-033": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt033_blankCardsAndSequenceColumns"
+    ]
+  },
+  "BR-TRT-034": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt034_inlineCommentSwallowsWhereClause"
+    ]
+  },
+  "BR-TRT-035": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt035_statementBufferAndLineCountLimits"
+    ]
+  },
+  "BR-TRT-036": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/SqlCodeTranslator.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt036_prepareThenExecute"
+    ]
+  },
+  "BR-TRT-037": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt037_errorsSurfaceAtExecute",
+      "TrantypeDatabaseTest#brTrt037_emptyPreparedStatementMapsToMinus212"
+    ]
+  },
+  "BR-TRT-038": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt038_executeReturnCodeAndCall"
+    ]
+  },
+  "BR-TRT-039": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt039_dynamicRcReplacedByCobtupdt"
+    ]
+  },
+  "BR-TRT-040": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt040_dynamicCallFromParms"
+    ]
+  },
+  "BR-TRT-041": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt041_cobtupdtStopRun"
+    ]
+  },
+  "BR-TRT-042": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt042_noParmsNormalEnd"
+    ]
+  },
+  "BR-TRT-043": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt043_dynamicAndBatchChangesShareUnitOfWork"
+    ]
+  },
+  "BR-TRT-044": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlService.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/JdbcSqlSession.java",
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeDatabaseTest#brTrt044_unqualifiedDynamicSqlPreservesLiteralPadding"
+    ]
+  },
+  "BR-TRT-045": {
+    "java": [
+      "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenanceService.java"
+    ],
+    "tests": [
+      "TrantypeRuleTest#brTrt045_sqlConstantsMatchCobolSource"
+    ]
+  }
+}
