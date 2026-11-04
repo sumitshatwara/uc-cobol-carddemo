@@ -3,7 +3,7 @@
 
 Inputs: the trailing ```json block of docs/analysis/business-rules/<slice>.md (or the directory given as argv[1]),
 field metadata from docs/analysis/data-dictionary.md and, when present,
-docs/analysis/traceability.json ({"<rule id>": {"java": [...], "tests": [...]}}).
+docs/analysis/traceability/<slice>.json ({"<rule id>": {"java": [...], "tests": [...]}}).
 """
 import json, re, sys
 from pathlib import Path
@@ -58,8 +58,9 @@ def load_fields():
 def main():
     rules_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else DOCS / "business-rules"
     rules = load_rules(rules_dir)
-    trace_p = DOCS / "traceability.json"
-    trace = json.loads(trace_p.read_text()) if trace_p.exists() else {}
+    trace = {}
+    for p in sorted((DOCS / "traceability").glob("*.json")):
+        trace.update(json.loads(p.read_text()))
     data = {"rules": rules, "fields": load_fields(), "trace": trace, "repo": REPO_URL}
     html = TEMPLATE.replace("/*DATA*/null", json.dumps(data).replace("</", "<\\/"))
     (DOCS / "business-rule-explorer.html").write_text(html)
