@@ -104,7 +104,7 @@ public class OutputWriter {
 
     public void snapshotTable(String table, String orderBy) {
         String sql = "COPY (SELECT * FROM " + tableName(table) + " ORDER BY " + orderBy + ") TO STDOUT WITH CSV HEADER";
-        Path file = outDir.resolve("db").resolve(table.substring(table.lastIndexOf('.') + 1) + ".csv");
+        Path file = outDir.resolve("db").resolve(table + ".csv");
         ensureParent(file);
         try (Connection connection = dataSource.getConnection();
              ByteArrayOutputStream output = new ByteArrayOutputStream()) {
