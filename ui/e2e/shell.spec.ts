@@ -10,5 +10,5 @@ test('jobs page lists all fixture chains and main navigation works', async ({ pa
   await page.getByRole('link', { name: /Runs/ }).click();
   await expect(page.getByRole('heading', { name: 'Runs' })).toBeVisible();
   await page.getByRole('link', { name: /Parity report/ }).click();
-  await expect(page.getByRole('heading', { name: 'Parity report' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Parity report', exact: true })).toBeVisible();
 });
