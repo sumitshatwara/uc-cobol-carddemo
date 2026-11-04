@@ -1,0 +1,454 @@
+{
+  "BR-ONL-001": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl001_initialScreen"
+    ]
+  },
+  "BR-ONL-002": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl002_signonAids"
+    ]
+  },
+  "BR-ONL-003": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl003_blankFields"
+    ]
+  },
+  "BR-ONL-004": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl004_uppercaseInputs",
+      "SignOnServiceTest#brOnl004_lowercaseStoredPasswordFinding"
+    ]
+  },
+  "BR-ONL-005": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl005_fileResponses"
+    ]
+  },
+  "BR-ONL-006": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl006_wrongPassword"
+    ]
+  },
+  "BR-ONL-007": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+    ],
+    "tests": [
+      "SignOnServiceTest#brOnl007_routing",
+      "SignOnServiceTest#brOnl007_unexpectedUserTypeFinding"
+    ]
+  },
+  "BR-ONL-008": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl008_entryPf3AndEibcalenZero"
+    ]
+  },
+  "BR-ONL-009": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl009_menuLines"
+    ]
+  },
+  "BR-ONL-010": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl010_optionParsing"
+    ]
+  },
+  "BR-ONL-011": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl011_invalidNumbers"
+    ]
+  },
+  "BR-ONL-012": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl012_adminVariantAndShippedTable"
+    ]
+  },
+  "BR-ONL-013": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl013_notInstalledAndComingSoon"
+    ]
+  },
+  "BR-ONL-014": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+    ],
+    "tests": [
+      "MenuServiceTest#brOnl014_xctlCommarea"
+    ]
+  },
+  "BR-ONL-015": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl015_pfKeys"
+    ]
+  },
+  "BR-ONL-016": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java",
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl016_accountUpdateExit",
+      "AccountViewServiceTest#brOnl016_accountViewExit"
+    ]
+  },
+  "BR-ONL-017": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl017_blankAccountId"
+    ]
+  },
+  "BR-ONL-018": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl018_invalidAccountId"
+    ]
+  },
+  "BR-ONL-019": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl019_readChain",
+      "AccountViewServiceTest#brOnl019_missingAccountFinding"
+    ]
+  },
+  "BR-ONL-020": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl020_notFoundMessages"
+    ]
+  },
+  "BR-ONL-021": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl021_fileError"
+    ]
+  },
+  "BR-ONL-022": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+    ],
+    "tests": [
+      "AccountViewServiceTest#brOnl022_mapping",
+      "AccountViewServiceTest#brOnl022_missingAccountFinding"
+    ]
+  },
+  "BR-ONL-023": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl023_statesAndMessages"
+    ]
+  },
+  "BR-ONL-024": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl024_pf5InStateSProcessesEnter"
+    ]
+  },
+  "BR-ONL-025": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl025_searchAndFetch"
+    ]
+  },
+  "BR-ONL-026": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl026_amountConversionAndStarBlank"
+    ]
+  },
+  "BR-ONL-027": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl027_noChange"
+    ]
+  },
+  "BR-ONL-028": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl028_editOrder"
+    ]
+  },
+  "BR-ONL-029": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl029_yesNoFields"
+    ]
+  },
+  "BR-ONL-030": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl030_signedAmount"
+    ]
+  },
+  "BR-ONL-031": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl031_dateValidationAndLeapYears"
+    ]
+  },
+  "BR-ONL-032": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl032_dobMustBePast"
+    ]
+  },
+  "BR-ONL-033": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl033_numericRequired"
+    ]
+  },
+  "BR-ONL-034": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl034_textEdits"
+    ]
+  },
+  "BR-ONL-035": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl035_stateAndZip"
+    ]
+  },
+  "BR-ONL-036": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl036_phoneNumber",
+      "AccountUpdateServiceTest#brOnl036_blankAreaPrefixFinding"
+    ]
+  },
+  "BR-ONL-037": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl037_ssnEdit"
+    ]
+  },
+  "BR-ONL-038": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl038_waitsForConfirmation"
+    ]
+  },
+  "BR-ONL-039": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl039_accountLockFailure",
+      "AccountUpdateServiceTest#brOnl039_customerLockFinding"
+    ]
+  },
+  "BR-ONL-040": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl040_concurrencyCheck"
+    ]
+  },
+  "BR-ONL-041": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl041_rewritesAndRollback"
+    ]
+  },
+  "BR-ONL-042": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+    ],
+    "tests": [
+      "AccountUpdateServiceTest#brOnl042_cancelFromEditError"
+    ]
+  },
+  "BR-ONL-043": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java",
+      "java/online/src/main/java/com/carddemo/online/account/AccountUpdateSession.java",
+      "java/online/src/main/java/com/carddemo/online/commarea/CardDemoCommarea.java"
+    ],
+    "tests": [
+      "CommareaTest#brOnl043_commareaLayout"
+    ]
+  },
+  "BR-ONL-044": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/routines/DateFormatter.java"
+    ],
+    "tests": [
+      "DateFormatterTest#brOnl044_returnCode"
+    ]
+  },
+  "BR-ONL-045": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/routines/DateFormatter.java"
+    ],
+    "tests": [
+      "DateFormatterTest#brOnl045_typeOneConversion",
+      "DateFormatterTest#brOnl045_typeOneHyphenFinding"
+    ]
+  },
+  "BR-ONL-046": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/routines/DateFormatter.java"
+    ],
+    "tests": [
+      "DateFormatterTest#brOnl046_typeTwoSeparatorFinding"
+    ]
+  },
+  "BR-ONL-047": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/routines/DateFormatter.java"
+    ],
+    "tests": [
+      "DateFormatterTest#brOnl047_invalidInputAndStaleError"
+    ]
+  },
+  "BR-ONL-048": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/routines/MvsWait.java"
+    ],
+    "tests": [
+      "MvsWaitTest#brOnl048_wait"
+    ]
+  },
+  "BR-ONL-049": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl049_truncatedFee"
+    ]
+  },
+  "BR-ONL-050": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl050_floorAndCap"
+    ]
+  },
+  "BR-ONL-051": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl051_goldWaiver"
+    ]
+  },
+  "BR-ONL-052": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl052_zeroDays"
+    ]
+  },
+  "BR-ONL-053": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl053_notLate"
+    ]
+  },
+  "BR-ONL-054": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "LateFeeCalculatorTest#brOnl054_sizeAndErrorConditions"
+    ]
+  },
+  "BR-ONL-055": {
+    "java": [
+      "java/online/src/main/java/com/carddemo/online/fees/FeeDriver.java",
+      "java/online/src/main/java/com/carddemo/online/fees/LateFeeCalculator.java"
+    ],
+    "tests": [
+      "FeeDriverTest#brOnl055_feeRequestAndOutput"
+    ]
+  }
+}
