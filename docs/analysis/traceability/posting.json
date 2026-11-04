@@ -1,0 +1,391 @@
+{
+  "BR-POST-001": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost001_sysoutSequenceAndCounters"
+    ]
+  },
+  "BR-POST-002": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/PostingHandler.java",
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost002_readsInInputOrder"
+    ]
+  },
+  "BR-POST-003": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost003_checksXrefBeforeAccount"
+    ]
+  },
+  "BR-POST-004": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost004_rejectsUnknownCard"
+    ]
+  },
+  "BR-POST-005": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost005_rejectsMissingAccount"
+    ]
+  },
+  "BR-POST-006": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost006_checksCycleAmountInsteadOfCurrentBalance"
+    ]
+  },
+  "BR-POST-007": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost007_cycleDebitRaisesLimitBalance"
+    ]
+  },
+  "BR-POST-008": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/CobolFormat.java",
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost008_truncatesHighOrderDigit"
+    ]
+  },
+  "BR-POST-009": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost009_expiryBoundaryIsInclusive"
+    ]
+  },
+  "BR-POST-010": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost010_expiryReasonOverridesOverlimit"
+    ]
+  },
+  "BR-POST-011": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost011_ignoresUnimplementedValidations"
+    ]
+  },
+  "BR-POST-012": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost012_writesExactRejectLength"
+    ]
+  },
+  "BR-POST-013": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost013_rejectHasNoMasterChanges"
+    ]
+  },
+  "BR-POST-014": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost014_returnsFourForReject"
+    ]
+  },
+  "BR-POST-015": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcPostingStore.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost015_mapsDailyTransactionFields"
+    ]
+  },
+  "BR-POST-016": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/CobolFormat.java",
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost016_formatsFrozenProcTimestamp"
+    ]
+  },
+  "BR-POST-017": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost017_updatesInLegacyOrder"
+    ]
+  },
+  "BR-POST-018": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcPostingStore.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost018_updatesExistingCategoryBalance"
+    ]
+  },
+  "BR-POST-019": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcPostingStore.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost019_createsNewCategoryBalance"
+    ]
+  },
+  "BR-POST-020": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost020_updatesBalanceAndCycleBuckets"
+    ]
+  },
+  "BR-POST-021": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost021_ignoresAccountRewriteFailure"
+    ]
+  },
+  "BR-POST-022": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost022_keepsExactCentAmounts"
+    ]
+  },
+  "BR-POST-023": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcPostingStore.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost023_truncatesOldTransactionsBeforePosting"
+    ]
+  },
+  "BR-POST-024": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcPostingStore.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost024_duplicateTransactionAbendsAfterUpdates"
+    ]
+  },
+  "BR-POST-025": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost025_hasIoErrorMessageCatalogue"
+    ]
+  },
+  "BR-POST-026": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost026_rejectCloseDisplaysXrefStatus"
+    ]
+  },
+  "BR-POST-027": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/CobolFormat.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost027_formatsFileStatusValues"
+    ]
+  },
+  "BR-POST-028": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/CobolFormat.java",
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost028_emitsU999Abend"
+    ]
+  },
+  "BR-POST-029": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/DailyPostingService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost029_emptyDailyFilePostsNothing"
+    ]
+  },
+  "BR-POST-030": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcReportLookups.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost030_reportsTransactionIdOrder"
+    ]
+  },
+  "BR-POST-031": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost031_appliesLiteralSortWindow"
+    ]
+  },
+  "BR-POST-032": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost032_sortsByCardAndKeepsTiesStable"
+    ]
+  },
+  "BR-POST-033": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost033_reportsBannersAndDateRange"
+    ]
+  },
+  "BR-POST-034": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost034_emptyDateParmStopsBeforeReport"
+    ]
+  },
+  "BR-POST-035": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost035_echoesRawTransactionRecords"
+    ]
+  },
+  "BR-POST-036": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost036_outOfDateRecordStopsFurtherRows"
+    ]
+  },
+  "BR-POST-037": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java",
+      "java/posting/src/main/java/com/carddemo/posting/PostingHandler.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost037_emptyFixtureHasNoReportRecords"
+    ]
+  },
+  "BR-POST-038": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost038_writes133ByteHeaderAndRecords"
+    ]
+  },
+  "BR-POST-039": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost039_writesExpectedDetailColumns"
+    ]
+  },
+  "BR-POST-040": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost040_writesPreviousCardTotalOnBreak"
+    ]
+  },
+  "BR-POST-041": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost041_keepsAccumulatingLineCounter"
+    ]
+  },
+  "BR-POST-042": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost042_addsPageTotalToGrandTotal"
+    ]
+  },
+  "BR-POST-043": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost043_doubleCountsLastAmountAndOmitsLastAccountTotal"
+    ]
+  },
+  "BR-POST-044": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java",
+      "java/posting/src/main/java/com/carddemo/posting/CobolFormat.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost044_logsEofAmountAndPreviousPageTotal"
+    ]
+  },
+  "BR-POST-045": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost045_writesGrandTotalLine"
+    ]
+  },
+  "BR-POST-046": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java",
+      "java/posting/src/main/java/com/carddemo/posting/JdbcReportLookups.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost046_abendsOnMissingReportLookups"
+    ]
+  },
+  "BR-POST-047": {
+    "java": [
+      "java/posting/src/main/java/com/carddemo/posting/TransactionReportService.java"
+    ],
+    "tests": [
+      "PostingBusinessRulesTest#brPost047_hasReportIoErrorCatalogue"
+    ]
+  }
+}
