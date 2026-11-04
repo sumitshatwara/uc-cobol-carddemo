@@ -31,9 +31,18 @@ class InterestHandlerDbTest {
             jdbcTemplate.execute("""
                     TRUNCATE TABLE carddemo.account, carddemo.card_xref, carddemo.tran_cat_balance,
                         carddemo.disclosure_group, carddemo.tran_category, carddemo.tran_type,
-                        carddemo.daily_transaction, carddemo."transaction",
-                        carddemo.transaction_type_categor, carddemo.transaction_type CASCADE
+                        carddemo.daily_transaction, carddemo."transaction" CASCADE
                     """);
+            Boolean transactionTypeExists =
+                    jdbcTemplate.queryForObject(
+                            "SELECT to_regclass('carddemo.transaction_type') IS NOT NULL",
+                            Boolean.class);
+            if (Boolean.TRUE.equals(transactionTypeExists)) {
+                jdbcTemplate.execute("""
+                        TRUNCATE TABLE carddemo.transaction_type_categor,
+                            carddemo.transaction_type CASCADE
+                        """);
+            }
         }
     }
 
