@@ -8,6 +8,9 @@ const reuseExistingServer = !process.env.CI;
 
 export default defineConfig({
   testDir: './e2e',
+  // specs share one PostgreSQL database; chain runs truncate tables the online seed uses
+  workers: 1,
+  fullyParallel: false,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report', open: 'never' }]],
   use: {
     baseURL: 'http://127.0.0.1:4173',
