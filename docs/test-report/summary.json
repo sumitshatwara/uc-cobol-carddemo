@@ -1,0 +1,60 @@
+{
+ "functional": [
+  9,
+  9
+ ],
+ "legacy": [
+  24,
+  24
+ ],
+ "modules": {
+  "app": [
+   1,
+   0,
+   0,
+   1
+  ],
+  "common": [
+   5,
+   0,
+   0,
+   5
+  ],
+  "interest": [
+   48,
+   0,
+   0,
+   48
+  ],
+  "online": [
+   64,
+   0,
+   0,
+   64
+  ],
+  "posting": [
+   54,
+   0,
+   0,
+   54
+  ],
+  "trantype": [
+   52,
+   0,
+   0,
+   52
+  ]
+ },
+ "naiveExit": "2",
+ "naiveFailed": true,
+ "parityJava": [
+  24,
+  24
+ ],
+ "rulesTested": 194,
+ "unit": [
+  224,
+  224,
+  0
+ ]
+}
