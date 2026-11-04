@@ -283,7 +283,7 @@ class PostingBusinessRulesTest {
         assertThat(result.returnCode()).isEqualTo(12);
         assertThat(result.sysout()).containsSubsequence(
                 "ERROR WRITING TO TRANSACTION FILE", "FILE STATUS IS: NNNN0022", "ABENDING PROGRAM",
-                "CEE3ABD: USER ABEND U999");
+                "CEE3ABD: USER ABEND U+0000000999");
         assertThat(result.sysout()).doesNotContain("END OF EXECUTION OF PROGRAM CBTRN02C");
         assertThat(store.storedCategoryBalance(bd("1001"), "01", bd("1")).orElseThrow())
                 .isEqualByComparingTo("750.00");
@@ -305,7 +305,7 @@ class PostingBusinessRulesTest {
                 "ERROR CLOSING TRANSACTION BALANCE FILE");
         assertThat(DailyPostingService.ioError("ERROR OPENING ACCOUNT MASTER FILE", "35"))
                 .containsExactly("ERROR OPENING ACCOUNT MASTER FILE", "FILE STATUS IS: NNNN0035",
-                        "ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+                        "ABENDING PROGRAM", "CEE3ABD: USER ABEND U+0000000999");
     }
 
     @Test
@@ -326,7 +326,10 @@ class PostingBusinessRulesTest {
     @DisplayName("BR-POST-028 Abend via CEE3ABD with code 999")
     void brPost028_emitsU999Abend() {
         assertThat(DailyPostingService.ioError("ERROR READING DALYTRAN FILE", "23"))
-                .contains("ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+                .contains("ABENDING PROGRAM", "CEE3ABD: USER ABEND U+0000000999");
+        assertThat(CobolFormat.abendLines("ERROR READING DALYTRAN FILE"))
+                .containsExactly("ERROR READING DALYTRAN FILE", "ABENDING PROGRAM",
+                        "CEE3ABD: USER ABEND U+0000000999");
     }
 
     @Test
@@ -563,7 +566,7 @@ class PostingBusinessRulesTest {
                 "ERROR CLOSING TRANSACTION CATG FILE", "ERROR CLOSING DATE PARM FILE");
         assertThat(TransactionReportService.ioError("ERROR READING TRANSACTION FILE", "23"))
                 .containsExactly("ERROR READING TRANSACTION FILE", "FILE STATUS IS: NNNN0023",
-                        "ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+                        "ABENDING PROGRAM", "CEE3ABD: USER ABEND U+0000000999");
     }
 
     private static DailyPostingService.Result post(InMemoryPostingStore store, List<byte[]> records) {
@@ -596,7 +599,7 @@ class PostingBusinessRulesTest {
         assertThat(result.abended()).isTrue();
         assertThat(result.returnCode()).isEqualTo(12);
         assertThat(result.sysout()).containsSubsequence(message, "FILE STATUS IS: NNNN0023",
-                "ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+                "ABENDING PROGRAM", "CEE3ABD: USER ABEND U+0000000999");
         assertThat(result.sysout()).doesNotContain("END OF EXECUTION OF PROGRAM CBTRN03C");
     }
 

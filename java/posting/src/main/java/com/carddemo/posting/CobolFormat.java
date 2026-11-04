@@ -65,11 +65,12 @@ public final class CobolFormat {
     }
 
     public static List<String> abendLines(String message, String status) {
-        return List.of(message, fileStatusLine(status), "ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+        return List.of(message, fileStatusLine(status), "ABENDING PROGRAM",
+                "CEE3ABD: USER ABEND U+0000000999");
     }
 
     public static List<String> abendLines(String message) {
-        return List.of(message, "ABENDING PROGRAM", "CEE3ABD: USER ABEND U999");
+        return List.of(message, "ABENDING PROGRAM", "CEE3ABD: USER ABEND U+0000000999");
     }
 
     private static String editAmount(BigDecimal value, boolean leadingPlus) {
