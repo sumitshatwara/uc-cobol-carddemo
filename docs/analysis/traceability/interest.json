@@ -1,0 +1,409 @@
+{
+  "BR-INT-001": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt001_intcalcParmAndTransactionPrefix"
+    ]
+  },
+  "BR-INT-002": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt002_normalRunHasStartAndEndBanners"
+    ]
+  },
+  "BR-INT-003": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt003_setupChainHasZeroReturnCodeOnNormalRun",
+      "InterestHandlerDbTest#allSevenInterestFixturesMatchTheGoldenOutputs"
+    ]
+  },
+  "BR-INT-004": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt004_filesOpenInCobolOrder"
+    ]
+  },
+  "BR-INT-005": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt005_eachOpenFailureAbendsWithItsMessageAndStatus"
+    ]
+  },
+  "BR-INT-006": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt006_categoryBalancesRetainFileKeyOrder"
+    ]
+  },
+  "BR-INT-007": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt007_eofIsNotEchoedAndOtherReadErrorsAbend"
+    ]
+  },
+  "BR-INT-008": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt008_categoryBalanceEchoRetainsZonedSignAndTrailingSpaces"
+    ]
+  },
+  "BR-INT-009": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt009_previousAccountIsRewrittenBeforeNextAccountRead"
+    ]
+  },
+  "BR-INT-010": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt010_accountReadSuppliesGroupForRateLookup"
+    ]
+  },
+  "BR-INT-011": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt011_missingAccountDisplaysIdAndAbends"
+    ]
+  },
+  "BR-INT-012": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt012_cardNumberIsReadByAccountId",
+      "InterestHandlerDbTest#allSevenInterestFixturesMatchTheGoldenOutputs"
+    ]
+  },
+  "BR-INT-013": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt013_missingXrefUsesAccountNotFoundMessage"
+    ]
+  },
+  "BR-INT-014": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt014_disclosureLookupUsesCompleteKey"
+    ]
+  },
+  "BR-INT-015": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt015_interestRatesDifferByAccountGroup"
+    ]
+  },
+  "BR-INT-016": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt016_interestRatesDifferByCategory"
+    ]
+  },
+  "BR-INT-017": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt017_missingGroupFallsBackToDefault"
+    ]
+  },
+  "BR-INT-018": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt018_defaultGroupMatchesWithoutFallback"
+    ]
+  },
+  "BR-INT-019": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt019_defaultDisclosureReadFailureAbends"
+    ]
+  },
+  "BR-INT-020": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt020_zeroRateSkipsWriteAndSequence"
+    ]
+  },
+  "BR-INT-021": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt021_monthlyInterestFormula"
+    ]
+  },
+  "BR-INT-022": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt022_halfCentInterestTruncatesTowardZero"
+    ]
+  },
+  "BR-INT-023": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt023_nonTieSubCentAmountsAreTruncated"
+    ]
+  },
+  "BR-INT-024": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt024_negativeBalanceProducesNegativeInterest"
+    ]
+  },
+  "BR-INT-025": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt025_accountAndTransactionAmountsUseZonedDecimal"
+    ]
+  },
+  "BR-INT-026": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt026_accountTotalUsesTruncatedMonthlyAmounts"
+    ]
+  },
+  "BR-INT-027": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt027_overflowDropsHighOrderDigits"
+    ]
+  },
+  "BR-INT-028": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt028_updateAddsInterestToPreviousAccount"
+    ]
+  },
+  "BR-INT-029": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt029_updateZerosCycleFields"
+    ]
+  },
+  "BR-INT-030": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt030_zeroRateAccountStillRewritten"
+    ]
+  },
+  "BR-INT-031": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt031_rewritePreservesUnmodifiedAccountFields",
+      "InterestHandlerDbTest#allSevenInterestFixturesMatchTheGoldenOutputs"
+    ]
+  },
+  "BR-INT-032": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt032_noStatusOrDateEligibilityChecks"
+    ]
+  },
+  "BR-INT-033": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java",
+      "java/interest/src/main/java/com/carddemo/interest/JdbcInterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt033_rewriteFailureAbendsWithStatus"
+    ]
+  },
+  "BR-INT-034": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt034_lastAccountIsNeverUpdatedAtEof"
+    ]
+  },
+  "BR-INT-035": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt035_singleAccountIsNotRewritten"
+    ]
+  },
+  "BR-INT-036": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt036_transactionIdsUseRunWideSequence"
+    ]
+  },
+  "BR-INT-037": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt037_transactionHasFixedCodesAndBlankMerchantFields"
+    ]
+  },
+  "BR-INT-038": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt038_transactionDescriptionContainsElevenDigitAccountId"
+    ]
+  },
+  "BR-INT-039": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt039_eachCategoryWritesSeparateTransactionAmount"
+    ]
+  },
+  "BR-INT-040": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt040_timestampsComeFromFrozenClock"
+    ]
+  },
+  "BR-INT-041": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt041_systranRecordUses350ByteLayout"
+    ]
+  },
+  "BR-INT-042": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt042_noFeeTransactionsAreGenerated"
+    ]
+  },
+  "BR-INT-043": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt043_emptyInputCompletesWithoutWrites"
+    ]
+  },
+  "BR-INT-044": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestFiles.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt044_closeOrderAndFailuresArePreserved"
+    ]
+  },
+  "BR-INT-045": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt045_fileStatusUsesLegacyFourCharacterFormatting"
+    ]
+  },
+  "BR-INT-046": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt046_abendDoesNotRollBackPriorWrites"
+    ]
+  },
+  "BR-INT-047": {
+    "java": [
+      "java/interest/src/main/java/com/carddemo/interest/InterestCalculationService.java",
+      "java/interest/src/main/java/com/carddemo/interest/InterestHandler.java"
+    ],
+    "tests": [
+      "InterestCalculationServiceTest#brInt047_normalCompletionReturnsZero"
+    ]
+  }
+}
