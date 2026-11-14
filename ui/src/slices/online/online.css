@@ -1,0 +1,19 @@
+.online-form { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: flex-end; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 12px 0; }
+.online-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); }
+.online-form input, .online-form select, .online-upd input {
+  font: inherit; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+  background: var(--bg); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+.online-keys { display: flex; gap: 8px; flex-wrap: wrap; }
+.online-keys button.pf { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.online-msg { white-space: pre-wrap; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; margin: 8px 0; min-height: 1.2em; }
+.online-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; margin: 8px 0 16px; }
+.online-fields .row { display: grid; grid-template-columns: 220px 1fr; gap: 8px; padding: 5px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.online-fields .row > span:first-child { color: var(--muted); white-space: pre; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; }
+.online-fields .row > span:last-child { white-space: pre-wrap; font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+.online-upd { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 8px 0 16px; }
+.online-upd label { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: var(--muted); }
+.online-menu { list-style: none; margin: 8px 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; max-width: 720px; }
+.online-menu button { width: 100%; text-align: left; background: transparent; color: var(--ink); font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; padding: 5px 8px; }
+.online-menu button:hover { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.online-note { background: color-mix(in srgb, var(--warn) 12%, transparent); border: 1px solid color-mix(in srgb, var(--warn) 40%, transparent); border-radius: 8px; padding: 6px 10px; font-size: 13px; margin: 8px 0; }
+@media (max-width: 900px) { .online-fields, .online-upd, .online-menu { grid-template-columns: 1fr; } .online-fields .row { grid-template-columns: 1fr; } }

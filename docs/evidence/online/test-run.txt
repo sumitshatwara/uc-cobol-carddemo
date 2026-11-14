@@ -1,0 +1,32 @@
+Online slice test run (2026-11-14T12:19Z)
+
+No legacy regression layer: CICS, HLASM and PL/I cannot be executed off-host; nothing was run in legacy form.
+
+== make test-unit (JUnit 5, all modules) ==
+[INFO] Building CardDemo :: common 1.0.0-SNAPSHOT                         [2/7]
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.common.CodecTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.common.HarnessFormatTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Building CardDemo :: posting 1.0.0-SNAPSHOT                        [3/7]
+[INFO] Building CardDemo :: interest 1.0.0-SNAPSHOT                       [4/7]
+[INFO] Building CardDemo :: trantype 1.0.0-SNAPSHOT                       [5/7]
+[INFO] Building CardDemo :: online 1.0.0-SNAPSHOT                         [6/7]
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.AccountViewServiceTest
+[INFO] Tests run: 17, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.LateFeeCalculatorTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.SignOnServiceTest
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.RoutinesTest
+[INFO] Tests run: 32, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.AccountUpdateServiceTest
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0 -- in com.carddemo.online.MenuServiceTest
+[INFO] Tests run: 82, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Building CardDemo :: app 1.0.0-SNAPSHOT                            [7/7]
+[INFO] BUILD SUCCESS
+
+== npx playwright test (ui/e2e) ==
+  ✓  1 [chromium] › e2e/console.spec.ts:6:1 › console lists the four batch chains
+  ✓  2 [chromium] › e2e/console.spec.ts:14:1 › a chain shows its JCL steps and fixture cases
+  ✓  3 [chromium] › e2e/console.spec.ts:22:1 › parity reports screen renders
+  ✓  4 [chromium] › e2e/online.spec.ts:27:3 › [online] journey › [online] admin signs on, opens the menu and views a seeded account
+  ✓  5 [chromium] › e2e/online.spec.ts:67:1 › [online] sign-on rejects a wrong password
+  ✓  6 [chromium] › e2e/online.spec.ts:73:1 › [online] date converter reformats YYYYMMDD
+  ✓  7 [chromium] › e2e/online.spec.ts:83:1 › [online] account update validates a change and PF12 cancels it
+  7 passed
