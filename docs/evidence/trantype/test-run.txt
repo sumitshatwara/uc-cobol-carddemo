@@ -1,0 +1,124 @@
+# trantype slice - test evidence (run 2026-11-14 in the estate sandbox)
+
+## 1. Legacy oracle: make parity CHAIN=trantype-update / CHAIN=trantype-dynamic
+trantype-update/t01-add [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t02-update [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t03-delete [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t04-comments [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t05-delete-missing [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t06-duplicate-add [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t07-mixed-batch [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d01-update-then-apply [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d02-delete-statement [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d03-bad-statement [legacy rerun]: PASS (0 records, 0 fields, 0 differences)
+
+## 2. Unit: make test-unit (JUnit 5, no database)
+[INFO] Reactor Build Order:
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.247 s -- in com.carddemo.common.CodecTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 s -- in com.carddemo.common.HarnessFormatTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.205 s -- in com.carddemo.trantype.DynamicSqlDriverTest
+[INFO] Tests run: 30, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.100 s -- in com.carddemo.trantype.TransactionTypeMaintenanceTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.091 s -- in com.carddemo.trantype.GoldenReplayTest
+[INFO] Tests run: 53, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Reactor Summary for CardDemo Java 21 target 1.0.0-SNAPSHOT:
+[INFO] CardDemo Java 21 target ............................ SUCCESS [  0.002 s]
+[INFO] CardDemo :: common ................................. SUCCESS [  1.734 s]
+[INFO] CardDemo :: posting ................................ SUCCESS [  0.047 s]
+[INFO] CardDemo :: interest ............................... SUCCESS [  0.035 s]
+[INFO] CardDemo :: trantype ............................... SUCCESS [  2.200 s]
+[INFO] CardDemo :: online ................................. SUCCESS [  0.037 s]
+[INFO] CardDemo :: app .................................... SUCCESS [  0.080 s]
+[INFO] BUILD SUCCESS
+
+## 3. Regression: make parity-java CHAIN=trantype-update / CHAIN=trantype-dynamic
+java trantype-update/t01-add: MAXRC=0 (165 ms) -> work/java/trantype-update/t01-add/actual
+java trantype-update/t02-update: MAXRC=0 (64 ms) -> work/java/trantype-update/t02-update/actual
+java trantype-update/t03-delete: MAXRC=0 (80 ms) -> work/java/trantype-update/t03-delete/actual
+java trantype-update/t04-comments: MAXRC=0 (51 ms) -> work/java/trantype-update/t04-comments/actual
+java trantype-update/t05-delete-missing: MAXRC=0 (38 ms) -> work/java/trantype-update/t05-delete-missing/actual
+java trantype-update/t06-duplicate-add: MAXRC=4 (60 ms) -> work/java/trantype-update/t06-duplicate-add/actual
+java trantype-update/t07-mixed-batch: MAXRC=0 (45 ms) -> work/java/trantype-update/t07-mixed-batch/actual
+trantype-update/t01-add [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t02-update [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t03-delete [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t04-comments [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t05-delete-missing [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t06-duplicate-add [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-update/t07-mixed-batch [java]: PASS (0 records, 0 fields, 0 differences)
+report: work/parity/report-java.md
+exit 0
+java trantype-dynamic/d01-update-then-apply: MAXRC=0 (141 ms) -> work/java/trantype-dynamic/d01-update-then-apply/actual
+java trantype-dynamic/d02-delete-statement: MAXRC=0 (56 ms) -> work/java/trantype-dynamic/d02-delete-statement/actual
+java trantype-dynamic/d03-bad-statement: MAXRC=4 (67 ms) -> work/java/trantype-dynamic/d03-bad-statement/actual
+trantype-dynamic/d01-update-then-apply [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d02-delete-statement [java]: PASS (0 records, 0 fields, 0 differences)
+trantype-dynamic/d03-bad-statement [java]: PASS (0 records, 0 fields, 0 differences)
+report: work/parity/report-java.md
+exit 0
+
+### work/parity/report-java.md (trantype-update)
+## trantype-update / t01-add — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t02-update — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t03-delete — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t04-comments — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t05-delete-missing — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t06-duplicate-add — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-update / t07-mixed-batch — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+
+### work/parity/report-java.md (trantype-dynamic)
+## trantype-dynamic / d01-update-then-apply — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-dynamic / d02-delete-statement — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+## trantype-dynamic / d03-bad-statement — java: **PASS**
+
+Checked 0 datasets, 0 records, 0 decoded fields, 1 SYSOUT files, 2 table snapshots, return codes.
+
+
+
+## 4. Functional: make test-e2e (Playwright, chromium)
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/console.spec.ts:6:1 › console lists the four batch chains (419ms)
+  ✓  2 [chromium] › e2e/console.spec.ts:14:1 › a chain shows its JCL steps and fixture cases (249ms)
+  ✓  3 [chromium] › e2e/console.spec.ts:22:1 › parity reports screen renders (191ms)
+  ✓  4 [chromium] › e2e/trantype.spec.ts:15:1 › [trantype] MNTTRDB2 t07-mixed-batch: add, update, comment, delete with RC 0 and parity PASS (1.4s)
+  ✓  5 [chromium] › e2e/trantype.spec.ts:47:1 › [trantype] MNTTRDYN d03-bad-statement: failed dynamic SQL aborts the unit of work, RC 4, parity PASS (536ms)
+  ✓  6 [chromium] › e2e/trantype.spec.ts:68:1 › [trantype] transaction types page lists the table rows via GET /api/trantype/types (240ms)
+
+  6 passed (10.8s)
