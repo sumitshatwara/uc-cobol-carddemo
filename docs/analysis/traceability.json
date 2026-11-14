@@ -1,0 +1,2535 @@
+{
+ "generated": "2026-11-14T12:25:00Z",
+ "note": "Java files and test ids scanned from java/ and ui/e2e; results from the last test run.",
+ "rules": {
+  "BR-INT-001": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_001_startAndEndBannersFrameTheRun": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_001_startAndEndBannersFrameTheRun"
+   ]
+  },
+  "BR-INT-002": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_002_parmDateIsTheTranIdPrefixNotTheTimestamp": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_002_parmDateIsTheTranIdPrefixNotTheTimestamp"
+   ]
+  },
+  "BR-INT-003": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_003_fiveFilesAreOpenedInOrderAndClosedAtTheEnd": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_003_fiveFilesAreOpenedInOrderAndClosedAtTheEnd"
+   ]
+  },
+  "BR-INT-004": {
+   "java": [],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_004_openFailureShowsFileSpecificMessageAndAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_004_openFailureShowsFileSpecificMessageAndAbends"
+   ]
+  },
+  "BR-INT-005": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_005_balancesAreProcessedInAscendingKeyOrder": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_005_balancesAreProcessedInAscendingKeyOrder"
+   ]
+  },
+  "BR-INT-006": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_006_endOfFileStatus10StopsTheLoop": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_006_endOfFileStatus10StopsTheLoop"
+   ]
+  },
+  "BR-INT-007": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_007_balanceReadErrorAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_007_balanceReadErrorAbends"
+   ]
+  },
+  "BR-INT-008": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_008_eachBalanceRecordIsEchoedAsItsRaw50ByteImage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_008_eachBalanceRecordIsEchoedAsItsRaw50ByteImage"
+   ]
+  },
+  "BR-INT-009": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_009_accountBreakRewritesPreviousAccountThenReadsTheNewOne": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_009_accountBreakRewritesPreviousAccountThenReadsTheNewOne"
+   ]
+  },
+  "BR-INT-010": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_010_firstRecordDoesNotTriggerAnUpdate": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_010_firstRecordDoesNotTriggerAnUpdate"
+   ]
+  },
+  "BR-INT-011": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_011_interestAccumulatorIsResetAtEveryAccountBreak": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_011_interestAccumulatorIsResetAtEveryAccountBreak"
+   ]
+  },
+  "BR-INT-012": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i04-default-group-fallback PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_012_accountIsReadByTheBalanceAccountIdAndItsGroupDrivesTheRate": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_012_accountIsReadByTheBalanceAccountIdAndItsGroupDrivesTheRate"
+   ]
+  },
+  "BR-INT-013": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_013_missingAccountAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_013_missingAccountAbends"
+   ]
+  },
+  "BR-INT-014": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_014_cardIsLookedUpByAccountIdOnTheAlternateKey": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_014_cardIsLookedUpByAccountIdOnTheAlternateKey"
+   ]
+  },
+  "BR-INT-015": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_015_missingCardCrossReferenceAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_015_missingCardCrossReferenceAbends"
+   ]
+  },
+  "BR-INT-016": {
+   "java": [],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_016_accountsWithoutBalanceRowsAreUntouched": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_016_accountsWithoutBalanceRowsAreUntouched"
+   ]
+  },
+  "BR-INT-017": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_017_rateKeyIsGroupTypeAndCategory": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_017_rateKeyIsGroupTypeAndCategory"
+   ]
+  },
+  "BR-INT-018": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i04-default-group-fallback PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_018_missingGroupFallsBackToDefaultKeepingTypeAndCategory": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_018_missingGroupFallsBackToDefaultKeepingTypeAndCategory"
+   ]
+  },
+  "BR-INT-019": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_019_accountInDefaultGroupUsesItWithoutFallbackMessages": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_019_accountInDefaultGroupUsesItWithoutFallbackMessages"
+   ]
+  },
+  "BR-INT-020": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_020_disclosureGroupReadErrorAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_020_disclosureGroupReadErrorAbends"
+   ]
+  },
+  "BR-INT-021": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_021_missingDefaultRowAbendsWithoutFurtherFallback": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_021_missingDefaultRowAbendsWithoutFurtherFallback"
+   ]
+  },
+  "BR-INT-022": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i03-zero-rate-skipped PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_022_zeroRateCategoriesAreSkipped": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_022_zeroRateCategoriesAreSkipped"
+   ]
+  },
+  "BR-INT-023": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_023_monthlyInterestIsBalanceTimesRateOver1200": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_023_monthlyInterestIsBalanceTimesRateOver1200"
+   ]
+  },
+  "BR-INT-024": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i02-tie-half-cent PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_024_categoryBreakdownKeepsTheExactQuotientForTheConsole": "pass",
+    "Cbact04cRulesTest#BR_INT_024_interestIsTruncatedNotRounded": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_024_interestIsTruncatedNotRounded",
+    "Cbact04cRulesTest#BR_INT_024_categoryBreakdownKeepsTheExactQuotientForTheConsole"
+   ]
+  },
+  "BR-INT-025": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_025_nonTieSubCentRemaindersAreDroppedAboveAndBelowHalf": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_025_nonTieSubCentRemaindersAreDroppedAboveAndBelowHalf"
+   ]
+  },
+  "BR-INT-026": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i06-negative-balance PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_026_negativeBalancesProduceNegativeInterestTruncatedTowardZero": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_026_negativeBalancesProduceNegativeInterestTruncatedTowardZero"
+   ]
+  },
+  "BR-INT-027": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_027_interestIsAccumulatedPerAccountAndAppliedAtTheBreak": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_027_interestIsAccumulatedPerAccountAndAppliedAtTheBreak"
+   ]
+  },
+  "BR-INT-028": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_028_zeroBalanceWithNonZeroRateStillPostsAZeroTransaction": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_028_zeroBalanceWithNonZeroRateStillPostsAZeroTransaction"
+   ]
+  },
+  "BR-INT-029": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_029_overflowSilentlyDropsHighOrderDigits": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_029_overflowSilentlyDropsHighOrderDigits"
+   ]
+  },
+  "BR-INT-030": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_030_feesStepIsAStubThatChangesNothing": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_030_feesStepIsAStubThatChangesNothing"
+   ]
+  },
+  "BR-INT-031": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_031_oneTransactionPerNonZeroRateBalance": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_031_oneTransactionPerNonZeroRateBalance"
+   ]
+  },
+  "BR-INT-032": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_032_tranIdIsParmPlusRunWideSixDigitSequence": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_032_tranIdIsParmPlusRunWideSixDigitSequence"
+   ]
+  },
+  "BR-INT-033": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i05-multi-category PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_033_interestTransactionsAreType01Category0005SourceSystem": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_033_interestTransactionsAreType01Category0005SourceSystem"
+   ]
+  },
+  "BR-INT-034": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_034_descriptionIsIntForAcPlusElevenDigitAccountId": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_034_descriptionIsIntForAcPlusElevenDigitAccountId"
+   ]
+  },
+  "BR-INT-035": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i04-default-group-fallback PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_035_amountMerchantAndCardFields": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_035_amountMerchantAndCardFields"
+   ]
+  },
+  "BR-INT-036": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_036_bothTimestampsComeFromTheFrozenClockInDb2Format": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_036_bothTimestampsComeFromTheFrozenClockInDb2Format"
+   ]
+  },
+  "BR-INT-037": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_037_transactionWriteErrorAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_037_transactionWriteErrorAbends"
+   ]
+  },
+  "BR-INT-038": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): i02-tie-half-cent PASS, i06-negative-balance PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_038_amountsAreZonedWithEbcdicOverpunchSign": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_038_amountsAreZonedWithEbcdicOverpunchSign"
+   ]
+  },
+  "BR-INT-039": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_039_accountBreakAddsInterestAndResetsCycleAmounts": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_039_accountBreakAddsInterestAndResetsCycleAmounts"
+   ]
+  },
+  "BR-INT-040": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_040_accountWithOnlyZeroRateCategoriesIsStillReset": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_040_accountWithOnlyZeroRateCategoriesIsStillReset"
+   ]
+  },
+  "BR-INT-041": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_041_accountRewriteErrorAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_041_accountRewriteErrorAbends"
+   ]
+  },
+  "BR-INT-042": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_042_lastAccountOnTheBalanceFileIsNeverUpdated": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_042_lastAccountOnTheBalanceFileIsNeverUpdated"
+   ]
+  },
+  "BR-INT-043": {
+   "java": [],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_043_emptyBalanceFileWritesOnlyTheBannersAndEndsRc0": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_043_emptyBalanceFileWritesOnlyTheBannersAndEndsRc0"
+   ]
+  },
+  "BR-INT-044": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_044_closeFailureShowsFileSpecificMessageAndAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_044_closeFailureShowsFileSpecificMessageAndAbends"
+   ]
+  },
+  "BR-INT-045": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_045_fileStatusDisplayFormat": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_045_fileStatusDisplayFormat"
+   ]
+  },
+  "BR-INT-046": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "regression": "Java vs legacy (compare.py): i01-baseline PASS, i02-tie-half-cent PASS, i03-zero-rate-skipped PASS, i04-default-group-fallback PASS, i05-multi-category PASS, i06-negative-balance PASS, i07-nontie-rounding PASS",
+   "results": {
+    "Cbact04cRulesTest#BR_INT_046_normalCompletionReturnsRc0AndRcJsonListsTheMergedSetupSteps": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_046_normalCompletionReturnsRc0AndRcJsonListsTheMergedSetupSteps"
+   ]
+  },
+  "BR-INT-047": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_047_abendRoutineDisplaysAndEndsWithRc12": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_047_abendRoutineDisplaysAndEndsWithRc12"
+   ]
+  },
+  "BR-INT-048": {
+   "java": [
+    "java/interest/src/main/java/com/carddemo/interest/Cbact04c.java",
+    "java/interest/src/main/java/com/carddemo/interest/IntCalcStep15Tasklet.java",
+    "java/interest/src/main/java/com/carddemo/interest/JdbcIntCalcFiles.java"
+   ],
+   "results": {
+    "Cbact04cRulesTest#BR_INT_048_rewritesBeforeAnAbendAreNotRolledBack": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "Cbact04cRulesTest#BR_INT_048_rewritesBeforeAnAbendAreNotRolledBack"
+   ]
+  },
+  "BR-ONL-001": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/package-info.java",
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_001_firstDisplayIsBlankWithCursorOnUserId": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_001_firstDisplayIsBlankWithCursorOnUserId"
+   ]
+  },
+  "BR-ONL-002": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_002_pf3SendsThankYouAndEndsSession": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_002_pf3SendsThankYouAndEndsSession"
+   ]
+  },
+  "BR-ONL-003": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_003_otherKeysAreInvalid": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_003_otherKeysAreInvalid"
+   ]
+  },
+  "BR-ONL-004": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnResponse.java",
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_004_userIdIsMandatoryAndUsrsecIsNotRead": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_004_userIdIsMandatoryAndUsrsecIsNotRead"
+   ]
+  },
+  "BR-ONL-005": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_005_passwordIsMandatory": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_005_passwordIsMandatory"
+   ]
+  },
+  "BR-ONL-006": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_006_credentialsAreUpperCasedBeforeTheCheck": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_006_credentialsAreUpperCasedBeforeTheCheck"
+   ]
+  },
+  "BR-ONL-007": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_007_unknownUser": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_007_unknownUser"
+   ]
+  },
+  "BR-ONL-008": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_008_securityFileError": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_008_securityFileError"
+   ]
+  },
+  "BR-ONL-009": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_009_wrongPassword": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_009_wrongPassword"
+   ]
+  },
+  "BR-ONL-010": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/signon/SignOnService.java"
+   ],
+   "results": {
+    "SignOnServiceTest#BR_ONL_010_successRoutesByUserType": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "SignOnServiceTest#BR_ONL_010_successRoutesByUserType"
+   ]
+  },
+  "BR-ONL-011": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_011_menuWithoutCommareaGoesToSignOn": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_011_menuWithoutCommareaGoesToSignOn"
+   ]
+  },
+  "BR-ONL-012": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_012_firstDisplayListsElevenOptionsAndSetsReenter": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_012_firstDisplayListsElevenOptionsAndSetsReenter"
+   ]
+  },
+  "BR-ONL-013": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_013_optionIsRightJustifiedAndZeroFilled": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_013_optionIsRightJustifiedAndZeroFilled"
+   ]
+  },
+  "BR-ONL-014": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_014_optionRangeCheck": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_014_optionRangeCheck"
+   ]
+  },
+  "BR-ONL-015": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_015_adminOnlyOptionRejectedForUser": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_015_adminOnlyOptionRejectedForUser"
+   ]
+  },
+  "BR-ONL-016": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_016_pendingAuthorizationNotInstalled": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_016_pendingAuthorizationNotInstalled"
+   ]
+  },
+  "BR-ONL-017": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_017_dummyProgramIsComingSoon": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_017_dummyProgramIsComingSoon"
+   ]
+  },
+  "BR-ONL-018": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_018_validOptionTransfersControl": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_018_validOptionTransfersControl"
+   ]
+  },
+  "BR-ONL-019": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/menu/MenuService.java"
+   ],
+   "results": {
+    "MenuServiceTest#BR_ONL_019_pf3ReturnsToSignOnOtherKeysInvalid": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "MenuServiceTest#BR_ONL_019_pf3ReturnsToSignOnOtherKeysInvalid"
+   ]
+  },
+  "BR-ONL-020": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_020_freshEntryAndPfKeyMapping": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_020_freshEntryAndPfKeyMapping"
+   ]
+  },
+  "BR-ONL-021": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_021_pf3ReturnsToCallerAsUserType_U": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_021_pf3ReturnsToCallerAsUserType_U"
+   ]
+  },
+  "BR-ONL-022": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_022_blankOrStarSearchKey": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_022_blankOrStarSearchKey"
+   ]
+  },
+  "BR-ONL-023": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_023_keyMustBeNonZero11Digits": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_023_keyMustBeNonZero11Digits"
+   ]
+  },
+  "BR-ONL-024": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountLookup.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_024_lookupChainXrefAccountCustomer": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_024_lookupChainXrefAccountCustomer"
+   ]
+  },
+  "BR-ONL-025": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountLookup.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_025_notFoundMessagesTruncatedTo75": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_025_notFoundMessagesTruncatedTo75"
+   ]
+  },
+  "BR-ONL-026": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountLookup.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_026_fileErrorMessage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_026_fileErrorMessage"
+   ]
+  },
+  "BR-ONL-027": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountViewService.java"
+   ],
+   "results": {
+    "AccountViewServiceTest#BR_ONL_027_displayFormatting": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountViewServiceTest#BR_ONL_027_displayFormatting"
+   ]
+  },
+  "BR-ONL-028": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_028_pf5BeforeValidationActsAsEnter": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_028_pf5BeforeValidationActsAsEnter"
+   ]
+  },
+  "BR-ONL-029": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_029_stateMachineAndInfoMessages": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_029_stateMachineAndInfoMessages"
+   ]
+  },
+  "BR-ONL-030": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_030_pf3SyncpointsAndReturnsAsUser": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_030_pf3SyncpointsAndReturnsAsUser"
+   ]
+  },
+  "BR-ONL-031": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_031_freshEntryAndResetAfterSave": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_031_freshEntryAndResetAfterSave"
+   ]
+  },
+  "BR-ONL-032": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_032_searchKeyEdit": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_032_searchKeyEdit"
+   ]
+  },
+  "BR-ONL-033": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_033_fetchSnapshotsOldValues": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_033_fetchSnapshotsOldValues"
+   ]
+  },
+  "BR-ONL-034": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_034_starMeansNotSupplied": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_034_starMeansNotSupplied"
+   ]
+  },
+  "BR-ONL-035": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_035_moneyInputTruncates": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_035_moneyInputTruncates"
+   ]
+  },
+  "BR-ONL-036": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_036_changeDetectionIsTrimmedAndCaseInsensitive": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_036_changeDetectionIsTrimmedAndCaseInsensitive"
+   ]
+  },
+  "BR-ONL-037": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_037_firstErrorWins": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_037_firstErrorWins"
+   ]
+  },
+  "BR-ONL-038": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_038_yesNoFields": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_038_yesNoFields"
+   ]
+  },
+  "BR-ONL-039": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_039_signedMoneyFields": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_039_signedMoneyFields"
+   ]
+  },
+  "BR-ONL-040": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_040_yearAndCentury": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_040_yearAndCentury"
+   ]
+  },
+  "BR-ONL-041": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_041_monthAndDayRanges": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_041_monthAndDayRanges"
+   ]
+  },
+  "BR-ONL-042": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_042_dayMonthCombinationsAndLeapYears": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_042_dayMonthCombinationsAndLeapYears"
+   ]
+  },
+  "BR-ONL-043": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_043_dateOfBirthMustBeBeforeToday": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_043_dateOfBirthMustBeBeforeToday"
+   ]
+  },
+  "BR-ONL-044": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_044_ssnEdit": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_044_ssnEdit"
+   ]
+  },
+  "BR-ONL-045": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_045_ficoRange": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_045_ficoRange"
+   ]
+  },
+  "BR-ONL-046": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_046_namesAlphabeticOnly": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_046_namesAlphabeticOnly"
+   ]
+  },
+  "BR-ONL-047": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_047_addressCityCountry": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_047_addressCityCountry"
+   ]
+  },
+  "BR-ONL-048": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_048_stateCode": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_048_stateCode"
+   ]
+  },
+  "BR-ONL-049": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_049_zipAndStateZipCombination": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_049_zipAndStateZipCombination"
+   ]
+  },
+  "BR-ONL-050": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_050_phoneNumberEdit": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_050_phoneNumberEdit"
+   ]
+  },
+  "BR-ONL-051": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_051_eftAccountId": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_051_eftAccountId"
+   ]
+  },
+  "BR-ONL-052": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_052_validChangesAskForConfirmation": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_052_validChangesAskForConfirmation"
+   ]
+  },
+  "BR-ONL-053": {
+   "java": [],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_053_pf12CancelsChanges": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_053_pf12CancelsChanges"
+   ]
+  },
+  "BR-ONL-054": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_054_saveLocksBothRecords": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_054_saveLocksBothRecords"
+   ]
+  },
+  "BR-ONL-055": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_055_optimisticConcurrencyCheck": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_055_optimisticConcurrencyCheck"
+   ]
+  },
+  "BR-ONL-056": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_056_savedRecordFormats": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_056_savedRecordFormats"
+   ]
+  },
+  "BR-ONL-057": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_057_rewriteFailureRollsBack": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_057_rewriteFailureRollsBack"
+   ]
+  },
+  "BR-ONL-058": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_058_currencyDisplayPicture": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_058_currencyDisplayPicture"
+   ]
+  },
+  "BR-ONL-059": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/account/AccountUpdateService.java"
+   ],
+   "results": {
+    "AccountUpdateServiceTest#BR_ONL_059_unexpectedStateAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "AccountUpdateServiceTest#BR_ONL_059_unexpectedStateAbends"
+   ]
+  },
+  "BR-ONL-060": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/DateFormatRoutine.java"
+   ],
+   "results": {
+    "RoutinesTest#BR_ONL_060_linkageUpdatesRecordInPlaceAndReturnsZero": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "RoutinesTest#BR_ONL_060_linkageUpdatesRecordInPlaceAndReturnsZero"
+   ]
+  },
+  "BR-ONL-061": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/DateFormatRoutine.java"
+   ],
+   "results": {
+    "RoutinesTest#BR_ONL_061_yyyymmddToIsoDate": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "RoutinesTest#BR_ONL_061_yyyymmddToIsoDate"
+   ]
+  },
+  "BR-ONL-062": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/DateFormatRoutine.java"
+   ],
+   "results": {
+    "RoutinesTest#BR_ONL_062_finding12_hyphenGuardComparesTwentyBytes": "pass",
+    "RoutinesTest#BR_ONL_062_isoDateToYyyymmddWithoutSeparatorCheck": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "RoutinesTest#BR_ONL_062_isoDateToYyyymmddWithoutSeparatorCheck",
+    "RoutinesTest#BR_ONL_062_finding12_hyphenGuardComparesTwentyBytes"
+   ]
+  },
+  "BR-ONL-063": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/DateFormatRoutine.java"
+   ],
+   "results": {
+    "RoutinesTest#BR_ONL_063_invalidInputMessageLeavesOutputUnchanged": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "RoutinesTest#BR_ONL_063_invalidInputMessageLeavesOutputUnchanged"
+   ]
+  },
+  "BR-ONL-064": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/WaitRoutine.java"
+   ],
+   "results": {
+    "RoutinesTest#BR_ONL_064_mvswaitSleepsHundredthsInjectable": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "RoutinesTest#BR_ONL_064_mvswaitSleepsHundredthsInjectable"
+   ]
+  },
+  "BR-ONL-065": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/FeeDriver.java",
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_065_driverBuildsRequestArea": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_065_driverBuildsRequestArea"
+   ]
+  },
+  "BR-ONL-066": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_066_averageDailyBalanceTruncatesAndIsAlwaysComputed": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_066_averageDailyBalanceTruncatesAndIsAlwaysComputed"
+   ]
+  },
+  "BR-ONL-067": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_067_negativeLateDaysMeansNoFee": "pass",
+    "LateFeeCalculatorTest#BR_ONL_067_workedExample6_nothingOverdue": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_067_workedExample6_nothingOverdue",
+    "LateFeeCalculatorTest#BR_ONL_067_negativeLateDaysMeansNoFee"
+   ]
+  },
+  "BR-ONL-068": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_068_goldAtHundredIsNotWaived": "pass",
+    "LateFeeCalculatorTest#BR_ONL_068_workedExample4_goldWaiverRc4": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_068_workedExample4_goldWaiverRc4",
+    "LateFeeCalculatorTest#BR_ONL_068_goldAtHundredIsNotWaived"
+   ]
+  },
+  "BR-ONL-069": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_069_lateFeeTruncatesToCents": "pass",
+    "LateFeeCalculatorTest#BR_ONL_069_workedExample1_feeTruncatesTo3086": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_069_workedExample1_feeTruncatesTo3086",
+    "LateFeeCalculatorTest#BR_ONL_069_lateFeeTruncatesToCents"
+   ]
+  },
+  "BR-ONL-070": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_070_feeJustBelowFloorIsLifted": "pass",
+    "LateFeeCalculatorTest#BR_ONL_070_workedExample2_floorFiveDollars": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_070_workedExample2_floorFiveDollars",
+    "LateFeeCalculatorTest#BR_ONL_070_feeJustBelowFloorIsLifted"
+   ]
+  },
+  "BR-ONL-071": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_071_feeJustAboveCapIsCapped": "pass",
+    "LateFeeCalculatorTest#BR_ONL_071_workedExample3_capThirtyFiveDollars": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_071_workedExample3_capThirtyFiveDollars",
+    "LateFeeCalculatorTest#BR_ONL_071_feeJustAboveCapIsCapped"
+   ]
+  },
+  "BR-ONL-072": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_072_workedExample5_zeroDivideRc8": "pass",
+    "LateFeeCalculatorTest#BR_ONL_072_zeroDivideMessage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_072_workedExample5_zeroDivideRc8",
+    "LateFeeCalculatorTest#BR_ONL_072_zeroDivideMessage"
+   ]
+  },
+  "BR-ONL-073": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/LateFeeCalculator.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_073_sizeConditionRc8": "pass",
+    "LateFeeCalculatorTest#BR_ONL_073_unexpectedErrorRc8": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_073_sizeConditionRc8",
+    "LateFeeCalculatorTest#BR_ONL_073_unexpectedErrorRc8"
+   ]
+  },
+  "BR-ONL-074": {
+   "java": [
+    "java/online/src/main/java/com/carddemo/online/routines/FeeDriver.java"
+   ],
+   "results": {
+    "LateFeeCalculatorTest#BR_ONL_074_feeOutputLine": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "LateFeeCalculatorTest#BR_ONL_074_feeOutputLine"
+   ]
+  },
+  "BR-POST-001": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_001_postTranJclRunsCbtrn02cWithTheSixDatasets": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_001_postTranJclRunsCbtrn02cWithTheSixDatasets"
+   ]
+  },
+  "BR-POST-002": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_002_everyRecordIsReadAndCounted": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_002_everyRecordIsReadAndCounted"
+   ]
+  },
+  "BR-POST-003": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_003_cardIsCheckedBeforeTheAccount": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_003_cardIsCheckedBeforeTheAccount"
+   ]
+  },
+  "BR-POST-004": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_004_unknownCardRejects100": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_004_unknownCardRejects100"
+   ]
+  },
+  "BR-POST-005": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p03-account-missing PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_005_missingAccountRejects101WithoutLimitOrExpiryChecks": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_005_missingAccountRejects101WithoutLimitOrExpiryChecks"
+   ]
+  },
+  "BR-POST-006": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p04-overlimit-reject PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_006_limitCheckUsesCycleAmountsNotTheBalance": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_006_limitCheckUsesCycleAmountsNotTheBalance"
+   ]
+  },
+  "BR-POST-007": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p04-overlimit-reject PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_007_overLimitRejects102": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_007_overLimitRejects102"
+   ]
+  },
+  "BR-POST-008": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): p04-overlimit-reject PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_008_limitCheckSeesEarlierPostingsOfTheSameRun": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_008_limitCheckSeesEarlierPostingsOfTheSameRun"
+   ]
+  },
+  "BR-POST-009": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p05-expired-account PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_009_expiryBeforeOriginDateRejects103_onTheDayIsAccepted": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_009_expiryBeforeOriginDateRejects103_onTheDayIsAccepted"
+   ]
+  },
+  "BR-POST-010": {
+   "java": [],
+   "results": {
+    "PostTranRulesTest#BR_POST_010_expiryReasonOverridesOverLimit": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_010_expiryReasonOverridesOverLimit"
+   ]
+  },
+  "BR-POST-011": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_011_blankOrZeroExpiryRejectsEveryTransaction": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_011_blankOrZeroExpiryRejectsEveryTransaction"
+   ]
+  },
+  "BR-POST-012": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_012_rejectRecordIsTheInputPlusAn80ByteTrailer": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_012_rejectRecordIsTheInputPlusAn80ByteTrailer"
+   ]
+  },
+  "BR-POST-013": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_013_rejectsAreCountedAndPostingContinues": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_013_rejectsAreCountedAndPostingContinues"
+   ]
+  },
+  "BR-POST-014": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS, p07-empty-day PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_014_returnCode4OnlyWhenSomethingWasRejected": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_014_returnCode4OnlyWhenSomethingWasRejected"
+   ]
+  },
+  "BR-POST-015": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS, p07-empty-day PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_015_sysoutMessagesAndCounters": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_015_sysoutMessagesAndCounters"
+   ]
+  },
+  "BR-POST-016": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_016_postedTransactionCopiesTheDailyFields": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_016_postedTransactionCopiesTheDailyFields"
+   ]
+  },
+  "BR-POST-017": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p06-credits-new-category PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_017_processingTimestampIsTheRunClock": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_017_processingTimestampIsTheRunClock"
+   ]
+  },
+  "BR-POST-018": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p06-credits-new-category PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_018_categoryBalanceKeyIsAccountTypeCategory": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_018_categoryBalanceKeyIsAccountTypeCategory"
+   ]
+  },
+  "BR-POST-019": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p06-credits-new-category PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_019_missingCategoryBalanceIsCreatedWithTheAmount": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_019_missingCategoryBalanceIsCreatedWithTheAmount"
+   ]
+  },
+  "BR-POST-020": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p04-overlimit-reject PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_020_existingCategoryBalanceIsAddedTo": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_020_existingCategoryBalanceIsAddedTo"
+   ]
+  },
+  "BR-POST-021": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_021_categoryBalanceWriteFailureAbends": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_021_categoryBalanceWriteFailureAbends"
+   ]
+  },
+  "BR-POST-022": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p06-credits-new-category PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_022_balanceAndCycleTotalsUpdatedBySign": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_022_balanceAndCycleTotalsUpdatedBySign"
+   ]
+  },
+  "BR-POST-023": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java",
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_023_paymentsRaiseTheLimitCheckAmount": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_023_paymentsRaiseTheLimitCheckAmount"
+   ]
+  },
+  "BR-POST-024": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_024_accountRewriteFailureSets109ButStillPosts": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_024_accountRewriteFailureSets109ButStillPosts"
+   ]
+  },
+  "BR-POST-025": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionPoster.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_025_postingOrderCategoryThenAccountThenTransaction": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_025_postingOrderCategoryThenAccountThenTransaction"
+   ]
+  },
+  "BR-POST-026": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_026_transactionMasterIsOpenedForOutput": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_026_transactionMasterIsOpenedForOutput"
+   ]
+  },
+  "BR-POST-027": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/PostTranProgram.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p07-empty-day PASS",
+   "results": {
+    "PostTranRulesTest#BR_POST_027_emptyDailyFilePostsNothingRc0": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_027_emptyDailyFilePostsNothingRc0"
+   ]
+  },
+  "BR-POST-028": {
+   "java": [],
+   "results": {
+    "PostTranRulesTest#BR_POST_028_ioErrorsDisplayStatusAndAbendRc12": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_028_ioErrorsDisplayStatusAndAbendRc12"
+   ]
+  },
+  "BR-POST-029": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/post/TransactionValidator.java"
+   ],
+   "results": {
+    "PostTranRulesTest#BR_POST_029_noRoundingAndHighOrderTruncation": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "PostTranRulesTest#BR_POST_029_noRoundingAndHighOrderTruncation"
+   ]
+  },
+  "BR-POST-030": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/PostingChainHandler.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_030_reproUnloadsTheTransactionMasterInKeyOrder": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_030_reproUnloadsTheTransactionMasterInKeyOrder"
+   ]
+  },
+  "BR-POST-031": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TranReptSort.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_031_sortFiltersOnProcessingDateAndSortsStablyByCard": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_031_sortFiltersOnProcessingDateAndSortsStablyByCard"
+   ]
+  },
+  "BR-POST-032": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS, p07-empty-day PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_032_dateRangeComesFromDateparm": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_032_dateRangeComesFromDateparm"
+   ]
+  },
+  "BR-POST-033": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p07-empty-day PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_033_outOfRangeDateEndsTheLoopWithoutTotals": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_033_outOfRangeDateEndsTheLoopWithoutTotals"
+   ]
+  },
+  "BR-POST-034": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_034_eachReportedRecordIsEchoedToSysout": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_034_eachReportedRecordIsEchoedToSysout"
+   ]
+  },
+  "BR-POST-035": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_035_headersBeforeTheFirstDetail": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_035_headersBeforeTheFirstDetail"
+   ]
+  },
+  "BR-POST-036": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/NumericEdit.java",
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p06-credits-new-category PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_036_detailLineFormat": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_036_detailLineFormat"
+   ]
+  },
+  "BR-POST-037": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/NumericEdit.java"
+   ],
+   "results": {
+    "TranReptRulesTest#BR_POST_037_zeroAmountsPrintAsBlanks": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_037_zeroAmountsPrintAsBlanks"
+   ]
+  },
+  "BR-POST-038": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "results": {
+    "TranReptRulesTest#BR_POST_038_missingLookupsAbend": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_038_missingLookupsAbend"
+   ]
+  },
+  "BR-POST-039": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_039_accountTotalsBreakOnCardNumber": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_039_accountTotalsBreakOnCardNumber"
+   ]
+  },
+  "BR-POST-040": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "results": {
+    "TranReptRulesTest#BR_POST_040_pageBreakWhenTheLineCounterIsAMultipleOf20": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_040_pageBreakWhenTheLineCounterIsAMultipleOf20"
+   ]
+  },
+  "BR-POST-041": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_041_pageTotalsRollIntoTheGrandTotal": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_041_pageTotalsRollIntoTheGrandTotal"
+   ]
+  },
+  "BR-POST-042": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_042_endOfFileAddsTheLastAmountAgain": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_042_endOfFileAddsTheLastAmountAgain"
+   ]
+  },
+  "BR-POST-043": {
+   "java": [
+    "java/posting/src/main/java/com/carddemo/posting/report/TransactionReport.java"
+   ],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_043_lastAccountTotalIsNeverPrinted": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_043_lastAccountTotalIsNeverPrinted"
+   ]
+  },
+  "BR-POST-044": {
+   "java": [],
+   "regression": "Java vs legacy (compare.py): p01-baseline-mixed PASS, p02-invalid-card PASS, p03-account-missing PASS, p04-overlimit-reject PASS, p05-expired-account PASS, p06-credits-new-category PASS, p07-empty-day PASS",
+   "results": {
+    "TranReptRulesTest#BR_POST_044_startAndEndMessagesAndNoReturnCode": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TranReptRulesTest#BR_POST_044_startAndEndMessagesAndNoReturnCode"
+   ]
+  },
+  "BR-TT-001": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_001_recordLayoutActionTypeAndDescription": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_001_recordLayoutActionTypeAndDescription"
+   ]
+  },
+  "BR-TT-002": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS, d02-delete-statement PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_002_openFileOkIsTheSecondLine": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_002_openFileOkIsTheSecondLine"
+   ]
+  },
+  "BR-TT-003": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_003_openFailureDoesNotStopTheProgram": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_003_openFailureDoesNotStopTheProgram"
+   ]
+  },
+  "BR-TT-004": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t02-update PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_004_everyRecordIsEchoedPaddedTo53": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_004_everyRecordIsEchoedPaddedTo53"
+   ]
+  },
+  "BR-TT-005": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d02-delete-statement PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_005_emptyInputFileIsNotAnError": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_005_emptyInputFileIsNotAnError"
+   ]
+  },
+  "BR-TT-006": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_006_actionAInsertsANewType": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_006_actionAInsertsANewType"
+   ]
+  },
+  "BR-TT-007": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS, t04-comments PASS, d01-update-then-apply PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_007_insertSuccessMessage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_007_insertSuccessMessage"
+   ]
+  },
+  "BR-TT-008": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS, t02-update PASS, t04-comments PASS, d01-update-then-apply PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_008_descriptionIsStoredSpacePaddedTo50": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_008_descriptionIsStoredSpacePaddedTo50"
+   ]
+  },
+  "BR-TT-009": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t02-update PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_009_actionUUpdatesTheDescriptionByKey": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_009_actionUUpdatesTheDescriptionByKey"
+   ]
+  },
+  "BR-TT-010": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t02-update PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_010_updateSuccessMessage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_010_updateSuccessMessage"
+   ]
+  },
+  "BR-TT-011": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_011_updateOfMissingKeyOffHostReportsSuccess": "pass",
+    "TransactionTypeMaintenanceTest#BR_TT_011_updateOfMissingKeyWithSqlcode100IsAnError": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_011_updateOfMissingKeyOffHostReportsSuccess",
+    "TransactionTypeMaintenanceTest#BR_TT_011_updateOfMissingKeyWithSqlcode100IsAnError"
+   ]
+  },
+  "BR-TT-012": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t03-delete PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_012_actionDDeletesByKeyAndIgnoresTheDescription": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_012_actionDDeletesByKeyAndIgnoresTheDescription"
+   ]
+  },
+  "BR-TT-013": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t03-delete PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_013_deleteSuccessMessage": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_013_deleteSuccessMessage"
+   ]
+  },
+  "BR-TT-014": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/SqlCodes.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t05-delete-missing PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_014_deleteOfMissingKeyReportsSuccess": "pass",
+    "TransactionTypeMaintenanceTest#BR_TT_014_deleteOfMissingKeyWithSqlcode100WouldBeAnError": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_014_deleteOfMissingKeyReportsSuccess",
+    "TransactionTypeMaintenanceTest#BR_TT_014_deleteOfMissingKeyWithSqlcode100WouldBeAnError"
+   ]
+  },
+  "BR-TT-015": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t04-comments PASS, t07-mixed-batch PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_015_commentRecordsAreSkipped": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_015_commentRecordsAreSkipped"
+   ]
+  },
+  "BR-TT-016": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_016_unknownActionCodeIsRejectedAndProcessingContinues": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_016_unknownActionCodeIsRejectedAndProcessingContinues"
+   ]
+  },
+  "BR-TT-017": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t06-duplicate-add PASS, d03-bad-statement PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_017_negativeSqlcodeIsAnErrorWithEditedCode": "pass",
+    "TransactionTypeMaintenanceTest#BR_TT_017_positiveSqlcodeOtherThan100FallsThroughSilently": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_017_negativeSqlcodeIsAnErrorWithEditedCode",
+    "TransactionTypeMaintenanceTest#BR_TT_017_positiveSqlcodeOtherThan100FallsThroughSilently"
+   ]
+  },
+  "BR-TT-018": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/SqlCodes.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t06-duplicate-add PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_018_duplicateAddIsRejectedWithMinus403": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_018_duplicateAddIsRejectedWithMinus403"
+   ]
+  },
+  "BR-TT-019": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t06-duplicate-add PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_019_errorsDoNotStopTheBatchAndRc4IsSticky": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_019_errorsDoNotStopTheBatchAndRc4IsSticky"
+   ]
+  },
+  "BR-TT-020": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t06-duplicate-add PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_020_errorBufferIs80BytesAndNeverCleared": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_020_errorBufferIs80BytesAndNeverCleared"
+   ]
+  },
+  "BR-TT-021": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_021_typeCodeIsNotValidated": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_021_typeCodeIsNotValidated"
+   ]
+  },
+  "BR-TT-022": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnRunner.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/program/StopRun.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS, d02-delete-statement PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_022_endOfFileClosesAndStopsTheRunUnit": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_022_endOfFileClosesAndStopsTheRunUnit"
+   ]
+  },
+  "BR-TT-023": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnRunner.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/Db2Session.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/JdbcDb2Session.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS, d01-update-then-apply PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_023_dsnAttachLinesAndCommitAtEndOfTask": "pass",
+    "TransactionTypeMaintenanceTest#BR_TT_023_failedCommitIsReported": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_023_dsnAttachLinesAndCommitAtEndOfTask",
+    "TransactionTypeMaintenanceTest#BR_TT_023_failedCommitIsReported"
+   ]
+  },
+  "BR-TT-024": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/Db2Session.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/JdbcDb2Session.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/SqlCodes.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d03-bad-statement PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_024_failedStatementAbortsTheUnitOfWork": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_024_failedStatementAbortsTheUnitOfWork"
+   ]
+  },
+  "BR-TT-025": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_025_deleteOfATypeWithCategoriesIsRefused": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_025_deleteOfATypeWithCategoriesIsRefused"
+   ]
+  },
+  "BR-TT-026": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/TransactionTypeMaintenance.java"
+   ],
+   "regression": "Java vs legacy (compare.py): t01-add PASS",
+   "results": {
+    "TransactionTypeMaintenanceTest#BR_TT_026_tableKeysAndColumnsMatchTheDb2Ddl": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "TransactionTypeMaintenanceTest#BR_TT_026_tableKeysAndColumnsMatchTheDb2Ddl"
+   ]
+  },
+  "BR-TT-027": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_027_statementIsAssembledFromColumns1To72PlusOneSpace": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_027_statementIsAssembledFromColumns1To72PlusOneSpace"
+   ]
+  },
+  "BR-TT-028": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_028_onlyDashDashInColumns1And2IsAComment": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_028_onlyDashDashInColumns1And2IsAComment"
+   ]
+  },
+  "BR-TT-029": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS, d02-delete-statement PASS, d03-bad-statement PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_029_lineCountMessageHasTwoDigits": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_029_lineCountMessageHasTwoDigits"
+   ]
+  },
+  "BR-TT-030": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_030_statementIsCutAt800CharactersAndTheCountWraps": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_030_statementIsCutAt800CharactersAndTheCountWraps"
+   ]
+  },
+  "BR-TT-031": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_031_prepareFailureSetsRc8AndSkipsExecute": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_031_prepareFailureSetsRc8AndSkipsExecute"
+   ]
+  },
+  "BR-TT-032": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS, d02-delete-statement PASS, d03-bad-statement PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_032_executeSqlcodeIsAlwaysShownAndOnlyNegativeSetsRc8": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_032_executeSqlcodeIsAlwaysShownAndOnlyNegativeSetsRc8"
+   ]
+  },
+  "BR-TT-033": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d03-bad-statement PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_033_badStatementDoesNotStopTheJob": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_033_badStatementDoesNotStopTheJob"
+   ]
+  },
+  "BR-TT-034": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnCommand.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnRunner.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/program/ProgramRegistry.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_034_dynamicCallOfTheProgramNamedInParms": "pass",
+    "DynamicSqlDriverTest#BR_TT_034_unknownProgramEndsTheRunUnitWithRc1": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_034_dynamicCallOfTheProgramNamedInParms",
+    "DynamicSqlDriverTest#BR_TT_034_unknownProgramEndsTheRunUnitWithRc1"
+   ]
+  },
+  "BR-TT-035": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnCommand.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java"
+   ],
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_035_noParmsMeansNoCall": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_035_noParmsMeansNoCall"
+   ]
+  },
+  "BR-TT-036": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/program/StopRun.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS, d02-delete-statement PASS, d03-bad-statement PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_036_endIsNeverShownAfterCallingCobtupdt": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_036_endIsNeverShownAfterCallingCobtupdt"
+   ]
+  },
+  "BR-TT-037": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DsnRunner.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/program/RunUnit.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d03-bad-statement PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_037_stepRcIsTheLastValueMovedToReturnCode": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_037_stepRcIsTheLastValueMovedToReturnCode"
+   ]
+  },
+  "BR-TT-038": {
+   "java": [
+    "java/trantype/src/main/java/com/carddemo/trantype/DynamicSqlDriver.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/Db2Session.java",
+    "java/trantype/src/main/java/com/carddemo/trantype/db2/JdbcDb2Session.java"
+   ],
+   "regression": "Java vs legacy (compare.py): d01-update-then-apply PASS",
+   "results": {
+    "DynamicSqlDriverTest#BR_TT_038_dynamicSqlAndFileUpdatesShareOneUnitOfWork": "pass"
+   },
+   "status": "pass",
+   "tests": [
+    "DynamicSqlDriverTest#BR_TT_038_dynamicSqlAndFileUpdatesShareOneUnitOfWork"
+   ]
+  }
+ }
+}
