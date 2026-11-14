@@ -1,0 +1,1251 @@
+[
+  {
+    "id": "BR-TT-001",
+    "slice": "trantype",
+    "title": "Maintenance input record layout",
+    "rule": "Each INPFILE record is 53 bytes: column 1 is the action code, columns 2-3 the two-character transaction type code and columns 4-53 the 50-character description. Short records are padded with spaces.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 39,
+        "end": 46
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 71,
+        "end": 77
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 100,
+        "end": 103
+      },
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl",
+        "start": 8,
+        "end": 19
+      }
+    ],
+    "fields": [
+      "INPUT-TYPE, INPUT-TR-NUMBER, INPUT-TR-DESC (FD TR-RECORD, COBTUPDT)",
+      "INPUT-REC-TYPE, INPUT-REC-NUMBER, INPUT-REC-DESC (WS-INPUT-REC, COBTUPDT working storage)"
+    ],
+    "test": {
+      "given": "an INPFILE record `A04Authorization`",
+      "when": "COBTUPDT reads it INTO WS-INPUT-REC",
+      "then": "INPUT-REC-TYPE = `A`, INPUT-REC-NUMBER = `04`, INPUT-REC-DESC = `Authorization` followed by 37 spaces"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add"
+    ]
+  },
+  {
+    "id": "BR-TT-002",
+    "slice": "trantype",
+    "title": "Open-file status message",
+    "rule": "On start the program opens INPFILE and displays `OPEN FILE OK` when the file status is `00`, otherwise `OPEN FILE NOT OK`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 82,
+        "end": 89
+      }
+    ],
+    "fields": [
+      "WS-INF-STATUS (COBTUPDT working storage)"
+    ],
+    "test": {
+      "given": "an existing INPFILE (even an empty one)",
+      "when": "MNTTRDB2 STEP1 starts COBTUPDT",
+      "then": "the second SYSOUT line is `OPEN FILE OK`"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add",
+      "fixtures/trantype-dynamic/d02-delete-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-003",
+    "slice": "trantype",
+    "title": "Open failure does not stop the program",
+    "rule": "If the open fails the program still falls through into the read loop; there is no stop, return code or abend on `OPEN FILE NOT OK`. With no end-of-file condition ever raised the loop would keep reporting invalid records (see Findings F2; derived from the source, not executed).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 82,
+        "end": 99
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 100,
+        "end": 107
+      }
+    ],
+    "fields": [
+      "WS-INF-STATUS, LASTREC (COBTUPDT working storage)"
+    ],
+    "test": {
+      "given": "INPFILE cannot be opened (file status not `00`)",
+      "when": "COBTUPDT runs",
+      "then": "`OPEN FILE NOT OK` is displayed and control continues into 1001-READ-NEXT-RECORDS anyway"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-004",
+    "slice": "trantype",
+    "title": "Read loop and record echo",
+    "rule": "Records are read sequentially until end of file. Every record read (not the end-of-file read) is echoed as `PROCESSING   ` (three spaces) followed by the full 53-byte record, before it is acted on.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 91,
+        "end": 107
+      }
+    ],
+    "fields": [
+      "LASTREC (FLAGS, COBTUPDT)",
+      "WS-INPUT-REC (COBTUPDT)"
+    ],
+    "test": {
+      "given": "INPFILE holds `U02Payment - bank transfer`",
+      "when": "the record is read",
+      "then": "SYSOUT shows `PROCESSING   U02Payment - bank transfer` padded with trailing spaces to 53 record bytes, then `UPDATING RECORD`"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t02-update",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-005",
+    "slice": "trantype",
+    "title": "Empty input file",
+    "rule": "An empty INPFILE is not an error: after `OPEN FILE OK` nothing else is displayed by COBTUPDT, no SQL is issued and the step ends with return code 0.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 91,
+        "end": 107
+      }
+    ],
+    "fields": [
+      "LASTREC (FLAGS, COBTUPDT)"
+    ],
+    "test": {
+      "given": "an empty INPFILE",
+      "when": "COBTUPDT runs (here called from CBTRNDYN)",
+      "then": "SYSOUT from COBTUPDT is only `OPEN FILE OK`; table rows are unchanged by COBTUPDT; RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d02-delete-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-006",
+    "slice": "trantype",
+    "title": "Action A inserts a new transaction type",
+    "rule": "Action code `A` displays `ADDING RECORD` and inserts a row into CARDDEMO.TRANSACTION_TYPE with TR_TYPE = columns 2-3 and TR_DESCRIPTION = columns 4-53.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 111,
+        "end": 113
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 132,
+        "end": 148
+      }
+    ],
+    "fields": [
+      "INPUT-REC-TYPE, INPUT-REC-NUMBER, INPUT-REC-DESC (WS-INPUT-REC, COBTUPDT working storage)",
+      "TR_TYPE, TR_DESCRIPTION (DCLTRTYP / CARDDEMO.TRANSACTION_TYPE)"
+    ],
+    "test": {
+      "given": "TRANSACTION_TYPE holds 01, 02, 03",
+      "when": "record `A05Refund` is processed",
+      "then": "`ADDING RECORD` is displayed and a row 05 / `Refund` (space-padded to 50) exists"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-007",
+    "slice": "trantype",
+    "title": "Insert success message",
+    "rule": "When the INSERT returns SQLCODE 0 the program displays `RECORD INSERTED SUCCESSFULLY`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 149,
+        "end": 153
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)"
+    ],
+    "test": {
+      "given": "type 04 does not exist",
+      "when": "record `A04Authorization` is processed",
+      "then": "SYSOUT shows `ADDING RECORD` then `RECORD INSERTED SUCCESSFULLY`; RC stays 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add",
+      "fixtures/trantype-update/t04-comments",
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-008",
+    "slice": "trantype",
+    "title": "Description stored space-padded to 50 characters",
+    "rule": "INSERT and UPDATE bind the fixed PIC X(50) field INPUT-REC-DESC, not the DCLGEN VARCHAR structure, so TR_DESCRIPTION is stored with trailing spaces to its full 50 characters. Rows written by other means (seed data, dynamic SQL) are not padded.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 76,
+        "end": 77
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 137,
+        "end": 148
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 171,
+        "end": 175
+      },
+      {
+        "file": "app/app-transaction-type-db2/dcl/DCLTRTYP.dcl",
+        "start": 40,
+        "end": 46
+      }
+    ],
+    "fields": [
+      "INPUT-REC-DESC (COBTUPDT)",
+      "DCL-TR-DESCRIPTION-LEN, DCL-TR-DESCRIPTION-TEXT (DCLTRTYP, unused)",
+      "TR_DESCRIPTION VARCHAR(50)"
+    ],
+    "test": {
+      "given": "record `A06Fee`",
+      "when": "it is inserted",
+      "then": "TR_DESCRIPTION = `Fee` + 47 spaces (50 characters), whereas a seed row such as `Purchase` has no padding"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add",
+      "fixtures/trantype-update/t02-update",
+      "fixtures/trantype-update/t04-comments",
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-009",
+    "slice": "trantype",
+    "title": "Action U updates a description by key",
+    "rule": "Action code `U` displays `UPDATING RECORD` and sets TR_DESCRIPTION to columns 4-53 for the row whose TR_TYPE equals columns 2-3.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 114,
+        "end": 116
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 166,
+        "end": 175
+      }
+    ],
+    "fields": [
+      "INPUT-REC-TYPE, INPUT-REC-NUMBER, INPUT-REC-DESC (WS-INPUT-REC, COBTUPDT working storage)",
+      "TR_TYPE, TR_DESCRIPTION (DCLTRTYP / CARDDEMO.TRANSACTION_TYPE)"
+    ],
+    "test": {
+      "given": "row 02 / `Payment`",
+      "when": "record `U02Payment - bank transfer` is processed",
+      "then": "row 02 has TR_DESCRIPTION `Payment - bank transfer` padded to 50"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t02-update",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-010",
+    "slice": "trantype",
+    "title": "Update success message",
+    "rule": "When the UPDATE returns SQLCODE 0 the program displays `RECORD UPDATED SUCCESSFULLY`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 176,
+        "end": 179
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)"
+    ],
+    "test": {
+      "given": "row 01 exists",
+      "when": "record `U01Purchase - card present` is processed",
+      "then": "SYSOUT shows `UPDATING RECORD` then `RECORD UPDATED SUCCESSFULLY`"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t02-update",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-011",
+    "slice": "trantype",
+    "title": "Update of a missing key",
+    "rule": "The source treats UPDATE SQLCODE +100 (no row) as an error: it displays `No records found.` and sets return code 4. Off-host, Open COBOL ESQL is expected to report SQLCODE 0 for a zero-row UPDATE as it does for DELETE (BR-TT-014), which would print `RECORD UPDATED SUCCESSFULLY` with RC 0; no fixture proves either outcome yet.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 180,
+        "end": 184
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 230,
+        "end": 233
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)",
+      "WS-RETURN-MSG (COBTUPDT)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "type 09 does not exist",
+      "when": "record `U09Anything` is processed",
+      "then": "on Db2: `No records found.` (padded to 80) and RC 4; off-host: to be confirmed by a new fixture before the Java port relies on it"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-012",
+    "slice": "trantype",
+    "title": "Action D deletes by key, description ignored",
+    "rule": "Action code `D` displays `DELETING RECORD` and deletes the row whose TR_TYPE equals columns 2-3. Columns 4-53 are not used.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 117,
+        "end": 119
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 196,
+        "end": 204
+      }
+    ],
+    "fields": [
+      "INPUT-REC-TYPE, INPUT-REC-NUMBER, INPUT-REC-DESC (WS-INPUT-REC, COBTUPDT working storage)",
+      "TR_TYPE (DCLTRTYP / CARDDEMO.TRANSACTION_TYPE)"
+    ],
+    "test": {
+      "given": "rows 01, 02, 03",
+      "when": "record `D03` is processed",
+      "then": "rows 01 and 02 remain"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t03-delete",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-013",
+    "slice": "trantype",
+    "title": "Delete success message",
+    "rule": "When the DELETE returns SQLCODE 0 the program displays `RECORD DELETED SUCCESSFULLY`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 205,
+        "end": 209
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)"
+    ],
+    "test": {
+      "given": "row 03 exists",
+      "when": "record `D03` is processed",
+      "then": "SYSOUT shows `DELETING RECORD` then `RECORD DELETED SUCCESSFULLY`; RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t03-delete",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-014",
+    "slice": "trantype",
+    "title": "Delete of a missing key reports success (off-host baseline)",
+    "rule": "Deleting a type that does not exist leaves the table unchanged, still displays `RECORD DELETED SUCCESSFULLY` and ends with RC 0. The golden output shows the SQLCODE seen by COBTUPDT was 0: the source does have a +100 branch (`No records found.`, RC 4) that Db2 on z/OS would take. The migration reproduces the golden behaviour (Findings F1).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 205,
+        "end": 225
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)",
+      "INPUT-REC-NUMBER (COBTUPDT)"
+    ],
+    "test": {
+      "given": "rows 01, 02, 03",
+      "when": "record `D09` is processed",
+      "then": "SYSOUT `DELETING RECORD`, `RECORD DELETED SUCCESSFULLY`; table unchanged; RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t05-delete-missing"
+    ]
+  },
+  {
+    "id": "BR-TT-015",
+    "slice": "trantype",
+    "title": "Comment records are skipped",
+    "rule": "A record whose action code is `*` is displayed (`PROCESSING   ...`), then `IGNORING COMMENTED LINE`; no SQL is issued.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 120,
+        "end": 121
+      }
+    ],
+    "fields": [
+      "INPUT-REC-TYPE (COBTUPDT)"
+    ],
+    "test": {
+      "given": "records `*  Nightly maintenance batch`, `A06Fee`, `*  end`",
+      "when": "the file is processed",
+      "then": "both comment lines print `IGNORING COMMENTED LINE`; only type 06 is added; RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t04-comments",
+      "fixtures/trantype-update/t07-mixed-batch"
+    ]
+  },
+  {
+    "id": "BR-TT-016",
+    "slice": "trantype",
+    "title": "Unknown action code",
+    "rule": "Any action code other than `A`, `U`, `D` or `*` (including lowercase letters and a blank column 1) displays `ERROR: TYPE NOT VALID`, sets return code 4 and continues with the next record.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 122,
+        "end": 129
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 230,
+        "end": 233
+      }
+    ],
+    "fields": [
+      "INPUT-REC-TYPE, WS-RETURN-MSG (COBTUPDT)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a record `X05Something`",
+      "when": "it is processed",
+      "then": "SYSOUT `ERROR: TYPE NOT VALID` (padded to 80); no SQL issued; step RC 4; following records still processed"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-017",
+    "slice": "trantype",
+    "title": "Negative SQLCODE is an error",
+    "rule": "For INSERT, UPDATE and DELETE only a negative SQLCODE is treated as a database error: the program displays `Error accessing: TRANSACTION_TYPE table. SQLCODE:` followed by the code edited as `----9` (e.g. ` -403`) and sets return code 4. Positive SQLCODEs other than +100 fall through silently.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 64,
+        "end": 65
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 154,
+        "end": 162
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 185,
+        "end": 193
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 216,
+        "end": 224
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 230,
+        "end": 233
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)",
+      "WS-VAR-SQLCODE, WS-RETURN-MSG (COBTUPDT)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "row 01 exists",
+      "when": "record `A01Purchase` is processed",
+      "then": "SYSOUT `Error accessing: TRANSACTION_TYPE table. SQLCODE: -403` padded to 80; RC 4"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t06-duplicate-add",
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-018",
+    "slice": "trantype",
+    "title": "Duplicate add is rejected",
+    "rule": "Adding a type code that already exists violates the primary key. Through Open COBOL ESQL the SQLCODE is -403 (Db2 would return -803); the error message is displayed, the existing row is unchanged and the step ends with RC 4.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 137,
+        "end": 162
+      },
+      {
+        "file": "app/app-transaction-type-db2/ddl/TRNTYPE.ddl",
+        "start": 1,
+        "end": 4
+      },
+      {
+        "file": "db/postgres/01-transaction-type.sql",
+        "start": 6,
+        "end": 9
+      }
+    ],
+    "fields": [
+      "TR_TYPE (primary key, CARDDEMO.TRANSACTION_TYPE)",
+      "SQLCODE (SQLCA)"
+    ],
+    "test": {
+      "given": "row 01 / `Purchase`",
+      "when": "record `A01Purchase` is processed",
+      "then": "`ADDING RECORD`, `Error accessing: TRANSACTION_TYPE table. SQLCODE: -403`; row 01 still `Purchase`; RC 4"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t06-duplicate-add"
+    ]
+  },
+  {
+    "id": "BR-TT-019",
+    "slice": "trantype",
+    "title": "Errors do not stop the batch; RC 4 is sticky",
+    "rule": "The error routine 9999-ABEND only displays the message and moves 4 to RETURN-CODE; it does not abend or stop. Processing continues with the next record and nothing resets RETURN-CODE, so one error anywhere gives the step RC 4.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 91,
+        "end": 99
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 230,
+        "end": 233
+      }
+    ],
+    "fields": [
+      "RETURN-CODE",
+      "WS-RETURN-MSG (COBTUPDT)"
+    ],
+    "test": {
+      "given": "records `X01bad` then `*  note`",
+      "when": "the file is processed",
+      "then": "`ERROR: TYPE NOT VALID`, then `IGNORING COMMENTED LINE`; step RC 4"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t06-duplicate-add"
+    ]
+  },
+  {
+    "id": "BR-TT-020",
+    "slice": "trantype",
+    "title": "Error message buffer is 80 characters and never cleared",
+    "rule": "Error texts are built with STRING into the 80-byte WS-RETURN-MSG and displayed in full, so SYSOUT lines carry trailing spaces to 80 characters. The buffer is never cleared, so a shorter message after a longer one keeps the tail of the earlier text (Findings F3).",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 60,
+        "end": 62
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 123,
+        "end": 127
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 155,
+        "end": 161
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 181,
+        "end": 183
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 211,
+        "end": 213
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 230,
+        "end": 231
+      }
+    ],
+    "fields": [
+      "WS-RETURN-MSG (COBTUPDT)"
+    ],
+    "test": {
+      "given": "a run whose first error was `Error accessing: TRANSACTION_TYPE table. SQLCODE: -403`",
+      "when": "a later record has action code `X`",
+      "then": "SYSOUT shows `ERROR: TYPE NOT VALIDSACTION_TYPE table. SQLCODE: -403` (derived from the source, no fixture)"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t06-duplicate-add"
+    ]
+  },
+  {
+    "id": "BR-TT-021",
+    "slice": "trantype",
+    "title": "Type code is not validated",
+    "rule": "The JCL documents columns 2-3 as numeric, but the program does not check them: any two characters (letters, spaces) are passed to the database as TR_TYPE.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 109,
+        "end": 129
+      },
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl",
+        "start": 16,
+        "end": 16
+      }
+    ],
+    "fields": [
+      "INPUT-REC-NUMBER (COBTUPDT)",
+      "TR_TYPE CHAR(2)"
+    ],
+    "test": {
+      "given": "no row `AB` exists",
+      "when": "record `AB` + `Letters` is processed as `AABLetters`",
+      "then": "a row with TR_TYPE `AB` is inserted and `RECORD INSERTED SUCCESSFULLY` is displayed"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-022",
+    "slice": "trantype",
+    "title": "End of run: close and STOP RUN",
+    "rule": "At end of file the program closes INPFILE and executes STOP RUN, which ends the whole run unit (including any program that CALLed it) with the current RETURN-CODE.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 91,
+        "end": 99
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 234,
+        "end": 236
+      }
+    ],
+    "fields": [
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "COBTUPDT called from CBTRNDYN",
+      "when": "COBTUPDT reaches end of file",
+      "then": "control never returns to CBTRNDYN; the next SYSOUT line is `DSNRUN: COMMIT AT END OF TASK`"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply",
+      "fixtures/trantype-dynamic/d02-delete-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-023",
+    "slice": "trantype",
+    "title": "Commit at end of task",
+    "rule": "Neither program commits. The DSN RUN step (emulated by DSNRUN/DSNEXIT) displays `DSNRUN: DSN ATTACHED, RUNNING <program>` before the program and commits the whole unit of work at end of task, displaying `DSNRUN: COMMIT AT END OF TASK` (or `DSNRUN: COMMIT FAILED` + SQLCODE).",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDB2.jcl",
+        "start": 28,
+        "end": 30
+      },
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl",
+        "start": 31,
+        "end": 34
+      },
+      {
+        "file": "tools/stubs/DSNRUN.cbl",
+        "start": 39,
+        "end": 52
+      },
+      {
+        "file": "tools/stubs/DSNEXIT.cbl",
+        "start": 13,
+        "end": 21
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)"
+    ],
+    "test": {
+      "given": "record `A04Authorization`",
+      "when": "MNTTRDB2 runs",
+      "then": "SYSOUT starts with `DSNRUN: DSN ATTACHED, RUNNING COBTUPDT` and ends with `DSNRUN: COMMIT AT END OF TASK`; row 04 is committed"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add",
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-024",
+    "slice": "trantype",
+    "title": "PostgreSQL aborts the unit of work after a failed statement",
+    "rule": "On PostgreSQL a failed SQL statement aborts the transaction: every later statement in the same run fails with SQLCODE -400, and the end-of-task COMMIT keeps none of that unit of work although `DSNRUN: COMMIT AT END OF TASK` is still displayed. Db2 would roll back only the failing statement (Findings F5).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 87,
+        "end": 102
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 171,
+        "end": 193
+      },
+      {
+        "file": "tools/stubs/DSNEXIT.cbl",
+        "start": 13,
+        "end": 19
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a DYNSQL statement naming a non-existent column, and INPFILE `U01Purchase - updated`",
+      "when": "MNTTRDYN runs",
+      "then": "`CBTRNDYN: EXECUTE SQLCODE -0000000400`, then COBTUPDT's update fails with `SQLCODE: -400`; table unchanged; RC 4"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-025",
+    "slice": "trantype",
+    "title": "Delete of a type that has categories is refused",
+    "rule": "TRANSACTION_TYPE_CATEGORY references TRANSACTION_TYPE with ON DELETE RESTRICT, so deleting a type that still has categories fails with a negative SQLCODE and goes through the error path of BR-TT-017 (RC 4).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/ddl/TRNTYCAT.ddl",
+        "start": 1,
+        "end": 7
+      },
+      {
+        "file": "db/postgres/01-transaction-type.sql",
+        "start": 11,
+        "end": 17
+      },
+      {
+        "file": "app/app-transaction-type-db2/dcl/DCLTRCAT.dcl",
+        "start": 36,
+        "end": 51
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 201,
+        "end": 224
+      }
+    ],
+    "fields": [
+      "TRC_TYPE_CODE, TRC_TYPE_CATEGORY, TRC_CAT_DATA (DCLTRCAT)",
+      "TR_TYPE (DCLTRTYP)"
+    ],
+    "test": {
+      "given": "type 01 with a category row 01/0001",
+      "when": "record `D01` is processed",
+      "then": "`Error accessing: TRANSACTION_TYPE table. SQLCODE:` with a negative code; both rows remain; RC 4 (no fixture yet: all category tables are empty)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-026",
+    "slice": "trantype",
+    "title": "Transaction type table keys and columns",
+    "rule": "CARDDEMO.TRANSACTION_TYPE has TR_TYPE CHAR(2) as primary key and TR_DESCRIPTION VARCHAR(50) NOT NULL; the PostgreSQL translation keeps the same types. The DCLGEN host structure DCLTRANSACTION-TYPE is included by COBTUPDT but none of its fields is used.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/ddl/TRNTYPE.ddl",
+        "start": 1,
+        "end": 4
+      },
+      {
+        "file": "db/postgres/01-transaction-type.sql",
+        "start": 6,
+        "end": 9
+      },
+      {
+        "file": "app/app-transaction-type-db2/dcl/DCLTRTYP.dcl",
+        "start": 28,
+        "end": 46
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 54,
+        "end": 54
+      }
+    ],
+    "fields": [
+      "DCL-TR-TYPE, DCL-TR-DESCRIPTION-LEN, DCL-TR-DESCRIPTION-TEXT (DCLTRTYP)"
+    ],
+    "test": {
+      "given": "a seeded table with 01, 02, 03",
+      "when": "the database is snapshotted after a run",
+      "then": "rows are ordered by tr_type and compared on tr_type, tr_description (descriptions compared with their padding)"
+    },
+    "fixtures": [
+      "fixtures/trantype-update/t01-add"
+    ]
+  },
+  {
+    "id": "BR-TT-027",
+    "slice": "trantype",
+    "title": "Dynamic SQL statement assembled from DYNSQL",
+    "rule": "CBTRNDYN reads every DYNSQL record (80 bytes) to end of file and concatenates columns 1-72 of each non-comment record, each followed by one space, into one statement. Columns 73-80 are ignored.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 34,
+        "end": 40
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 47,
+        "end": 51
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 67,
+        "end": 85
+      }
+    ],
+    "fields": [
+      "DYNSQL-REC, WS-SQL-STMT-ARR, WS-SQL-STMT-LEN, WS-SQL-POS (CBTRNDYN)"
+    ],
+    "test": {
+      "given": "DYNSQL lines `UPDATE TRANSACTION_TYPE`, `   SET TR_DESCRIPTION = 'Payment - SEPA'`, ` WHERE TR_TYPE = '02'`",
+      "when": "CBTRNDYN runs",
+      "then": "the three lines form one UPDATE statement; row 02 becomes `Payment - SEPA` (not padded)"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-028",
+    "slice": "trantype",
+    "title": "SQL comment lines in DYNSQL",
+    "rule": "A DYNSQL record whose first two columns are `--` is skipped and not counted. A `--` anywhere else (indented, or after SQL on the same line) is passed through to the statement.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 73,
+        "end": 79
+      }
+    ],
+    "fields": [
+      "DYNSQL-REC (CBTRNDYN)"
+    ],
+    "test": {
+      "given": "DYNSQL `-- ad-hoc fix requested by operations` followed by a three-line UPDATE",
+      "when": "CBTRNDYN reads it",
+      "then": "the comment is excluded and `CBTRNDYN: 03 SQL LINES READ` is displayed"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-029",
+    "slice": "trantype",
+    "title": "SQL line count message",
+    "rule": "After reading DYNSQL the program displays `CBTRNDYN: ` + the number of non-comment lines as two digits + ` SQL LINES READ`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 45,
+        "end": 45
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 78,
+        "end": 78
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 84,
+        "end": 84
+      }
+    ],
+    "fields": [
+      "WS-LINE-COUNT PIC 9(02) (CBTRNDYN)"
+    ],
+    "test": {
+      "given": "DYNSQL with a single `DELETE FROM TRANSACTION_TYPE WHERE TR_TYPE = '03'`",
+      "when": "CBTRNDYN runs",
+      "then": "SYSOUT `CBTRNDYN: 01 SQL LINES READ`"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply",
+      "fixtures/trantype-dynamic/d02-delete-statement",
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-030",
+    "slice": "trantype",
+    "title": "Statement size limits",
+    "rule": "The statement buffer holds 800 characters and each line takes 73, so only the first 10 full lines fit; later text is silently dropped (STRING without ON OVERFLOW). The two-digit line count wraps after 99. Statement length = pointer - 1.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 45,
+        "end": 51
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 74,
+        "end": 78
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 83,
+        "end": 83
+      }
+    ],
+    "fields": [
+      "WS-SQL-STMT-LEN, WS-SQL-STMT-ARR, WS-SQL-POS, WS-LINE-COUNT (CBTRNDYN)"
+    ],
+    "test": {
+      "given": "DYNSQL with 11 non-comment lines",
+      "when": "CBTRNDYN builds the statement",
+      "then": "only 800 characters (10 lines + 70 characters of line 11) are kept; `CBTRNDYN: 11 SQL LINES READ` is still displayed (derived from the source, no fixture)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-031",
+    "slice": "trantype",
+    "title": "PREPARE failure",
+    "rule": "If PREPARE returns any non-zero SQLCODE the program displays `CBTRNDYN: PREPARE FAILED SQLCODE ` + SQLCODE, sets return code 8 and does not EXECUTE.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 87,
+        "end": 93
+      }
+    ],
+    "fields": [
+      "WS-SQL-STMT (CBTRNDYN)",
+      "SQLCODE (SQLCA)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a statement the database rejects at PREPARE time",
+      "when": "CBTRNDYN runs",
+      "then": "`CBTRNDYN: PREPARE FAILED SQLCODE ` + code; RC 8 set; the dynamic CALL still follows (no fixture: Open COBOL ESQL defers errors to EXECUTE, see d03)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-032",
+    "slice": "trantype",
+    "title": "EXECUTE result message and return code",
+    "rule": "After a successful PREPARE the statement is executed and `CBTRNDYN: EXECUTE SQLCODE ` + SQLCODE (sign and 10 digits, e.g. `+0000000000`) is always displayed. Only a negative SQLCODE sets return code 8; zero or positive (e.g. +100) leaves it unchanged.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 94,
+        "end": 102
+      }
+    ],
+    "fields": [
+      "SQLCODE (SQLCA)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "DYNSQL `DELETE FROM TRANSACTION_TYPE WHERE TR_TYPE = '03'` and row 03 exists",
+      "when": "CBTRNDYN runs",
+      "then": "`CBTRNDYN: EXECUTE SQLCODE +0000000000`; row 03 deleted; RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply",
+      "fixtures/trantype-dynamic/d02-delete-statement",
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-033",
+    "slice": "trantype",
+    "title": "Bad dynamic statement does not stop the job",
+    "rule": "A failed PREPARE or EXECUTE only sets return code 8; CBTRNDYN still goes on to the dynamic CALL.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 56,
+        "end": 65
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 87,
+        "end": 102
+      }
+    ],
+    "fields": [
+      "RETURN-CODE",
+      "PARM-LENGTH (CBTRNDYN)"
+    ],
+    "test": {
+      "given": "DYNSQL `UPDATE TRANSACTION_TYPE SET NO_SUCH_COLUMN = 'x' WHERE TR_TYPE = '01'`",
+      "when": "MNTTRDYN runs",
+      "then": "`CBTRNDYN: EXECUTE SQLCODE -0000000400` is followed by `CBTRNDYN: CALLING COBTUPDT`"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-034",
+    "slice": "trantype",
+    "title": "Dynamic CALL of the program named in PARMS",
+    "rule": "When the run parameter is non-empty, the first PARM-LENGTH characters (at most 8) become the program name; the program displays `CBTRNDYN: CALLING ` + name and CALLs it by name at run time. MNTTRDYN passes PARMS('COBTUPDT').",
+    "category": "linkage",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 52,
+        "end": 63
+      },
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl",
+        "start": 33,
+        "end": 33
+      },
+      {
+        "file": "tools/stubs/DSNRUN.cbl",
+        "start": 26,
+        "end": 34
+      },
+      {
+        "file": "tools/stubs/DSNRUN.cbl",
+        "start": 51,
+        "end": 51
+      }
+    ],
+    "fields": [
+      "PARM-LENGTH, PARM-VALUE (LINKAGE PARM-AREA, CBTRNDYN)",
+      "WS-PGM-NAME (CBTRNDYN)",
+      "WS-PARM-LENGTH, WS-PARM-VALUE (DSNRUN)"
+    ],
+    "test": {
+      "given": "PARMS('COBTUPDT') and INPFILE `A04Authorization`",
+      "when": "MNTTRDYN runs",
+      "then": "`CBTRNDYN: CALLING COBTUPDT`, then COBTUPDT's `OPEN FILE OK` ... `RECORD INSERTED SUCCESSFULLY`"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  },
+  {
+    "id": "BR-TT-035",
+    "slice": "trantype",
+    "title": "No PARMS: no call",
+    "rule": "With an empty run parameter nothing is called; the program displays `CBTRNDYN: END` and returns (GOBACK) with the return code from the dynamic SQL.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 59,
+        "end": 65
+      }
+    ],
+    "fields": [
+      "PARM-LENGTH (CBTRNDYN)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "`RUN PROGRAM(CBTRNDYN)` without PARMS and a valid DYNSQL statement",
+      "when": "the step runs",
+      "then": "SYSOUT `CBTRNDYN: nn SQL LINES READ`, `CBTRNDYN: EXECUTE SQLCODE +0000000000`, `CBTRNDYN: END`; RC 0 (no fixture)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-TT-036",
+    "slice": "trantype",
+    "title": "`CBTRNDYN: END` is never shown after the call",
+    "rule": "Because the called COBTUPDT ends with STOP RUN, control never returns to CBTRNDYN, so `CBTRNDYN: END` does not appear whenever PARMS names COBTUPDT.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 62,
+        "end": 65
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 97,
+        "end": 99
+      }
+    ],
+    "fields": [],
+    "test": {
+      "given": "PARMS('COBTUPDT')",
+      "when": "MNTTRDYN runs",
+      "then": "the last SYSOUT lines are COBTUPDT's followed by `DSNRUN: COMMIT AT END OF TASK`; no `CBTRNDYN: END`"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply",
+      "fixtures/trantype-dynamic/d02-delete-statement",
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-037",
+    "slice": "trantype",
+    "title": "Step return code is the last value moved to RETURN-CODE",
+    "rule": "Both programs share one RETURN-CODE. The step ends with whatever value it holds at STOP RUN: CBTRNDYN's 8 for a failed dynamic statement is overwritten by COBTUPDT's 4 when COBTUPDT then hits an error, so the job reports RC 4.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 93,
+        "end": 93
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 100,
+        "end": 100
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 232,
+        "end": 232
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/COBTUPDT.cbl",
+        "start": 97,
+        "end": 99
+      }
+    ],
+    "fields": [
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a failing DYNSQL statement and a failing COBTUPDT update",
+      "when": "MNTTRDYN runs",
+      "then": "rc.json shows MNTTRDYN STEP1 = 4 (not 8)"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d03-bad-statement"
+    ]
+  },
+  {
+    "id": "BR-TT-038",
+    "slice": "trantype",
+    "title": "Dynamic SQL and file updates share one unit of work",
+    "rule": "The dynamic statement and every change made by the called program are in the same unit of work and are committed together at end of task.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 5,
+        "end": 12
+      },
+      {
+        "file": "app/app-transaction-type-db2/cbl/CBTRNDYN.cbl",
+        "start": 57,
+        "end": 63
+      },
+      {
+        "file": "app/app-transaction-type-db2/jcl/MNTTRDYN.jcl",
+        "start": 19,
+        "end": 21
+      },
+      {
+        "file": "tools/stubs/DSNEXIT.cbl",
+        "start": 13,
+        "end": 18
+      }
+    ],
+    "fields": [
+      "TR_TYPE, TR_DESCRIPTION (CARDDEMO.TRANSACTION_TYPE)"
+    ],
+    "test": {
+      "given": "rows 01, 02, 03; DYNSQL updates 02 to `Payment - SEPA`; INPFILE `A04Authorization`",
+      "when": "MNTTRDYN runs",
+      "then": "after commit the table holds 01 `Purchase`, 02 `Payment - SEPA`, 03 `Credit`, 04 `Authorization` (padded); RC 0"
+    },
+    "fixtures": [
+      "fixtures/trantype-dynamic/d01-update-then-apply"
+    ]
+  }
+]
