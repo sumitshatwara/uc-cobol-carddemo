@@ -1,0 +1,2257 @@
+[
+  {
+    "id": "BR-ONL-001",
+    "slice": "online",
+    "title": "Sign-on first display",
+    "rule": "When the sign-on transaction CC00 starts with no communication area, a blank sign-on screen is sent with the cursor in the User ID field.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 80,
+        "end": 83
+      }
+    ],
+    "fields": [
+      "EIBCALEN (CICS EIB)",
+      "USERIDL of COSGN0AI (COSGN00 BMS)",
+      "COSGN0AO (COSGN00 BMS)"
+    ],
+    "test": {
+      "given": "A terminal with no CardDemo session (EIBCALEN = 0)",
+      "when": "Transaction CC00 is started",
+      "then": "Map COSGN0A is sent erased with an empty ERRMSG and the cursor on USERID"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-002",
+    "slice": "online",
+    "title": "Sign-on PF3 ends the session",
+    "rule": "On the sign-on screen PF3 sends the plain-text message 'Thank you for using CardDemo application...' and ends the task without re-arming CC00.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 88,
+        "end": 90
+      },
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 162,
+        "end": 172
+      },
+      {
+        "file": "app/cpy/CSMSG01Y.cpy",
+        "start": 18,
+        "end": 19
+      }
+    ],
+    "fields": [
+      "EIBAID (CICS EIB)",
+      "CCDA-MSG-THANK-YOU (CSMSG01Y)",
+      "WS-MESSAGE (COSGN00C)"
+    ],
+    "test": {
+      "given": "The sign-on screen is displayed",
+      "when": "The user presses PF3",
+      "then": "The screen is erased and shows 'Thank you for using CardDemo application...'; no next transaction is set"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-003",
+    "slice": "online",
+    "title": "Sign-on rejects keys other than ENTER and PF3",
+    "rule": "Any attention key other than ENTER or PF3 on the sign-on screen redisplays it with 'Invalid key pressed. Please see below...'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 91,
+        "end": 94
+      },
+      {
+        "file": "app/cpy/CSMSG01Y.cpy",
+        "start": 20,
+        "end": 21
+      }
+    ],
+    "fields": [
+      "EIBAID (CICS EIB)",
+      "CCDA-MSG-INVALID-KEY (CSMSG01Y)",
+      "ERRMSGO of COSGN0AO (COSGN00 BMS)"
+    ],
+    "test": {
+      "given": "The sign-on screen is displayed",
+      "when": "The user presses PF7",
+      "then": "The sign-on screen is resent with ERRMSG 'Invalid key pressed. Please see below...'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-004",
+    "slice": "online",
+    "title": "User ID is mandatory",
+    "rule": "If the User ID field is spaces or low-values the sign-on screen is redisplayed with 'Please enter User ID ...' and the cursor on User ID; the security file is not read.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 117,
+        "end": 122
+      },
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 138,
+        "end": 140
+      }
+    ],
+    "fields": [
+      "USERIDI of COSGN0AI (COSGN00 BMS, 8 chars)",
+      "WS-ERR-FLG (COSGN00C)"
+    ],
+    "test": {
+      "given": "User ID blank, Password 'PASSW0RD'",
+      "when": "ENTER is pressed",
+      "then": "ERRMSG 'Please enter User ID ...', cursor on USERID, no READ of USRSEC"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-005",
+    "slice": "online",
+    "title": "Password is mandatory",
+    "rule": "If a User ID is entered but the Password field is spaces or low-values the screen is redisplayed with 'Please enter Password ...' and the cursor on Password.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 123,
+        "end": 127
+      }
+    ],
+    "fields": [
+      "PASSWDI of COSGN0AI (COSGN00 BMS, 8 chars, dark)",
+      "WS-ERR-FLG (COSGN00C)"
+    ],
+    "test": {
+      "given": "User ID 'USER0001', Password blank",
+      "when": "ENTER is pressed",
+      "then": "ERRMSG 'Please enter Password ...', cursor on PASSWD"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-006",
+    "slice": "online",
+    "title": "Credentials are case-insensitive",
+    "rule": "Both the User ID and the Password typed by the user are converted to upper case before the security record is read and compared, so sign-on is case-insensitive.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 132,
+        "end": 136
+      },
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 209,
+        "end": 223
+      }
+    ],
+    "fields": [
+      "USERIDI / PASSWDI (COSGN00 BMS)",
+      "WS-USER-ID, WS-USER-PWD (COSGN00C)",
+      "SEC-USR-ID, SEC-USR-PWD (CSUSR01Y)"
+    ],
+    "test": {
+      "given": "USRSEC holds SEC-USR-ID 'USER0001' with SEC-USR-PWD 'PASSW0RD'",
+      "when": "The user signs on as 'user0001' / 'passw0rd'",
+      "then": "The record is found and the password matches; sign-on succeeds"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-007",
+    "slice": "online",
+    "title": "Unknown user",
+    "rule": "The USRSEC file is read by User ID; a NOTFND response (RESP 13) redisplays the screen with 'User not found. Try again ...' and the cursor on User ID.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 209,
+        "end": 221
+      },
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 247,
+        "end": 251
+      }
+    ],
+    "fields": [
+      "WS-USRSEC-FILE = 'USRSEC' (COSGN00C)",
+      "WS-RESP-CD (COSGN00C)",
+      "SEC-USER-DATA (CSUSR01Y)"
+    ],
+    "test": {
+      "given": "USRSEC has no record for 'GHOST001'",
+      "when": "The user signs on as 'GHOST001' / 'ANYPASS1'",
+      "then": "ERRMSG 'User not found. Try again ...', cursor on USERID"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-008",
+    "slice": "online",
+    "title": "Security file error",
+    "rule": "Any USRSEC READ response other than NORMAL or NOTFND redisplays the sign-on screen with 'Unable to verify the User ...'.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 252,
+        "end": 256
+      }
+    ],
+    "fields": [
+      "WS-RESP-CD, WS-REAS-CD (COSGN00C)"
+    ],
+    "test": {
+      "given": "The USRSEC file is closed (READ returns NOTOPEN, RESP 19)",
+      "when": "A user signs on",
+      "then": "ERRMSG 'Unable to verify the User ...', cursor on USERID"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-009",
+    "slice": "online",
+    "title": "Wrong password",
+    "rule": "If the user record exists but the stored password differs from the upper-cased entered password, the screen is redisplayed with 'Wrong Password. Try again ...' and the cursor on Password.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 223,
+        "end": 223
+      },
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 241,
+        "end": 246
+      }
+    ],
+    "fields": [
+      "SEC-USR-PWD (CSUSR01Y)",
+      "WS-USER-PWD (COSGN00C)",
+      "PASSWDL of COSGN0AI (COSGN00 BMS)"
+    ],
+    "test": {
+      "given": "USRSEC 'USER0001' has password 'PASSW0RD'",
+      "when": "The user enters 'USER0001' / 'WRONG123'",
+      "then": "ERRMSG 'Wrong Password. Try again ...', cursor on PASSWD"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-010",
+    "slice": "online",
+    "title": "Successful sign-on routes by user type",
+    "rule": "On a correct password the commarea is filled (from-tran CC00, from-program COSGN00C, user id, user type, program context 0) and control is transferred to COADM01C for user type 'A' or COMEN01C for any other type.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COSGN00C.cbl",
+        "start": 222,
+        "end": 240
+      },
+      {
+        "file": "app/cpy/COCOM01Y.cpy",
+        "start": 19,
+        "end": 31
+      }
+    ],
+    "fields": [
+      "SEC-USR-TYPE (CSUSR01Y)",
+      "CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-USER-ID, CDEMO-USER-TYPE, CDEMO-PGM-CONTEXT (COCOM01Y)",
+      "CDEMO-USRTYP-ADMIN (COCOM01Y)"
+    ],
+    "test": {
+      "given": "USRSEC 'ADMIN001' type 'A' and 'USER0001' type 'U', both with correct passwords",
+      "when": "Each user signs on",
+      "then": "ADMIN001 is XCTLed to COADM01C; USER0001 is XCTLed to COMEN01C; both with CDEMO-USER-TYPE copied and CDEMO-PGM-CONTEXT = 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-011",
+    "slice": "online",
+    "title": "Menu requires a session",
+    "rule": "If the main menu (CM00/COMEN01C) is started without a commarea it transfers control to the sign-on program COSGN00C.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 82,
+        "end": 84
+      },
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 196,
+        "end": 203
+      }
+    ],
+    "fields": [
+      "EIBCALEN (CICS EIB)",
+      "CDEMO-TO-PROGRAM (COCOM01Y)"
+    ],
+    "test": {
+      "given": "No CardDemo commarea",
+      "when": "Transaction CM00 is entered directly",
+      "then": "XCTL to COSGN00C"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-012",
+    "slice": "online",
+    "title": "Menu first display lists eleven options",
+    "rule": "On first entry (context not re-enter) the menu marks the commarea as re-enter and lists the options from COMEN02Y, each formatted as 'NN. <option name>' (11 options, slots OPTN001-OPTN012).",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 86,
+        "end": 90
+      },
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 262,
+        "end": 303
+      },
+      {
+        "file": "app/cpy/COMEN02Y.cpy",
+        "start": 21,
+        "end": 98
+      }
+    ],
+    "fields": [
+      "CDEMO-PGM-CONTEXT (COCOM01Y)",
+      "CDEMO-MENU-OPT-COUNT, CDEMO-MENU-OPT-NUM, CDEMO-MENU-OPT-NAME (COMEN02Y)",
+      "OPTN001O..OPTN012O (COMEN01 BMS)"
+    ],
+    "test": {
+      "given": "A user arrives from COSGN00C with CDEMO-PGM-CONTEXT = 0",
+      "when": "COMEN01C runs",
+      "then": "OPTN001O reads '01. Account View' ... OPTN011O reads '11. Pending Authorization View'; context becomes 1"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-013",
+    "slice": "online",
+    "title": "Menu option is right-justified and zero-filled",
+    "rule": "The 2-character option is trimmed of trailing spaces, right-justified and spaces are replaced by zeros before it is used as a number, so '1 ' and ' 1' both mean option 01.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 117,
+        "end": 125
+      }
+    ],
+    "fields": [
+      "OPTIONI of COMEN1AI (COMEN01 BMS, 2 chars NUM)",
+      "WS-OPTION-X (JUST RIGHT), WS-OPTION 9(02) (COMEN01C)"
+    ],
+    "test": {
+      "given": "The menu is displayed",
+      "when": "The user types '2' followed by a space and presses ENTER",
+      "then": "WS-OPTION = 02 and OPTIONO is redisplayed as '02'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-014",
+    "slice": "online",
+    "title": "Menu option range check",
+    "rule": "An option that is not numeric, is zero, or is greater than the configured option count (11) is rejected with 'Please enter a valid option number...'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 127,
+        "end": 134
+      },
+      {
+        "file": "app/cpy/COMEN02Y.cpy",
+        "start": 21,
+        "end": 21
+      }
+    ],
+    "fields": [
+      "WS-OPTION (COMEN01C)",
+      "CDEMO-MENU-OPT-COUNT = 11 (COMEN02Y)"
+    ],
+    "test": {
+      "given": "The menu is displayed",
+      "when": "The user enters '12'",
+      "then": "ERRMSG 'Please enter a valid option number...'; no transfer"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-015",
+    "slice": "online",
+    "title": "Admin-only menu options",
+    "rule": "A regular user (type 'U') who selects an option flagged 'A' in COMEN02Y gets 'No access - Admin Only option... '. All eleven shipped options are flagged 'U', so this edit is currently never triggered.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 136,
+        "end": 143
+      },
+      {
+        "file": "app/cpy/COMEN02Y.cpy",
+        "start": 29,
+        "end": 90
+      }
+    ],
+    "fields": [
+      "CDEMO-USRTYP-USER (COCOM01Y)",
+      "CDEMO-MENU-OPT-USRTYPE (COMEN02Y)"
+    ],
+    "test": {
+      "given": "An options table in which option 08 carries user type 'A', signed-on user type 'U'",
+      "when": "The user selects 08",
+      "then": "ERRMSG 'No access - Admin Only option... '; no transfer"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-016",
+    "slice": "online",
+    "title": "Pending-authorization option checks installation",
+    "rule": "For option 11 (program COPAUS0C) the menu first asks CICS whether the program is installed; if not, it shows in red 'This option Pending Authorization View is not installed...' instead of transferring.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 147,
+        "end": 168
+      },
+      {
+        "file": "app/cpy/COMEN02Y.cpy",
+        "start": 86,
+        "end": 90
+      }
+    ],
+    "fields": [
+      "CDEMO-MENU-OPT-PGMNAME, CDEMO-MENU-OPT-NAME (COMEN02Y)",
+      "EIBRESP (CICS EIB)",
+      "ERRMSGC of COMEN1AO (COMEN01 BMS)"
+    ],
+    "test": {
+      "given": "COPAUS0C is not defined to the CICS region",
+      "when": "The user selects option 11",
+      "then": "ERRMSG (red) 'This option Pending Authorization View is not installed...'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-017",
+    "slice": "online",
+    "title": "Placeholder options show 'coming soon'",
+    "rule": "An option whose program name starts with 'DUMMY' shows in green 'This option <first word of the name>is coming soon ...'; the name is cut at its first space and no space precedes 'is'. No shipped option uses DUMMY.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 169,
+        "end": 176
+      }
+    ],
+    "fields": [
+      "CDEMO-MENU-OPT-PGMNAME, CDEMO-MENU-OPT-NAME (COMEN02Y)",
+      "ERRMSGC of COMEN1AO (COMEN01 BMS)"
+    ],
+    "test": {
+      "given": "An options table entry 'Statement Print' with program 'DUMMY001'",
+      "when": "The user selects it",
+      "then": "ERRMSG (green) 'This option Statementis coming soon ...'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-018",
+    "slice": "online",
+    "title": "Valid menu option transfers control",
+    "rule": "A valid, permitted option transfers control (XCTL) to the option's program with from-tran CM00, from-program COMEN01C and program context 0 (first entry).",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 177,
+        "end": 187
+      }
+    ],
+    "fields": [
+      "CDEMO-MENU-OPT-PGMNAME (COMEN02Y)",
+      "CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-PGM-CONTEXT (COCOM01Y)"
+    ],
+    "test": {
+      "given": "Signed-on user type 'U' on the menu",
+      "when": "The user enters '1'",
+      "then": "XCTL to COACTVWC with CDEMO-FROM-PROGRAM 'COMEN01C', CDEMO-FROM-TRANID 'CM00', CDEMO-PGM-CONTEXT 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-019",
+    "slice": "online",
+    "title": "Menu PF3 and invalid keys",
+    "rule": "On the menu PF3 returns to the sign-on program COSGN00C; any key other than ENTER or PF3 redisplays the menu with 'Invalid key pressed. Please see below...'.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 93,
+        "end": 103
+      },
+      {
+        "file": "app/cbl/COMEN01C.cbl",
+        "start": 196,
+        "end": 203
+      }
+    ],
+    "fields": [
+      "EIBAID (CICS EIB)",
+      "CDEMO-TO-PROGRAM (COCOM01Y)",
+      "CCDA-MSG-INVALID-KEY (CSMSG01Y)"
+    ],
+    "test": {
+      "given": "The menu is displayed",
+      "when": "The user presses PF3, then (in a second test) PF5",
+      "then": "PF3: XCTL to COSGN00C. PF5: ERRMSG 'Invalid key pressed. Please see below...'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-020",
+    "slice": "online",
+    "title": "Account view entry and PF-key mapping",
+    "rule": "Account View (CAVW/COACTVWC) starts fresh when entered without a commarea or freshly from the menu. Only ENTER and PF3 are honoured; every other key is treated as ENTER, and PF13-PF24 are folded onto PF1-PF12 (so PF15 acts as PF3).",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 282,
+        "end": 314
+      },
+      {
+        "file": "app/cpy/CSSTRPFY.cpy",
+        "start": 21,
+        "end": 78
+      }
+    ],
+    "fields": [
+      "CDEMO-FROM-PROGRAM, CDEMO-PGM-CONTEXT (COCOM01Y)",
+      "CCARD-AID (CVCRD01Y)",
+      "EIBAID (CICS EIB)"
+    ],
+    "test": {
+      "given": "Account View is displayed after a previous search",
+      "when": "The user presses PF8",
+      "then": "PF8 is treated as ENTER: the account id on the screen is re-edited and re-read"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-021",
+    "slice": "online",
+    "title": "Account view PF3 return",
+    "rule": "PF3 returns to the calling transaction/program recorded in the commarea, or to the main menu (CM00/COMEN01C) when none is recorded; the commarea is marked from CAVW/COACTVWC, user type is set to 'U' and context to first entry.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 323,
+        "end": 352
+      }
+    ],
+    "fields": [
+      "CDEMO-FROM-TRANID, CDEMO-FROM-PROGRAM, CDEMO-TO-TRANID, CDEMO-TO-PROGRAM, CDEMO-USER-TYPE, CDEMO-LAST-MAP, CDEMO-LAST-MAPSET (COCOM01Y)"
+    ],
+    "test": {
+      "given": "Account View was entered from COMEN01C/CM00",
+      "when": "The user presses PF3",
+      "then": "XCTL to COMEN01C with CDEMO-FROM-PROGRAM 'COACTVWC', CDEMO-USER-TYPE 'U', CDEMO-PGM-CONTEXT 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-022",
+    "slice": "online",
+    "title": "Account view blank search key",
+    "rule": "An account id of spaces or '*' is treated as not supplied: the message shown is 'No input received' (it overwrites 'Account number not provided'), and on re-entry the field is shown as a red '*'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 628,
+        "end": 642
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 653,
+        "end": 662
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 561,
+        "end": 565
+      }
+    ],
+    "fields": [
+      "ACCTSIDI / ACCTSIDO / ACCTSIDC (COACTVW BMS, 11 chars)",
+      "CC-ACCT-ID (CVCRD01Y)",
+      "WS-RETURN-MSG (COACTVWC)"
+    ],
+    "test": {
+      "given": "Account View is displayed",
+      "when": "ENTER is pressed with the account id blank",
+      "then": "ERRMSG 'No input received', ACCTSID shows '*' in red, no file is read"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-023",
+    "slice": "online",
+    "title": "Account view key must be a non-zero 11-digit number",
+    "rule": "A supplied account id that is not all digits or is all zeros is rejected with 'Account Filter must  be a non-zero 11 digit number' (two spaces after 'must').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 666,
+        "end": 680
+      }
+    ],
+    "fields": [
+      "CC-ACCT-ID X(11) (CVCRD01Y)",
+      "CDEMO-ACCT-ID (COCOM01Y)"
+    ],
+    "test": {
+      "given": "Account View is displayed",
+      "when": "The user enters '1234' (padded with spaces) or '00000000000'",
+      "then": "ERRMSG 'Account Filter must  be a non-zero 11 digit number', field coloured red, CDEMO-ACCT-ID = 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-024",
+    "slice": "online",
+    "title": "Account lookup chain: xref, account, customer",
+    "rule": "A valid account id is looked up in the card cross-reference via its account alternate index (CXACAIX) to obtain the customer id and card number, then the account master (ACCTDAT) by account id, then the customer master (CUSTDAT) by the customer id from the cross-reference.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 687,
+        "end": 720
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 723,
+        "end": 740
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 774,
+        "end": 788
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 825,
+        "end": 838
+      }
+    ],
+    "fields": [
+      "XREF-CUST-ID, XREF-CARD-NUM (CVACT03Y)",
+      "ACCOUNT-RECORD (CVACT01Y)",
+      "CUSTOMER-RECORD (CVCUS01Y)",
+      "CDEMO-CUST-ID, CDEMO-CARD-NUM (COCOM01Y)"
+    ],
+    "test": {
+      "given": "Xref: account 00000000099 -> customer 000000099, card 4000000000000099; matching ACCTDAT and CUSTDAT records",
+      "when": "The user views account 00000000099",
+      "then": "Account and customer details are displayed; CDEMO-CUST-ID = 000000099 and CDEMO-CARD-NUM = 4000000000000099"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-025",
+    "slice": "online",
+    "title": "Account view not-found messages",
+    "rule": "Not-found responses build a message with the key and CICS RESP/RESP2 as 9-digit zero-padded values, cut to the 75-character message area: 'Account:<id> not found in Cross ref file.  Resp:<resp> Reas:<resp2>', 'Account:<id> not found in Acct Master file.Resp:...', 'CustId:<id> not found in customer master.Resp: ... REAS:...'. Only the first message of a request is kept.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 741,
+        "end": 758
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 789,
+        "end": 807
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 839,
+        "end": 857
+      }
+    ],
+    "fields": [
+      "WS-RETURN-MSG X(75), ERROR-RESP, ERROR-RESP2 (COACTVWC)",
+      "WS-CARD-RID-ACCT-ID-X, WS-CARD-RID-CUST-ID-X (COACTVWC)"
+    ],
+    "test": {
+      "given": "No xref record for account 00000000077 (READ returns RESP 13, RESP2 80)",
+      "when": "The user views account 00000000077",
+      "then": "ERRMSG 'Account:00000000077 not found in Cross ref file.  Resp:000000013  Reas:0000' (truncated at 75 characters)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-026",
+    "slice": "online",
+    "title": "Account view file errors",
+    "rule": "Any other READ response sets the message 'File Error: READ on <file> returned RESP <resp>,RESP2 <resp2>' (file name padded to 9, numbers 9-digit zero-padded).",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 86,
+        "end": 105
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 759,
+        "end": 766
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 809,
+        "end": 816
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 858,
+        "end": 865
+      }
+    ],
+    "fields": [
+      "WS-FILE-ERROR-MESSAGE, ERROR-OPNAME, ERROR-FILE (COACTVWC)"
+    ],
+    "test": {
+      "given": "ACCTDAT is disabled (READ returns DISABLED, RESP 84, RESP2 0)",
+      "when": "A valid account id with an xref record is viewed",
+      "then": "ERRMSG 'File Error: READ     on ACCTDAT   returned RESP 000000084 ,RESP2 000000000'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-027",
+    "slice": "online",
+    "title": "Account view display formatting",
+    "rule": "Account fields are displayed when the account or the customer was found; customer fields only when the customer was found. The SSN is shown as NNN-NN-NNNN; the information line is always 'Enter or update id of account to display'.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 471,
+        "end": 523
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 528,
+        "end": 534
+      },
+      {
+        "file": "app/cbl/COACTVWC.cbl",
+        "start": 689,
+        "end": 689
+      }
+    ],
+    "fields": [
+      "ACCT-* (CVACT01Y) -> ACSTTUSO..AADDGRPO (COACTVW BMS)",
+      "CUST-SSN 9(09) (CVCUS01Y) -> ACSTSSNO (COACTVW BMS)",
+      "WS-INFO-MSG (COACTVWC)"
+    ],
+    "test": {
+      "given": "Customer 000000099 with CUST-SSN 123456789",
+      "when": "Account 00000000099 is viewed",
+      "then": "ACSTSSNO shows '123-45-6789'; INFOMSG shows 'Enter or update id of account to display'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-028",
+    "slice": "online",
+    "title": "Account update PF-key validity",
+    "rule": "In Account Update (CAUP/COACTUPC) ENTER and PF3 are always valid; PF5 only while validated changes await confirmation; PF12 only once account details have been fetched. Any other key is treated as ENTER.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 905,
+        "end": 916
+      }
+    ],
+    "fields": [
+      "CCARD-AID (CVCRD01Y)",
+      "ACUP-CHANGE-ACTION (COACTUPC commarea)"
+    ],
+    "test": {
+      "given": "Account details shown, changes not yet validated (state 'S')",
+      "when": "The user presses PF5",
+      "then": "PF5 is treated as ENTER: inputs are edited, nothing is saved"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-029",
+    "slice": "online",
+    "title": "Account update state machine",
+    "rule": "The update screen keeps its state in ACUP-CHANGE-ACTION: low-values/spaces = details not fetched, 'S' = details shown, 'E' = changes have errors, 'N' = changes valid but not confirmed, 'C' = saved, 'L' = lock error, 'F' = save failed. The information line follows the state: 'Enter or update id of account to update', 'Update account details presented above.', 'Changes validated.Press F5 to save', 'Changes committed to database', 'Changes unsuccessful. Please try again'.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 654,
+        "end": 668
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 463,
+        "end": 477
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2955,
+        "end": 2981
+      }
+    ],
+    "fields": [
+      "ACUP-CHANGE-ACTION (COACTUPC)",
+      "WS-INFO-MSG (COACTUPC)",
+      "INFOMSGO (COACTUP BMS)"
+    ],
+    "test": {
+      "given": "State 'E' after an edit failure",
+      "when": "The user corrects the field and presses ENTER",
+      "then": "State becomes 'N' and INFOMSG reads 'Changes validated.Press F5 to save'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-030",
+    "slice": "online",
+    "title": "Account update PF3 exit commits",
+    "rule": "PF3 returns to the caller (or the menu if none), forces user type 'U' and first-entry context, and issues a SYNCPOINT before the XCTL.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 927,
+        "end": 959
+      }
+    ],
+    "fields": [
+      "CDEMO-TO-PROGRAM, CDEMO-TO-TRANID, CDEMO-USER-TYPE, CDEMO-PGM-CONTEXT (COCOM01Y)"
+    ],
+    "test": {
+      "given": "Account Update entered from the menu",
+      "when": "The user presses PF3",
+      "then": "SYNCPOINT, then XCTL to COMEN01C with CDEMO-FROM-PROGRAM 'COACTUPC', CDEMO-USER-TYPE 'U'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-031",
+    "slice": "online",
+    "title": "Account update fresh entry and post-save reset",
+    "rule": "A fresh entry (no commarea, or from the menu) shows the empty search screen. After a save attempt ends in 'C', 'L' or 'F', the next interaction clears the screen data and the account id and shows the search screen again.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 880,
+        "end": 893
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 964,
+        "end": 973
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 979,
+        "end": 989
+      }
+    ],
+    "fields": [
+      "WS-THIS-PROGCOMMAREA, ACUP-CHANGE-ACTION (COACTUPC)",
+      "CDEMO-ACCT-ID (COCOM01Y)"
+    ],
+    "test": {
+      "given": "State 'C' after a successful save of account 00000000099",
+      "when": "The user presses ENTER",
+      "then": "Search screen is shown with empty fields, CDEMO-ACCT-ID = 0, INFOMSG 'Enter or update id of account to update'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-032",
+    "slice": "online",
+    "title": "Account update search key edit",
+    "rule": "Blank or '*' account id gives 'No input received' (overriding 'Account number not provided'); a non-numeric or all-zero id gives 'Account Number if supplied must be a 11 digit Non-Zero Number'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1433,
+        "end": 1446
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1783,
+        "end": 1820
+      }
+    ],
+    "fields": [
+      "ACCTSIDI (COACTUP BMS, 11 chars)",
+      "CC-ACCT-ID, CC-ACCT-ID-N (CVCRD01Y)",
+      "ACUP-NEW-ACCT-ID (COACTUPC)"
+    ],
+    "test": {
+      "given": "The update search screen",
+      "when": "The user enters 'ABC00000001'",
+      "then": "ERRMSG 'Account Number if supplied must be a 11 digit Non-Zero Number'; nothing is read"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-033",
+    "slice": "online",
+    "title": "Account update fetch and snapshot",
+    "rule": "A valid account id is looked up xref -> account -> customer exactly as in Account View; the fetched values are saved as the 'old' snapshot (dates split into year/month/day, SSN and phones kept as stored) and the account id, customer id/names, status and card number are copied to the commarea.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2568,
+        "end": 2580
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 3608,
+        "end": 3647
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 3801,
+        "end": 3885
+      }
+    ],
+    "fields": [
+      "ACUP-OLD-DETAILS (COACTUPC)",
+      "ACCOUNT-RECORD (CVACT01Y)",
+      "CUSTOMER-RECORD (CVCUS01Y)",
+      "CDEMO-ACCT-ID, CDEMO-CUST-ID, CDEMO-CUST-FNAME/MNAME/LNAME, CDEMO-ACCT-STATUS, CDEMO-CARD-NUM (COCOM01Y)"
+    ],
+    "test": {
+      "given": "ACCTDAT 00000000099 with ACCT-OPEN-DATE '2019-03-15'",
+      "when": "The user searches 00000000099",
+      "then": "ACUP-OLD-OPEN-YEAR '2019', MON '03', DAY '15'; state 'S'; INFOMSG 'Update account details presented above.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-034",
+    "slice": "online",
+    "title": "Blank or '*' fields mean 'not supplied'",
+    "rule": "Every input field on the update screen that is spaces or a single '*' is stored as low-values (not supplied) before editing; money fields that pass a currency-numeric test are converted to a signed 10.2 value.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1051,
+        "end": 1058
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1065,
+        "end": 1140
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1419,
+        "end": 1424
+      }
+    ],
+    "fields": [
+      "ACSTTUSI..ACSPFLGI (COACTUP BMS)",
+      "ACUP-NEW-DETAILS (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user replaces the credit limit with '*'",
+      "then": "ACUP-NEW-CREDIT-LIMIT-X = low-values and the edit reports 'Credit Limit must be supplied.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-035",
+    "slice": "online",
+    "title": "Money input conversion truncates",
+    "rule": "Money inputs are converted with NUMVAL-C (currency sign and commas allowed) into PIC S9(10)V99 without ROUNDED, so digits beyond the cents are dropped.",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1073,
+        "end": 1084
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 763,
+        "end": 795
+      }
+    ],
+    "fields": [
+      "ACRDLIMI, ACSHLIMI, ACURBALI, ACRCYCRI, ACRCYDBI (COACTUP BMS, 15 chars)",
+      "ACUP-NEW-CREDIT-LIMIT-N etc. S9(10)V99 (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters credit limit '$2,500.759'",
+      "then": "ACUP-NEW-CREDIT-LIMIT-N = 2500.75 (truncated, not 2500.76)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-036",
+    "slice": "online",
+    "title": "Change detection before editing",
+    "rule": "Before any field edit, new values are compared with the snapshot: account money/date fields exactly, status case-insensitively, group id and customer text fields trimmed and case-insensitive, phones/SSN/DOB/EFT/FICO exactly. If nothing changed the message is 'No change detected with respect to values fetched.' and no edits run.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1460,
+        "end": 1468
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1681,
+        "end": 1777
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 491,
+        "end": 492
+      }
+    ],
+    "fields": [
+      "ACUP-OLD-DETAILS, ACUP-NEW-DETAILS (COACTUPC)",
+      "WS-DATACHANGED-FLAG (COACTUPC)"
+    ],
+    "test": {
+      "given": "Fetched first name 'AVERY'",
+      "when": "The user retypes it as 'avery ' and presses ENTER",
+      "then": "No change is detected; ERRMSG 'No change detected with respect to values fetched.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-037",
+    "slice": "online",
+    "title": "First error wins; all edits run",
+    "rule": "Once changes are detected all field edits run in screen order (status, open date, credit limit, expiry date, cash limit, reissue date, balance, cycle credit, cycle debit, SSN, DOB, FICO, names, address, state, zip, city, country, phones, EFT id, primary holder, state/zip) but only the first failing edit's message is shown; any failure sets state 'E'.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1470,
+        "end": 1675
+      }
+    ],
+    "fields": [
+      "WS-RETURN-MSG, INPUT-ERROR (COACTUPC)",
+      "ACUP-CHANGES-NOT-OK (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user blanks both Account Status and First Name",
+      "then": "ERRMSG 'Account Status must be supplied.' (first edit); state 'E'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-038",
+    "slice": "online",
+    "title": "Account status and primary card holder must be Y or N",
+    "rule": "Account Status and Primary Card Holder must be upper-case 'Y' or 'N': blank/zero gives '<field> must be supplied.', anything else '<field> must be Y or N.'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1472,
+        "end": 1476
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1657,
+        "end": 1662
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1856,
+        "end": 1894
+      }
+    ],
+    "fields": [
+      "ACSTTUSI, ACSPFLGI (COACTUP BMS, 1 char)",
+      "WS-EDIT-YES-NO (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown with status 'Y'",
+      "when": "The user changes status to 'X'",
+      "then": "ERRMSG 'Account Status must be Y or N.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-039",
+    "slice": "online",
+    "title": "Signed money fields are required and numeric",
+    "rule": "Credit Limit, Cash Credit Limit, Current Balance, cycle credit and cycle debit must be supplied and pass a currency-numeric test; messages are '<name> must be supplied.' or '<name> is not valid'. The cycle fields are labelled 'Current Cycle Credit Limit' and 'Current Cycle Debit Limit'. No range or sign limit and no cross-field check apply.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1484,
+        "end": 1527
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2180,
+        "end": 2221
+      }
+    ],
+    "fields": [
+      "ACUP-NEW-CREDIT-LIMIT-X ... ACUP-NEW-CURR-CYC-DEBIT-X (COACTUPC)",
+      "WS-EDIT-SIGNED-NUMBER-9V2-X (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters cash credit limit '12O0.00' (letter O)",
+      "then": "ERRMSG 'Cash Credit Limit is not valid'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-040",
+    "slice": "online",
+    "title": "Date edit: year and century",
+    "rule": "For Open, Expiry, Reissue and Birth dates the year must be supplied ('<field> : Year must be supplied.'), be 4 digits ('<field> must be 4 digit number.') and start with 19 or 20 ('<field> : Century is not valid.').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cpy/CSUTLDPY.cpy",
+        "start": 18,
+        "end": 88
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1478,
+        "end": 1482
+      }
+    ],
+    "fields": [
+      "OPNYEARI, EXPYEARI, RISYEARI, DOBYEARI (COACTUP BMS)",
+      "WS-EDIT-DATE-CCYY, THIS-CENTURY, LAST-CENTURY (CSUTLDWY)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters open year '2124'",
+      "then": "ERRMSG 'Open Date : Century is not valid.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-041",
+    "slice": "online",
+    "title": "Date edit: month and day ranges",
+    "rule": "Month must be supplied and be 1-12 ('<field>: Month must be a number between 1 and 12.'); day must be supplied and be 1-31 ('<field>:day must be a number between 1 and 31.').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cpy/CSUTLDPY.cpy",
+        "start": 91,
+        "end": 205
+      }
+    ],
+    "fields": [
+      "OPNMONI, OPNDAYI etc. (COACTUP BMS)",
+      "WS-EDIT-DATE-MM, WS-EDIT-DATE-DD, WS-VALID-MONTH, WS-VALID-DAY (CSUTLDWY)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters expiry month '13'",
+      "then": "ERRMSG 'Expiry Date: Month must be a number between 1 and 12.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-042",
+    "slice": "online",
+    "title": "Date edit: day/month combinations and leap years",
+    "rule": "Day 31 is rejected in 30-day months ('<field>:Cannot have 31 days in this month.'), 30 February is rejected, and 29 February is accepted only in leap years (century years must divide by 400, other years by 4), otherwise '<field>:Not a leap year.Cannot have 29 days in this month.'. The date is finally checked by the CSUTLDTC (Language Environment) service.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cpy/CSUTLDPY.cpy",
+        "start": 209,
+        "end": 323
+      }
+    ],
+    "fields": [
+      "WS-31-DAY-MONTH, WS-FEBRUARY, WS-DAY-29/30/31 (CSUTLDWY)",
+      "WS-DIV-BY, WS-REMAINDER (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters reissue date 1900-02-29, then (second test) 2000-02-29",
+      "then": "1900-02-29: ERRMSG 'Reissue Date:Not a leap year.Cannot have 29 days in this month.'; 2000-02-29 passes this edit"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-043",
+    "slice": "online",
+    "title": "Date of birth cannot be today or later",
+    "rule": "After a valid date edit the date of birth must be strictly before today's date, else 'Date of Birth:cannot be in the future '.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1533,
+        "end": 1543
+      },
+      {
+        "file": "app/cpy/CSUTLDPY.cpy",
+        "start": 341,
+        "end": 370
+      }
+    ],
+    "fields": [
+      "DOBYEARI, DOBMONI, DOBDAYI (COACTUP BMS)",
+      "WS-EDIT-DATE-BINARY, WS-CURRENT-DATE-BINARY (CSUTLDWY)"
+    ],
+    "test": {
+      "given": "Today is 2022-07-05",
+      "when": "The user enters date of birth 2022-07-05",
+      "then": "ERRMSG 'Date of Birth:cannot be in the future '"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-044",
+    "slice": "online",
+    "title": "SSN edit",
+    "rule": "The SSN's three parts (3, 2, 4 characters) must each be supplied, all numeric and not zero; the first part may not be 000, 666 or 900-999 ('SSN: First 3 chars: should not be 000, 666, or between 900 and 999').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2431,
+        "end": 2489
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 117,
+        "end": 131
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2109,
+        "end": 2176
+      }
+    ],
+    "fields": [
+      "ACTSSN1I, ACTSSN2I, ACTSSN3I (COACTUP BMS)",
+      "ACUP-NEW-CUST-SSN-1/2/3 (COACTUPC)",
+      "INVALID-SSN-PART1 (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters SSN 666-12-3456",
+      "then": "ERRMSG 'SSN: First 3 chars: should not be 000, 666, or between 900 and 999'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-045",
+    "slice": "online",
+    "title": "FICO score range",
+    "rule": "The FICO score must be a supplied, non-zero 3-digit number between 300 and 850 inclusive ('FICO Score: should be between 300 and 850').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1545,
+        "end": 1556
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2514,
+        "end": 2531
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 848,
+        "end": 849
+      }
+    ],
+    "fields": [
+      "ACSTFCOI (COACTUP BMS, 3 chars)",
+      "ACUP-NEW-CUST-FICO-SCORE, FICO-RANGE-IS-VALID (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters FICO '299', then (second test) '850'",
+      "then": "'299': ERRMSG 'FICO Score: should be between 300 and 850'; '850' passes"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-046",
+    "slice": "online",
+    "title": "Names must be alphabetic",
+    "rule": "First Name and Last Name are required and may contain only letters and spaces ('<field> must be supplied.' / '<field> can have alphabets only.'); Middle Name is optional but, if given, letters and spaces only.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1560,
+        "end": 1582
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1898,
+        "end": 1951
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2012,
+        "end": 2057
+      }
+    ],
+    "fields": [
+      "ACSFNAMI, ACSMNAMI, ACSLNAMI (COACTUP BMS, 25 chars)",
+      "WS-EDIT-ALPHANUM-ONLY, WS-EDIT-ALPHA-ONLY-FLAGS (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters last name 'TEST-CASE'",
+      "then": "ERRMSG 'Last Name can have alphabets only.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-047",
+    "slice": "online",
+    "title": "Address, city and country edits",
+    "rule": "Address Line 1 is mandatory ('Address Line 1 must be supplied.'); City (address line 3) is required, letters/spaces only; Country is required, letters only (3 chars). Address Line 2, Government ID and Group ID are not edited.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1584,
+        "end": 1590
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1615,
+        "end": 1630
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1824,
+        "end": 1852
+      }
+    ],
+    "fields": [
+      "ACSADL1I, ACSADL2I, ACSCITYI, ACSCTRYI, ACSGOVTI, AADDGRPI (COACTUP BMS)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters city 'Springfield 2'",
+      "then": "ERRMSG 'City can have alphabets only.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-048",
+    "slice": "online",
+    "title": "State code must be a US state",
+    "rule": "State is required, alphabetic, and must be in the US state/territory list (CSLKPCDY), else 'State: is not a valid state code'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1592,
+        "end": 1602
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2493,
+        "end": 2511
+      },
+      {
+        "file": "app/cpy/CSLKPCDY.cpy",
+        "start": 1012,
+        "end": 1069
+      }
+    ],
+    "fields": [
+      "ACSSTTEI (COACTUP BMS, 2 chars)",
+      "US-STATE-CODE-TO-EDIT, VALID-US-STATE-CODE (CSLKPCDY)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters state 'XX'",
+      "then": "ERRMSG 'State: is not a valid state code'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-049",
+    "slice": "online",
+    "title": "Zip code and state/zip consistency",
+    "rule": "The first 5 characters of Zip must be numeric and non-zero ('Zip must be all numeric.' / 'Zip must not be zero.'). When state and zip are each valid, the state plus first two zip digits must be a known combination, else 'Invalid zip code for state'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1605,
+        "end": 1611
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1665,
+        "end": 1669
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2536,
+        "end": 2558
+      },
+      {
+        "file": "app/cpy/CSLKPCDY.cpy",
+        "start": 1071,
+        "end": 1313
+      }
+    ],
+    "fields": [
+      "ACSZIPCI (COACTUP BMS, 5 chars)",
+      "US-STATE-AND-FIRST-ZIP2, VALID-US-STATE-ZIP-CD2-COMBO (CSLKPCDY)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters state 'NY' and zip '75001'",
+      "then": "ERRMSG 'Invalid zip code for state' ('NY75' is not a valid combination; 'NY10' would be)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-050",
+    "slice": "online",
+    "title": "Phone number edit",
+    "rule": "A phone number left entirely blank is accepted. Otherwise area code, prefix and line number must be supplied, numeric and non-zero, and the area code must be a North American general-purpose code; messages are e.g. 'Phone Number 1: Area code must be supplied.', 'Phone Number 1: Not valid North America general purpose area code'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2225,
+        "end": 2427
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1632,
+        "end": 1646
+      },
+      {
+        "file": "app/cpy/CSLKPCDY.cpy",
+        "start": 521,
+        "end": 930
+      }
+    ],
+    "fields": [
+      "ACSPH1AI/BI/CI, ACSPH2AI/BI/CI (COACTUP BMS)",
+      "WS-EDIT-US-PHONE-NUM (COACTUPC)",
+      "VALID-GENERAL-PURP-CODE (CSLKPCDY)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters phone 1 as 555 / 010 / 0123",
+      "then": "ERRMSG 'Phone Number 1: Not valid North America general purpose area code'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-051",
+    "slice": "online",
+    "title": "EFT account id edit",
+    "rule": "The EFT Account Id is required and must be 10 numeric digits, not all zero ('EFT Account Id must be all numeric.' / 'EFT Account Id must not be zero.').",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1648,
+        "end": 1655
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2109,
+        "end": 2176
+      }
+    ],
+    "fields": [
+      "ACSEFTCI (COACTUP BMS, 10 chars)",
+      "ACUP-NEW-CUST-EFT-ACCOUNT-ID (COACTUPC)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user enters EFT id '0000000000'",
+      "then": "ERRMSG 'EFT Account Id must not be zero.'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-052",
+    "slice": "online",
+    "title": "Validated changes ask for confirmation",
+    "rule": "When all edits pass, the state becomes 'N', the information line reads 'Changes validated.Press F5 to save' and the F5=Save and F12=Cancel labels are shown bright.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 1671,
+        "end": 1675
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2585,
+        "end": 2591
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 3566,
+        "end": 3584
+      }
+    ],
+    "fields": [
+      "ACUP-CHANGES-OK-NOT-CONFIRMED (COACTUPC)",
+      "FKEY05A, FKEY12A (COACTUP BMS)"
+    ],
+    "test": {
+      "given": "Account details shown",
+      "when": "The user changes credit limit 2000.00 to 2500.00 and presses ENTER",
+      "then": "INFOMSG 'Changes validated.Press F5 to save'; F5 and F12 visible"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-053",
+    "slice": "online",
+    "title": "PF12 cancels changes",
+    "rule": "Once details are fetched, PF12 re-reads the account and customer and redisplays the stored values, discarding unsaved changes.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2572,
+        "end": 2580
+      }
+    ],
+    "fields": [
+      "CCARD-AID-PFK12 (CVCRD01Y)",
+      "ACUP-SHOW-DETAILS (COACTUPC)"
+    ],
+    "test": {
+      "given": "State 'N' with credit limit changed to 2500.00 (stored 2000.00)",
+      "when": "The user presses PF12",
+      "then": "Screen shows credit limit '+      2,000.00'; state 'S'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-054",
+    "slice": "online",
+    "title": "Save locks both records",
+    "rule": "PF5 in state 'N' reads the account (ACCTDAT) and then the customer (CUSTDAT) for update; failure gives 'Could not lock account record for update' or 'Could not lock customer record for update', state 'L' and 'Changes unsuccessful. Please try again'.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 3888,
+        "end": 3942
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2602,
+        "end": 2610
+      }
+    ],
+    "fields": [
+      "WS-RESP-CD (COACTUPC)",
+      "COULD-NOT-LOCK-ACCT-FOR-UPDATE, COULD-NOT-LOCK-CUST-FOR-UPDATE (COACTUPC)"
+    ],
+    "test": {
+      "given": "State 'N'; another task holds account 00000000099 for update and the read fails",
+      "when": "The user presses PF5",
+      "then": "ERRMSG 'Could not lock account record for update'; INFOMSG 'Changes unsuccessful. Please try again'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-055",
+    "slice": "online",
+    "title": "Optimistic concurrency check",
+    "rule": "After locking, the current records are compared with the snapshot taken when they were displayed (case-insensitive for text fields); any difference aborts the save with 'Record changed by some one else. Please review' and returns to state 'S'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 4109,
+        "end": 4193
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2611,
+        "end": 2612
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 521,
+        "end": 522
+      }
+    ],
+    "fields": [
+      "ACUP-OLD-DETAILS (COACTUPC)",
+      "ACCOUNT-RECORD (CVACT01Y)",
+      "CUSTOMER-RECORD (CVCUS01Y)"
+    ],
+    "test": {
+      "given": "Snapshot balance 150.00; another user changes ACCT-CURR-BAL to 175.00 before PF5",
+      "when": "The user presses PF5",
+      "then": "Nothing is rewritten; ERRMSG 'Record changed by some one else. Please review'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-056",
+    "slice": "online",
+    "title": "Saved record formats",
+    "rule": "On save, dates are written as YYYY-MM-DD, phone numbers as '(AAA)BBB-CCCC' and the SSN as one 9-digit number; all other fields are copied as entered.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 3956,
+        "end": 4059
+      }
+    ],
+    "fields": [
+      "ACCT-UPDATE-RECORD, CUST-UPDATE-RECORD (COACTUPC)",
+      "ACUP-NEW-* (COACTUPC)"
+    ],
+    "test": {
+      "given": "Validated changes: open date 2019/03/15, phone 1 201/555/0142",
+      "when": "PF5 is pressed and the save succeeds",
+      "then": "ACCT-OPEN-DATE '2019-03-15'; CUST-PHONE-NUM-1 '(201)555-0142  '"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-057",
+    "slice": "online",
+    "title": "Rewrite outcome and rollback",
+    "rule": "The account is rewritten, then the customer. If the account rewrite fails the state is 'F' ('Update of record failed'); if the customer rewrite fails the unit of work is rolled back and the state is 'F'. Otherwise the state is 'C' with 'Changes committed to database'.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 4065,
+        "end": 4103
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2613,
+        "end": 2614
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 523,
+        "end": 524
+      }
+    ],
+    "fields": [
+      "LOCKED-BUT-UPDATE-FAILED (COACTUPC)",
+      "ACUP-CHANGES-OKAYED-AND-DONE, ACUP-CHANGES-OKAYED-BUT-FAILED (COACTUPC)"
+    ],
+    "test": {
+      "given": "State 'N'; the CUSTDAT REWRITE returns an I/O error",
+      "when": "The user presses PF5",
+      "then": "SYNCPOINT ROLLBACK (account change undone); INFOMSG 'Changes unsuccessful. Please try again'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-058",
+    "slice": "online",
+    "title": "Currency display picture",
+    "rule": "Stored money values are displayed with the picture +ZZZ,ZZZ,ZZZ.99 (leading sign, thousands separators, two decimals).",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 371,
+        "end": 371
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2797,
+        "end": 2811
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2874,
+        "end": 2909
+      }
+    ],
+    "fields": [
+      "WS-EDIT-CURRENCY-9-2-F (COACTUPC)",
+      "ACURBALO, ACRDLIMO, ACSHLIMO, ACRCYCRO, ACRCYDBO (COACTUP BMS)"
+    ],
+    "test": {
+      "given": "ACCT-CURR-BAL = -1234.50",
+      "when": "The account is displayed for update",
+      "then": "ACURBALO shows '-      1,234.50'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-059",
+    "slice": "online",
+    "title": "Unexpected state abends",
+    "rule": "If the update program reaches an unexpected combination of state and key it abends: the abend data (code '0001', culprit COACTUPC, 'UNEXPECTED DATA SCENARIO') is sent to the terminal and the task ends with abend code 9999.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 2633,
+        "end": 2640
+      },
+      {
+        "file": "app/cbl/COACTUPC.cbl",
+        "start": 4203,
+        "end": 4226
+      }
+    ],
+    "fields": [
+      "ABEND-CODE, ABEND-CULPRIT, ABEND-MSG (CSMSG02Y)"
+    ],
+    "test": {
+      "given": "A commarea whose ACUP-CHANGE-ACTION is 'X' (not a defined state)",
+      "when": "ENTER is pressed with no field changed",
+      "then": "The screen shows the abend data and the task abends with code 9999"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-060",
+    "slice": "online",
+    "title": "COBDATFT linkage",
+    "rule": "COBDATFT uses standard OS linkage: saves R14-R12 in the caller's area, chains its own 18-word save area, uses R12 as base, R1 points to a one-entry parameter list whose address (R2) is the CODATECN-REC record. It always returns R15 = 0; errors are reported only in the message field.",
+    "category": "linkage",
+    "sources": [
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 17,
+        "end": 29
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 57,
+        "end": 64
+      },
+      {
+        "file": "app/maclib/COCDATFT.mac",
+        "start": 17,
+        "end": 23
+      },
+      {
+        "file": "app/cpy/CODATECN.cpy",
+        "start": 17,
+        "end": 52
+      }
+    ],
+    "fields": [
+      "COINTYPE CL1, COINPDT CL20, COOUTYPE CL1, COOUTDT CL20, COERMSG CL38 (COCDATFT)",
+      "CODATECN-TYPE, CODATECN-INP-DATE, CODATECN-OUTTYPE, CODATECN-0UT-DATE, CODATECN-ERROR-MSG (CODATECN)"
+    ],
+    "test": {
+      "given": "A COBOL caller with CODATECN-REC",
+      "when": "It executes CALL 'COBDATFT' USING CODATECN-REC",
+      "then": "The record is updated in place and RETURN-CODE is 0. Java equivalent: a static method taking and returning the record (or a DateTimeFormatter conversion) with no exception on bad input"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-061",
+    "slice": "online",
+    "title": "COBDATFT YYYYMMDD to YYYY-MM-DD",
+    "rule": "Input type '1' (YYYYMMDD) with output type '1' is reformatted to YYYY-MM-DD in the output field.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 30,
+        "end": 31
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 35,
+        "end": 45
+      }
+    ],
+    "fields": [
+      "COINTYPE, COINPDT, COOUTYPE, COOUTDT (COCDATFT)",
+      "YYYYMMDD-IN, YYYY-MM-DD-OP (CODATECN)"
+    ],
+    "test": {
+      "given": "CODATECN-TYPE '1', input '20250315', CODATECN-OUTTYPE '1'",
+      "when": "COBDATFT is called",
+      "then": "CODATECN-0UT-DATE starts '2025-03-15', error message unchanged"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-062",
+    "slice": "online",
+    "title": "COBDATFT YYYY-MM-DD to YYYYMMDD",
+    "rule": "Input type '2' (YYYY-MM-DD) with output type '2' is reformatted to YYYYMMDD by taking characters 1-4, 6-7 and 9-10; the separator characters are not checked. CBACT01C uses this for the account reissue date.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 32,
+        "end": 33
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 46,
+        "end": 54
+      },
+      {
+        "file": "app/cbl/CBACT01C.cbl",
+        "start": 223,
+        "end": 233
+      }
+    ],
+    "fields": [
+      "COINPDT, COOUTDT (COCDATFT)",
+      "ACCT-REISSUE-DATE (CVACT01Y)",
+      "OUT-ACCT-REISSUE-DATE (CBACT01C)"
+    ],
+    "test": {
+      "given": "CODATECN-TYPE '2', input '2025/03/15', CODATECN-OUTTYPE '2'",
+      "when": "COBDATFT is called",
+      "then": "CODATECN-0UT-DATE starts '20250315' (the '/' separators are accepted)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-063",
+    "slice": "online",
+    "title": "COBDATFT invalid input",
+    "rule": "An input type other than '1' or '2', or a mismatched direction (type 1 with output type 2, type 2 with output type 1), moves 'INVALID INPUT' to the message field and leaves the output date unchanged; R15 is still 0.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 30,
+        "end": 34
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 36,
+        "end": 39
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 49,
+        "end": 50
+      },
+      {
+        "file": "app/asm/COBDATFT.asm",
+        "start": 55,
+        "end": 62
+      }
+    ],
+    "fields": [
+      "COERMSG (COCDATFT)",
+      "CODATECN-ERROR-MSG (CODATECN)"
+    ],
+    "test": {
+      "given": "CODATECN-TYPE '2', CODATECN-OUTTYPE '1', output field spaces",
+      "when": "COBDATFT is called",
+      "then": "CODATECN-ERROR-MSG starts 'INVALID INPUT', output date still spaces, RETURN-CODE 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-064",
+    "slice": "online",
+    "title": "MVSWAIT timed wait",
+    "rule": "COBSWAIT reads an 8-digit wait time in hundredths of a second from SYSIN and passes it as a binary fullword to MVSWAIT, which saves the caller's registers in the caller's save area (no own save area), issues the ASMWAIT (STIMER WAIT) macro, restores registers, flags the save area with X'FF' and returns R15 = 0. Java equivalent: Thread.sleep(n * 10 ms), a no-op in batch tests.",
+    "category": "linkage",
+    "sources": [
+      {
+        "file": "app/asm/MVSWAIT.asm",
+        "start": 17,
+        "end": 30
+      },
+      {
+        "file": "app/cbl/COBSWAIT.cbl",
+        "start": 30,
+        "end": 40
+      },
+      {
+        "file": "app/jcl/WAITSTEP.jcl",
+        "start": 22,
+        "end": 26
+      }
+    ],
+    "fields": [
+      "MVSWAIT-TIME 9(8) COMP, PARM-VALUE X(8) (COBSWAIT)",
+      "BINLBL F (MVSWAIT)"
+    ],
+    "test": {
+      "given": "SYSIN card '00003600'",
+      "when": "Job step WAIT runs COBSWAIT",
+      "then": "MVSWAIT receives 3600 and the step waits 36 seconds, then ends with RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-065",
+    "slice": "online",
+    "title": "CBFEECAL request area and driver",
+    "rule": "CBFEEDRV reads every account sequentially and, per account, builds the FEE_REQ area (account id, group id, cycle balance = cycle credit - cycle debit, late days 10 if that balance is positive else 0, cycle days 30) and calls the PL/I routine CBFEECAL, which overlays it as a BASED structure: DECIMAL FIXED fields map to COMP-3, FIXED BINARY(15) to COMP halfwords.",
+    "category": "linkage",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 21,
+        "end": 34
+      },
+      {
+        "file": "app/cbl/CBFEEDRV.cbl",
+        "start": 54,
+        "end": 62
+      },
+      {
+        "file": "app/cbl/CBFEEDRV.cbl",
+        "start": 75,
+        "end": 101
+      },
+      {
+        "file": "app/jcl/FEECALC.jcl",
+        "start": 24,
+        "end": 31
+      }
+    ],
+    "fields": [
+      "FEE_REQ (CBFEECAL) / FEE-REQ (CBFEEDRV)",
+      "ACCT-CURR-CYC-CREDIT, ACCT-CURR-CYC-DEBIT, ACCT-GROUP-ID (CVACT01Y)"
+    ],
+    "test": {
+      "given": "Account 00000000099, group 'STANDARD', cycle credit 1500.00, cycle debit 265.44",
+      "when": "CBFEEDRV processes it",
+      "then": "FEE-CYCLE-BAL 1234.56, FEE-LATE-DAYS 10, FEE-CYCLE-DAYS 30 are passed to CBFEECAL"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-066",
+    "slice": "online",
+    "title": "Average daily balance truncates",
+    "rule": "The average daily balance is cycle balance / cycle days assigned to DECIMAL FIXED(12,2), i.e. truncated to cents; it is computed before any other rule, for every account.",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 68,
+        "end": 69
+      }
+    ],
+    "fields": [
+      "FEE_CYCLE_BAL, FEE_CYCLE_DAYS, FEE_AVG_DAILY (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 2: STANDARD, cycle balance 100.00, late 10, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "FEE_AVG_DAILY = 3.33 (100/30 = 3.333...), FEE_AMT 5.00, FEE_RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-067",
+    "slice": "online",
+    "title": "Nothing overdue: no fee",
+    "rule": "If late days are zero or negative the routine returns fee 0.00 and RC 0 (after computing the average daily balance).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 65,
+        "end": 66
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 71,
+        "end": 72
+      }
+    ],
+    "fields": [
+      "FEE_LATE_DAYS, FEE_AMT, FEE_RC (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 6: GOLD, cycle balance 0.00, late 0, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "FEE_AMT 0.00, FEE_AVG_DAILY 0.00, FEE_RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-068",
+    "slice": "online",
+    "title": "GOLD small-balance waiver",
+    "rule": "A GOLD account with a cycle balance below 100.00 is waived: fee 0.00, RC 4.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 74,
+        "end": 77
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 39,
+        "end": 39
+      }
+    ],
+    "fields": [
+      "FEE_GROUP_ID, FEE_CYCLE_BAL, WAIVE_BELOW (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 4: GOLD, cycle balance 80.00, late 10, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "FEE_AMT 0.00, FEE_AVG_DAILY 2.66, FEE_RC 4"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-069",
+    "slice": "online",
+    "title": "Late fee is 2.5% truncated to cents",
+    "rule": "The fee is cycle balance x 2.500 / 100, assigned to DECIMAL FIXED(9,2), which truncates (no rounding).",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 36,
+        "end": 36
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 79,
+        "end": 80
+      }
+    ],
+    "fields": [
+      "FEE_PCT, WORK_FEE, FEE_AMT (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 1: STANDARD, cycle balance 1234.56, late 10, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "FEE_AMT 30.86 (30.864 truncated, not 30.87), FEE_AVG_DAILY 41.15, FEE_RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-070",
+    "slice": "online",
+    "title": "Late fee floor",
+    "rule": "A computed fee below 5.00 is raised to 5.00.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 37,
+        "end": 37
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 82,
+        "end": 82
+      }
+    ],
+    "fields": [
+      "FEE_FLOOR, FEE_AMT (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 2: STANDARD, cycle balance 100.00, late 10, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "Computed 2.50 is lifted: FEE_AMT 5.00, FEE_AVG_DAILY 3.33, FEE_RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-071",
+    "slice": "online",
+    "title": "Late fee cap",
+    "rule": "A computed fee above 35.00 is capped at 35.00.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 38,
+        "end": 38
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 83,
+        "end": 83
+      }
+    ],
+    "fields": [
+      "FEE_CAP, FEE_AMT (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 3: STANDARD, cycle balance 5000.00, late 10, cycle days 30",
+      "when": "CBFEECAL runs",
+      "then": "Computed 125.00 is capped: FEE_AMT 35.00, FEE_AVG_DAILY 166.66, FEE_RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-072",
+    "slice": "online",
+    "title": "Zero-day cycle raises ZERODIVIDE",
+    "rule": "A cycle of 0 days raises ZERODIVIDE in the average-daily division; the handler prints 'CBFEECAL: ZERODIVIDE FOR ACCOUNT <id>' and returns fee 0.00, average 0.00, RC 8.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 42,
+        "end": 48
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 69,
+        "end": 69
+      }
+    ],
+    "fields": [
+      "FEE_CYCLE_DAYS, FEE_AMT, FEE_AVG_DAILY, FEE_RC (CBFEECAL)"
+    ],
+    "test": {
+      "given": "Worked example 5: STANDARD, cycle balance 1000.00, late 10, cycle days 0",
+      "when": "CBFEECAL runs",
+      "then": "FEE_AMT 0.00, FEE_AVG_DAILY 0.00, FEE_RC 8; SYSPRINT line 'CBFEECAL: ZERODIVIDE FOR ACCOUNT 00000000099'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-073",
+    "slice": "online",
+    "title": "SIZE and ERROR conditions",
+    "rule": "A SIZE overflow inside the calculation block sets fee 0 and RC 8 with 'CBFEECAL: SIZE CONDITION FOR ACCOUNT <id>'; any other error sets RC 8 with 'CBFEECAL: UNEXPECTED ERROR, ACCOUNT <id>' (fee left as it was).",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 50,
+        "end": 61
+      },
+      {
+        "file": "app/pli/CBFEECAL.pli",
+        "start": 63,
+        "end": 64
+      }
+    ],
+    "fields": [
+      "FEE_AMT, FEE_RC (CBFEECAL)",
+      "SYSPRINT (FEECALC.jcl)"
+    ],
+    "test": {
+      "given": "A cycle balance whose fee would not fit DECIMAL FIXED(9,2) (cycle balance 9999999999.99: 2.5% = 249999999.99)",
+      "when": "CBFEECAL runs",
+      "then": "SYSPRINT 'CBFEECAL: SIZE CONDITION FOR ACCOUNT <id>', FEE_AMT 0.00, FEE_RC 8"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-ONL-074",
+    "slice": "online",
+    "title": "Late-fee output line",
+    "rule": "For every account CBFEEDRV writes an 80-byte FEEOUT line: account id, group id, cycle balance (-(10)9.99), fee (-(7)9.99) and 2-digit return code separated by single spaces, to a new generation of the LATEFEES GDG.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBFEEDRV.cbl",
+        "start": 63,
+        "end": 73
+      },
+      {
+        "file": "app/cbl/CBFEEDRV.cbl",
+        "start": 102,
+        "end": 107
+      },
+      {
+        "file": "app/jcl/FEECALC.jcl",
+        "start": 28,
+        "end": 31
+      }
+    ],
+    "fields": [
+      "FEE-LINE: FL-ACCT-ID, FL-GROUP-ID, FL-CYCLE-BAL, FL-FEE-AMT, FL-RC (CBFEEDRV)"
+    ],
+    "test": {
+      "given": "Worked example 1 result for account 00000000099",
+      "when": "The line is written",
+      "then": "'00000000099 STANDARD          1234.56       30.86 00' followed by 28 spaces (80 bytes)"
+    },
+    "fixtures": []
+  }
+]
