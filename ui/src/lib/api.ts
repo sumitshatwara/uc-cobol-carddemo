@@ -32,6 +32,7 @@ export interface Run {
   outDir: string;
   parity?: Parity;
 }
+export interface Decoded { layout: string; fields: string[]; records: Record<string, string>[] }
 export interface ReportInfo { name: string; modified: string; size: number }
 
 async function json<T>(res: Response): Promise<T> {
@@ -63,6 +64,10 @@ export const api = {
   runs: () => fetch('/api/runs').then(json<Run[]>),
   run: (id: string) => fetch(`/api/runs/${q(id)}`).then(json<Run>),
   runFile: (id: string, path: string) => fetch(`/api/runs/${q(id)}/file?path=${q(path)}`).then(text),
+  decodedRun: (id: string, path: string, layout: string) =>
+    fetch(`/api/runs/${q(id)}/decoded?path=${q(path)}&layout=${q(layout)}`).then(json<Decoded>),
+  decodedCase: (chain: string, c: string, kind: 'input' | 'expected', path: string, layout: string) =>
+    fetch(`/api/jobs/${q(chain)}/cases/${q(c)}/decoded?kind=${kind}&path=${q(path)}&layout=${q(layout)}`).then(json<Decoded>),
   reports: () => fetch('/api/parity/reports').then(json<ReportInfo[]>),
   report: (name: string) => fetch(`/api/parity/reports/${q(name)}`).then(text),
 };
