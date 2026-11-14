@@ -1,0 +1,1396 @@
+[
+  {
+    "id": "BR-POST-001",
+    "slice": "posting",
+    "title": "Posting job runs CBTRN02C against six datasets",
+    "rule": "POSTTRAN has a single step (STEP15) that runs CBTRN02C, reading the daily transaction file and card cross-reference, updating the account master and transaction-category balances, writing posted transactions to the transaction master, and writing rejects to a new 430-byte generation of the daily rejects GDG.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/jcl/POSTTRAN.jcl",
+        "start": 23,
+        "end": 42
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 29,
+        "end": 61
+      }
+    ],
+    "fields": [
+      "DALYTRAN-RECORD (CVTRA06Y)",
+      "TRAN-RECORD (CVTRA05Y)",
+      "CARD-XREF-RECORD (CVACT03Y)",
+      "ACCOUNT-RECORD (CVACT01Y)",
+      "TRAN-CAT-BAL-RECORD (CVTRA01Y)",
+      "REJECT-RECORD (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "a daily file with 4 valid transactions",
+      "when": "POSTTRAN runs",
+      "then": "TRANSACT holds 4 records, ACCTDATA and TCATBALF are updated, and DALYREJS(+1) is catalogued as an empty 430-byte dataset"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-002",
+    "slice": "posting",
+    "title": "Every daily record is read sequentially until end of file",
+    "rule": "CBTRN02C reads DALYTRAN one record at a time; file status 00 means a record, 10 means end of file and stops the loop, and any other status displays 'ERROR READING DALYTRAN FILE' and abends. Each record read is counted as processed.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 202,
+        "end": 219
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 345,
+        "end": 369
+      }
+    ],
+    "fields": [
+      "DALYTRAN-RECORD (CVTRA06Y)",
+      "WS-TRANSACTION-COUNT (CBTRN02C)"
+    ],
+    "test": {
+      "given": "a DALYTRAN file with 2 records",
+      "when": "CBTRN02C runs",
+      "then": "WS-TRANSACTION-COUNT = 2 and the program ends normally after status 10"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account"
+    ]
+  },
+  {
+    "id": "BR-POST-003",
+    "slice": "posting",
+    "title": "Validation order: card, then account, then limit and expiry",
+    "rule": "Each transaction is validated in a fixed order: the card must exist in the cross-reference; only if it does is the account read and the credit-limit and expiry checks applied. A failed card lookup skips all account checks.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 370,
+        "end": 378
+      }
+    ],
+    "fields": [
+      "WS-VALIDATION-FAIL-REASON (CBTRN02C)",
+      "DALYTRAN-CARD-NUM (CVTRA06Y)",
+      "XREF-ACCT-ID (CVACT03Y)"
+    ],
+    "test": {
+      "given": "card 4000999999999999 is not in CARDXREF",
+      "when": "the transaction is validated",
+      "then": "the reason is 100 and the account file is not read for this record"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card"
+    ]
+  },
+  {
+    "id": "BR-POST-004",
+    "slice": "posting",
+    "title": "Reject 100: card number not in cross-reference",
+    "rule": "If DALYTRAN-CARD-NUM has no CARDXREF record, the transaction is rejected with reason 0100 and description 'INVALID CARD NUMBER FOUND'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 380,
+        "end": 392
+      }
+    ],
+    "fields": [
+      "DALYTRAN-CARD-NUM (CVTRA06Y)",
+      "XREF-CARD-NUM (CVACT03Y)",
+      "REJ-FAIL-REASON (REJTRAN.cpy)",
+      "REJ-FAIL-REASON-DESC (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "transaction 0000000000000002 with card 4000999999999999 and no matching CARDXREF record",
+      "when": "CBTRN02C validates it",
+      "then": "a DALYREJS record is written with trailer '0100INVALID CARD NUMBER FOUND' and nothing is posted for it"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card"
+    ]
+  },
+  {
+    "id": "BR-POST-005",
+    "slice": "posting",
+    "title": "Reject 101: account in cross-reference but not on account master",
+    "rule": "If the card's cross-referenced account id has no ACCTDATA record, the transaction is rejected with reason 0101 and description 'ACCOUNT RECORD NOT FOUND'; the limit and expiry checks are not applied.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 393,
+        "end": 399
+      }
+    ],
+    "fields": [
+      "XREF-ACCT-ID (CVACT03Y)",
+      "ACCT-ID (CVACT01Y)",
+      "REJ-FAIL-REASON (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "card 4000000000001099 maps to account 00000001099, which is absent from ACCTDATA",
+      "when": "CBTRN02C validates it",
+      "then": "the reject trailer is '0101ACCOUNT RECORD NOT FOUND' and RC is 4"
+    },
+    "fixtures": [
+      "fixtures/posting/p03-account-missing"
+    ]
+  },
+  {
+    "id": "BR-POST-006",
+    "slice": "posting",
+    "title": "Credit-limit check uses cycle amounts, not the current balance",
+    "rule": "A transaction is over limit when ACCT-CURR-CYC-CREDIT - ACCT-CURR-CYC-DEBIT + DALYTRAN-AMT exceeds ACCT-CREDIT-LIMIT. The account's current balance is not used. Landing exactly on the limit is accepted.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 403,
+        "end": 408
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-CYC-CREDIT (CVACT01Y)",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)",
+      "ACCT-CREDIT-LIMIT (CVACT01Y)",
+      "DALYTRAN-AMT (CVTRA06Y)",
+      "WS-TEMP-BAL (CBTRN02C)"
+    ],
+    "test": {
+      "given": "account 1003 with limit 1000.00, cycle credit 950.00, cycle debit 0.00",
+      "when": "a 50.00 purchase is validated",
+      "then": "WS-TEMP-BAL = 1000.00, which is <= the limit, so the purchase posts"
+    },
+    "fixtures": [
+      "fixtures/posting/p04-overlimit-reject"
+    ]
+  },
+  {
+    "id": "BR-POST-007",
+    "slice": "posting",
+    "title": "Reject 102: over-limit transaction",
+    "rule": "When the cycle-based balance would exceed the credit limit, the transaction is rejected with reason 0102 and description 'OVERLIMIT TRANSACTION'.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 407,
+        "end": 413
+      }
+    ],
+    "fields": [
+      "ACCT-CREDIT-LIMIT (CVACT01Y)",
+      "WS-TEMP-BAL (CBTRN02C)",
+      "REJ-FAIL-REASON (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "account 1003 with limit 1000.00 whose cycle credit is already 1000.00",
+      "when": "a 100.00 purchase is validated",
+      "then": "WS-TEMP-BAL = 1100.00 > 1000.00, the trailer is '0102OVERLIMIT TRANSACTION' and the account is unchanged by it"
+    },
+    "fixtures": [
+      "fixtures/posting/p04-overlimit-reject"
+    ]
+  },
+  {
+    "id": "BR-POST-008",
+    "slice": "posting",
+    "title": "Limit check sees earlier postings in the same run",
+    "rule": "The account is re-read from the master for every transaction, and accepted postings rewrite it immediately, so the limit check for a later transaction includes amounts posted earlier in the same file.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 393,
+        "end": 413
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 545,
+        "end": 560
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-CYC-CREDIT (CVACT01Y)",
+      "ACCT-CREDIT-LIMIT (CVACT01Y)"
+    ],
+    "test": {
+      "given": "account 1003, limit 1000.00, cycle credit 950.00; two purchases of 50.00 then 100.00",
+      "when": "both are processed in order",
+      "then": "the first posts (cycle credit becomes 1000.00) and the second is rejected with 102 because 1000.00 + 100.00 > 1000.00"
+    },
+    "fixtures": [
+      "fixtures/posting/p04-overlimit-reject"
+    ]
+  },
+  {
+    "id": "BR-POST-009",
+    "slice": "posting",
+    "title": "Reject 103: transaction after account expiry",
+    "rule": "If the account expiry date is earlier than the first 10 characters (the date part) of the transaction's origin timestamp, the transaction is rejected with reason 0103 and description 'TRANSACTION RECEIVED AFTER ACCT EXPIRATION'. A transaction on the expiry date itself is accepted. The comparison is a plain character comparison of YYYY-MM-DD text.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 414,
+        "end": 420
+      }
+    ],
+    "fields": [
+      "ACCT-EXPIRAION-DATE (CVACT01Y)",
+      "DALYTRAN-ORIG-TS (CVTRA06Y)",
+      "REJ-FAIL-REASON (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "account 1004 expiring 2022-01-31 and account 1005 expiring 2022-07-04; both transactions have origin 2022-07-04-09.15.00.000000",
+      "when": "CBTRN02C validates them",
+      "then": "the account 1004 transaction is rejected with '0103TRANSACTION RECEIVED AFTER ACCT EXPIRATION'; the account 1005 one posts"
+    },
+    "fixtures": [
+      "fixtures/posting/p05-expired-account"
+    ]
+  },
+  {
+    "id": "BR-POST-010",
+    "slice": "posting",
+    "title": "Expiry reason overrides over-limit reason",
+    "rule": "The limit and expiry checks are both applied, one after the other, without stopping at the first failure. If a transaction is both over limit and after expiry, the reject carries only reason 0103 and the expiry text.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 403,
+        "end": 420
+      }
+    ],
+    "fields": [
+      "WS-VALIDATION-FAIL-REASON (CBTRN02C)",
+      "WS-VALIDATION-FAIL-REASON-DESC (CBTRN02C)"
+    ],
+    "test": {
+      "given": "an account with limit 100.00, cycle credit 90.00, expiry 2022-01-31",
+      "when": "a 50.00 purchase with origin 2022-07-04 is validated",
+      "then": "one reject is written with trailer '0103TRANSACTION RECEIVED AFTER ACCT EXPIRATION' (reason 102 is overwritten)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-011",
+    "slice": "posting",
+    "title": "Blank or zero expiry date rejects every transaction",
+    "rule": "Because expiry is compared as text, an expiry date of spaces or '0000-00-00' sorts below any real origin date, so every transaction for that account is rejected with reason 103.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 414,
+        "end": 420
+      }
+    ],
+    "fields": [
+      "ACCT-EXPIRAION-DATE (CVACT01Y)",
+      "DALYTRAN-ORIG-TS (CVTRA06Y)"
+    ],
+    "test": {
+      "given": "an account whose ACCT-EXPIRAION-DATE is '0000-00-00'",
+      "when": "a transaction with origin 2022-07-04 is validated",
+      "then": "it is rejected with reason 0103"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-012",
+    "slice": "posting",
+    "title": "Reject record layout: input record plus 80-byte trailer",
+    "rule": "A rejected transaction is written to DALYREJS as the unchanged 350-byte daily record followed by an 80-byte trailer: a 4-digit reason code and a 76-character description. A write failure displays 'ERROR WRITING TO REJECTS FILE' and abends.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 176,
+        "end": 182
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 446,
+        "end": 465
+      },
+      {
+        "file": "app/jcl/POSTTRAN.jcl",
+        "start": 34,
+        "end": 38
+      }
+    ],
+    "fields": [
+      "REJECT-TRAN-DATA (CBTRN02C)",
+      "WS-VALIDATION-FAIL-REASON (CBTRN02C)",
+      "WS-VALIDATION-FAIL-REASON-DESC (CBTRN02C)",
+      "REJ-FAIL-REASON (REJTRAN.cpy)",
+      "REJ-FAIL-REASON-DESC (REJTRAN.cpy)"
+    ],
+    "test": {
+      "given": "a rejected transaction with reason 102",
+      "when": "the reject is written",
+      "then": "the record is 430 bytes: bytes 1-350 equal the input record, bytes 351-354 are '0102', bytes 355-430 are 'OVERLIMIT TRANSACTION' padded with spaces"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account"
+    ]
+  },
+  {
+    "id": "BR-POST-013",
+    "slice": "posting",
+    "title": "Rejects are counted and the posting continues",
+    "rule": "A rejected transaction increments the reject count and processing continues with the next record; rejects never stop the run.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 211,
+        "end": 216
+      }
+    ],
+    "fields": [
+      "WS-REJECT-COUNT (CBTRN02C)"
+    ],
+    "test": {
+      "given": "a file with one invalid-card record and one valid record",
+      "when": "CBTRN02C runs",
+      "then": "one record is rejected, the other is posted, and both are counted as processed"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account"
+    ]
+  },
+  {
+    "id": "BR-POST-014",
+    "slice": "posting",
+    "title": "Return code 4 when any transaction is rejected",
+    "rule": "CBTRN02C ends with return code 4 if at least one transaction was rejected, otherwise 0.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 229,
+        "end": 231
+      }
+    ],
+    "fields": [
+      "WS-REJECT-COUNT (CBTRN02C)",
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a run with 2 transactions of which 1 is rejected",
+      "when": "CBTRN02C finishes",
+      "then": "STEP15 ends with RC 4 (RC 0 when no rejects)"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category",
+      "fixtures/posting/p07-empty-day"
+    ]
+  },
+  {
+    "id": "BR-POST-015",
+    "slice": "posting",
+    "title": "Posting SYSOUT messages and counters",
+    "rule": "CBTRN02C displays 'START OF EXECUTION OF PROGRAM CBTRN02C', then at the end 'TRANSACTIONS PROCESSED :' and 'TRANSACTIONS REJECTED  :' each followed by a 9-digit zero-padded count, then 'END OF EXECUTION OF PROGRAM CBTRN02C'.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 194,
+        "end": 194
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 227,
+        "end": 232
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 184,
+        "end": 186
+      }
+    ],
+    "fields": [
+      "WS-TRANSACTION-COUNT (CBTRN02C)",
+      "WS-REJECT-COUNT (CBTRN02C)"
+    ],
+    "test": {
+      "given": "2 transactions, 1 rejected",
+      "when": "CBTRN02C finishes",
+      "then": "SYSOUT contains 'TRANSACTIONS PROCESSED :000000002' and 'TRANSACTIONS REJECTED  :000000001'"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category",
+      "fixtures/posting/p07-empty-day"
+    ]
+  },
+  {
+    "id": "BR-POST-016",
+    "slice": "posting",
+    "title": "Posted transaction copies the daily record field by field",
+    "rule": "An accepted daily transaction is written to the transaction master with id, type, category, source, description, amount, merchant id/name/city/zip, card number and origin timestamp copied unchanged from the daily record.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 424,
+        "end": 444
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 562,
+        "end": 579
+      }
+    ],
+    "fields": [
+      "DALYTRAN-* (CVTRA06Y)",
+      "TRAN-ID, TRAN-TYPE-CD, TRAN-CAT-CD, TRAN-SOURCE, TRAN-DESC, TRAN-AMT, TRAN-MERCHANT-ID, TRAN-MERCHANT-NAME, TRAN-MERCHANT-CITY, TRAN-MERCHANT-ZIP, TRAN-CARD-NUM, TRAN-ORIG-TS (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "daily transaction 0000000000000001, type 01, category 0001, amount 125.00",
+      "when": "it posts",
+      "then": "TRANSACT has a record keyed 0000000000000001 with the same field values"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-017",
+    "slice": "posting",
+    "title": "Processing timestamp is the run clock, not the input value",
+    "rule": "TRAN-PROC-TS is set from the current date and time in DB2 timestamp form YYYY-MM-DD-HH.MM.SS.hh0000 (hundredths of a second followed by '0000'); the daily record's own DALYTRAN-PROC-TS is ignored.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 437,
+        "end": 438
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 692,
+        "end": 705
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 150,
+        "end": 174
+      }
+    ],
+    "fields": [
+      "TRAN-PROC-TS (CVTRA05Y)",
+      "DALYTRAN-PROC-TS (CVTRA06Y)",
+      "DB2-FORMAT-TS (CBTRN02C)"
+    ],
+    "test": {
+      "given": "the clock frozen at 2022-07-05 10:00:00.00",
+      "when": "a transaction posts",
+      "then": "TRAN-PROC-TS = '2022-07-05-10.00.00.000000'"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-018",
+    "slice": "posting",
+    "title": "Transaction-category balance key",
+    "rule": "Each posting updates the transaction-category balance identified by the cross-referenced account id, the transaction type code and the category code.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 467,
+        "end": 479
+      }
+    ],
+    "fields": [
+      "TRANCAT-ACCT-ID, TRANCAT-TYPE-CD, TRANCAT-CD (CVTRA01Y)",
+      "XREF-ACCT-ID (CVACT03Y)",
+      "DALYTRAN-TYPE-CD, DALYTRAN-CAT-CD (CVTRA06Y)"
+    ],
+    "test": {
+      "given": "account 00000001006, type 02, category 0001",
+      "when": "a payment posts",
+      "then": "the TCATBALF key used is '00000001006020001'"
+    },
+    "fixtures": [
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-019",
+    "slice": "posting",
+    "title": "Create a category balance record when none exists",
+    "rule": "If no balance record exists for the key, CBTRN02C displays 'TCATBAL record not found for key : <key>.. Creating.' and writes a new record whose balance equals the transaction amount.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 474,
+        "end": 479
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 495,
+        "end": 524
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "TRAN-CAT-KEY (CVTRA01Y)"
+    ],
+    "test": {
+      "given": "no TCATBALF record for account 1006, type 03, category 0001",
+      "when": "a -25.50 credit posts",
+      "then": "SYSOUT shows 'TCATBAL record not found for key : 00000001006030001.. Creating.' and a new record with TRAN-CAT-BAL = -25.50 is written"
+    },
+    "fixtures": [
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-020",
+    "slice": "posting",
+    "title": "Add to an existing category balance",
+    "rule": "If the balance record exists, the transaction amount (positive or negative) is added to TRAN-CAT-BAL and the record is rewritten.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 495,
+        "end": 499
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 526,
+        "end": 542
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "DALYTRAN-AMT (CVTRA06Y)"
+    ],
+    "test": {
+      "given": "TCATBALF record 00000001003010001 with balance 950.00",
+      "when": "a 50.00 purchase posts",
+      "then": "the balance becomes 1000.00"
+    },
+    "fixtures": [
+      "fixtures/posting/p04-overlimit-reject"
+    ]
+  },
+  {
+    "id": "BR-POST-021",
+    "slice": "posting",
+    "title": "Category balance read error abends",
+    "rule": "Any TCATBALF read status other than 00 (found) or 23 (not found) displays 'ERROR READING TRANSACTION BALANCE FILE' and abends. Write and rewrite failures display 'ERROR WRITING TRANSACTION BALANCE FILE' or 'ERROR REWRITING TRANSACTION BALANCE FILE' and abend.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 481,
+        "end": 493
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 512,
+        "end": 524
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 530,
+        "end": 542
+      }
+    ],
+    "fields": [
+      "TCATBALF-STATUS (CBTRN02C)"
+    ],
+    "test": {
+      "given": "TCATBALF returns status 92 on read",
+      "when": "a transaction posts",
+      "then": "SYSOUT shows 'ERROR READING TRANSACTION BALANCE FILE', the file status line and 'ABENDING PROGRAM'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-022",
+    "slice": "posting",
+    "title": "Account balance and cycle totals updated by sign of amount",
+    "rule": "Every posted amount is added to the account's current balance. A zero or positive amount is also added to the cycle credit; a negative amount is added (as a negative number) to the cycle debit, so cycle debit grows more negative.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 545,
+        "end": 552
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-BAL (CVACT01Y)",
+      "ACCT-CURR-CYC-CREDIT (CVACT01Y)",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)",
+      "DALYTRAN-AMT (CVTRA06Y)"
+    ],
+    "test": {
+      "given": "account 1006 with balance 800.00, cycle credit 800.00, cycle debit 0.00",
+      "when": "transactions of -300.00, -25.50 and +60.00 post",
+      "then": "balance = 534.50, cycle credit = 860.00, cycle debit = -325.50"
+    },
+    "fixtures": [
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-023",
+    "slice": "posting",
+    "title": "Payments raise the limit-check amount",
+    "rule": "Because cycle debit holds negative amounts and the limit check subtracts it, every payment or credit posted in the cycle increases the amount tested against the limit instead of lowering it.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 403,
+        "end": 405
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 548,
+        "end": 552
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)",
+      "WS-TEMP-BAL (CBTRN02C)"
+    ],
+    "test": {
+      "given": "an account with limit 1000.00, cycle credit 600.00 and cycle debit -500.00 (a 500.00 payment)",
+      "when": "a 50.00 purchase is validated",
+      "then": "WS-TEMP-BAL = 600.00 - (-500.00) + 50.00 = 1150.00 > 1000.00 and the purchase is rejected with 102"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-024",
+    "slice": "posting",
+    "title": "Account rewrite failure sets reason 109 but is not a reject",
+    "rule": "If the account rewrite fails with an invalid key, reason 109 'ACCOUNT RECORD NOT FOUND' is stored, but the record is neither counted as rejected nor written to DALYREJS, and the transaction is still written to TRANSACT.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 554,
+        "end": 559
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 440,
+        "end": 442
+      }
+    ],
+    "fields": [
+      "WS-VALIDATION-FAIL-REASON (CBTRN02C)",
+      "WS-REJECT-COUNT (CBTRN02C)"
+    ],
+    "test": {
+      "given": "an account deleted between its read and rewrite",
+      "when": "the transaction posts",
+      "then": "the transaction is in TRANSACT, the reject count is unchanged and RC is not raised by it"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-025",
+    "slice": "posting",
+    "title": "Posting order: category balance, account, transaction",
+    "rule": "For an accepted transaction the category balance is updated first, then the account, then the transaction record is written. A failure writing the transaction ('ERROR WRITING TO TRANSACTION FILE') abends after the balances were already changed.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 440,
+        "end": 442
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 562,
+        "end": 579
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "ACCOUNT-RECORD (CVACT01Y)",
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "a transaction whose id already exists in TRANSACT",
+      "when": "it posts",
+      "then": "TCATBALF and ACCTDATA are updated, then the duplicate-key write fails, SYSOUT shows 'ERROR WRITING TO TRANSACTION FILE' and the program abends"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-026",
+    "slice": "posting",
+    "title": "Transaction master is opened for output",
+    "rule": "CBTRN02C opens the transaction master KSDS for OUTPUT, so the posted transactions of this run are the only content written by the program (the file is loaded from DALYTRAN.PS.INIT by the TRANFILE setup job, empty in every fixture).",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 254,
+        "end": 270
+      }
+    ],
+    "fields": [
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "an empty transaction master and 4 accepted transactions",
+      "when": "CBTRN02C runs",
+      "then": "TRANSACT contains exactly those 4 records in transaction-id order"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-027",
+    "slice": "posting",
+    "title": "Empty daily file posts nothing and ends RC 0",
+    "rule": "If the daily file has no records, nothing is written to TRANSACT or DALYREJS, both counters are zero and the return code is 0.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 202,
+        "end": 231
+      }
+    ],
+    "fields": [
+      "WS-TRANSACTION-COUNT (CBTRN02C)",
+      "WS-REJECT-COUNT (CBTRN02C)"
+    ],
+    "test": {
+      "given": "an empty DALYTRAN",
+      "when": "POSTTRAN runs",
+      "then": "SYSOUT shows 'TRANSACTIONS PROCESSED :000000000' and 'TRANSACTIONS REJECTED  :000000000'; RC 0"
+    },
+    "fixtures": [
+      "fixtures/posting/p07-empty-day"
+    ]
+  },
+  {
+    "id": "BR-POST-028",
+    "slice": "posting",
+    "title": "File open, close and I/O errors abend with a status line",
+    "rule": "Any unexpected file status on open, read, write or close displays a specific message (for example 'ERROR OPENING DALYTRAN'), then 'FILE STATUS IS: NNNN' followed by the 4-digit status, then 'ABENDING PROGRAM', and calls CEE3ABD with abend code 999. Off-host the CEE3ABD stub returns RC 12.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 236,
+        "end": 343
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 582,
+        "end": 690
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 707,
+        "end": 727
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 376,
+        "end": 482
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 514,
+        "end": 649
+      }
+    ],
+    "fields": [
+      "IO-STATUS (CBTRN02C / CBTRN03C)",
+      "IO-STATUS-04 (CBTRN02C / CBTRN03C)",
+      "ABCODE (CBTRN02C / CBTRN03C)"
+    ],
+    "test": {
+      "given": "the account master cannot be opened (status 35)",
+      "when": "CBTRN02C starts",
+      "then": "SYSOUT shows 'ERROR OPENING ACCOUNT MASTER FILE', 'FILE STATUS IS: NNNN0035', 'ABENDING PROGRAM' and the step ends with the abend"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-029",
+    "slice": "posting",
+    "title": "No rounding; amounts carry exactly two decimals",
+    "rule": "All posting arithmetic is ADD or COMPUTE on fields with two decimal places, without ROUNDED and without ON SIZE ERROR. Results are exact; a value that exceeds the receiving field's integer digits loses its high-order digits silently.",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 403,
+        "end": 405
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 508,
+        "end": 508
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 527,
+        "end": 527
+      },
+      {
+        "file": "app/cbl/CBTRN02C.cbl",
+        "start": 547,
+        "end": 552
+      }
+    ],
+    "fields": [
+      "DALYTRAN-AMT S9(09)V99 (CVTRA06Y)",
+      "TRAN-CAT-BAL S9(09)V99 (CVTRA01Y)",
+      "ACCT-CURR-BAL S9(10)V99 (CVACT01Y)",
+      "WS-TEMP-BAL S9(09)V99 (CBTRN02C)"
+    ],
+    "test": {
+      "given": "a TCATBALF balance of 999,999,999.00",
+      "when": "a 2.00 purchase posts",
+      "then": "TRAN-CAT-BAL becomes 1.00 (high-order digit truncated) and no error is raised"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-030",
+    "slice": "posting",
+    "title": "Report step 1: unload the transaction master",
+    "rule": "TRANREPT first copies the transaction master KSDS (in transaction-id order) to a new 350-byte sequential backup generation with IDCAMS REPRO.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/jcl/TRANREPT.jcl",
+        "start": 23,
+        "end": 33
+      }
+    ],
+    "fields": [
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "a TRANSACT KSDS with 4 records",
+      "when": "STEP05R (REPROC) runs",
+      "then": "TRANSACT.BKUP(+1) holds the same 4 records"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-031",
+    "slice": "posting",
+    "title": "Report step 2: sort by card number and filter by processing date",
+    "rule": "A SORT step keeps only transactions whose processing date (bytes 305-314) is between 2022-01-01 and 2022-07-06 inclusive, and sorts them ascending by card number (bytes 263-278). These dates are hard-coded in the JCL SYMNAMES, not read from DATEPARM. Records with equal card numbers keep their input (transaction-id) order.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/jcl/TRANREPT.jcl",
+        "start": 37,
+        "end": 55
+      }
+    ],
+    "fields": [
+      "TRAN-CARD-NUM (CVTRA05Y)",
+      "TRAN-PROC-TS (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "transactions 1 and 3 on card ...1001 and 2 and 4 on card ...1002, all processed 2022-07-05",
+      "when": "the SORT step runs",
+      "then": "TRANSACT.DALY(+1) is in the order 1, 3, 2, 4"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-032",
+    "slice": "posting",
+    "title": "Report date range comes from the DATEPARM record",
+    "rule": "CBTRN03C reads one DATEPARM record: start date in columns 1-10, end date in columns 12-21, and displays 'Reporting from <start> to <end>'. An empty DATEPARM sets end of file, so no transaction is reported.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 122,
+        "end": 125
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 220,
+        "end": 243
+      },
+      {
+        "file": "app/jcl/TRANREPT.jcl",
+        "start": 73,
+        "end": 74
+      }
+    ],
+    "fields": [
+      "WS-START-DATE (CBTRN03C)",
+      "WS-END-DATE (CBTRN03C)"
+    ],
+    "test": {
+      "given": "DATEPARM contains '2022-01-01 2022-07-06'",
+      "when": "CBTRN03C starts",
+      "then": "SYSOUT shows 'Reporting from 2022-01-01 to 2022-07-06'"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category",
+      "fixtures/posting/p07-empty-day"
+    ]
+  },
+  {
+    "id": "BR-POST-033",
+    "slice": "posting",
+    "title": "Out-of-range processing date ends the report loop",
+    "rule": "CBTRN03C checks each record's processing date against the DATEPARM range. A record outside the range executes NEXT SENTENCE, which leaves the whole read loop: no further records are reported and no page or grand total is written.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 170,
+        "end": 178
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 206,
+        "end": 206
+      }
+    ],
+    "fields": [
+      "TRAN-PROC-TS (CVTRA05Y)",
+      "WS-START-DATE (CBTRN03C)",
+      "WS-END-DATE (CBTRN03C)"
+    ],
+    "test": {
+      "given": "an empty sorted transaction file (the record area stays blank, which is below the start date)",
+      "when": "CBTRN03C runs",
+      "then": "the loop exits at once: the report file has 0 lines and no 'TRAN-AMT' or 'WS-PAGE-TOTAL' lines appear in SYSOUT"
+    },
+    "fixtures": [
+      "fixtures/posting/p07-empty-day"
+    ]
+  },
+  {
+    "id": "BR-POST-034",
+    "slice": "posting",
+    "title": "Each reported transaction is echoed to SYSOUT",
+    "rule": "For every in-range record CBTRN03C displays the raw 350-byte transaction record on SYSOUT before reporting it.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 179,
+        "end": 180
+      }
+    ],
+    "fields": [
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "4 sorted transactions",
+      "when": "CBTRN03C runs",
+      "then": "SYSOUT contains the 4 records verbatim, in sorted order"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-035",
+    "slice": "posting",
+    "title": "Report headers on the first detail and on each new page",
+    "rule": "Before the first detail line the program fills the date range and writes four header lines: the report name line ('DALYREPT', 'Daily Transaction Report', 'Date Range: <start> to <end>'), a blank line, the column header line and a line of 133 dashes.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 274,
+        "end": 280
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 324,
+        "end": 341
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 4,
+        "end": 13
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 33,
+        "end": 48
+      }
+    ],
+    "fields": [
+      "REPORT-NAME-HEADER, REPT-START-DATE, REPT-END-DATE, TRANSACTION-HEADER-1, TRANSACTION-HEADER-2 (CVTRA07Y)",
+      "WS-LINE-COUNTER (CBTRN03C)"
+    ],
+    "test": {
+      "given": "DATEPARM 2022-01-01 to 2022-07-06 and one transaction",
+      "when": "the report is written",
+      "then": "line 1 starts 'DALYREPT' and ends 'Date Range: 2022-01-01 to 2022-07-06', line 2 is blank, line 4 is 133 '-' characters"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-036",
+    "slice": "posting",
+    "title": "Detail line format",
+    "rule": "Each detail line holds transaction id (16), account id (11 digits from the cross-reference), type code '-' type description truncated to 15, category code (4 digits) '-' category description truncated to 29, source (10), and the amount edited as -ZZZ,ZZZ,ZZZ.ZZ (leading '-' for negatives, blank for positives), padded to 133 bytes.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 361,
+        "end": 374
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 15,
+        "end": 31
+      }
+    ],
+    "fields": [
+      "TRAN-REPORT-TRANS-ID, TRAN-REPORT-ACCOUNT-ID, TRAN-REPORT-TYPE-CD, TRAN-REPORT-TYPE-DESC, TRAN-REPORT-CAT-CD, TRAN-REPORT-CAT-DESC, TRAN-REPORT-SOURCE, TRAN-REPORT-AMT (CVTRA07Y)",
+      "TRAN-TYPE-DESC (CVTRA03Y)",
+      "TRAN-CAT-TYPE-DESC (CVTRA04Y)",
+      "XREF-ACCT-ID (CVACT03Y)"
+    ],
+    "test": {
+      "given": "transaction 0000000000000003, account 1001, type 02 'Payment', category 0001 'Payment - Bank Transfer', source OPERATOR, amount -200.00",
+      "when": "its detail line is written",
+      "then": "the line reads '0000000000000003 00000001001 02-Payment         0001-Payment - Bank Transfer       OPERATOR      -        200.00'"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-037",
+    "slice": "posting",
+    "title": "Zero amounts print as blanks",
+    "rule": "The amount pictures use only Z for digit positions, so a 0.00 amount prints as all spaces on detail and total lines (standard COBOL editing).",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 30,
+        "end": 30
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 54,
+        "end": 54
+      }
+    ],
+    "fields": [
+      "TRAN-REPORT-AMT (CVTRA07Y)",
+      "REPT-PAGE-TOTAL (CVTRA07Y)"
+    ],
+    "test": {
+      "given": "a posted transaction with amount 0.00",
+      "when": "it is reported",
+      "then": "the 15-character amount field on its detail line is blank"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-038",
+    "slice": "posting",
+    "title": "Lookups for report descriptions abend when missing",
+    "rule": "On every card-number change the card is looked up in CARDXREF; for every record the type and type+category are looked up in TRANTYPE and TRANCATG. A missing key displays 'INVALID CARD NUMBER : ', 'INVALID TRANSACTION TYPE : ' or 'INVALID TRAN CATG KEY : ' with the key, then 'FILE STATUS IS: NNNN0023' and abends.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 181,
+        "end": 195
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 484,
+        "end": 512
+      }
+    ],
+    "fields": [
+      "FD-XREF-CARD-NUM, FD-TRAN-TYPE, FD-TRAN-CAT-KEY (CBTRN03C)",
+      "TRAN-TYPE-CD, TRAN-CAT-CD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "a posted transaction with type 09 that is not in TRANTYPE",
+      "when": "CBTRN03C reports it",
+      "then": "SYSOUT shows 'INVALID TRANSACTION TYPE : 09', 'FILE STATUS IS: NNNN0023', 'ABENDING PROGRAM'"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-039",
+    "slice": "posting",
+    "title": "Account totals break on card number",
+    "rule": "When the card number differs from the previous record (and it is not the first record), an 'Account Total' line with the accumulated amount is written, followed by a dash line, and the account total is reset. The break is on card number, not account id.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 181,
+        "end": 188
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 306,
+        "end": 316
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 56,
+        "end": 60
+      }
+    ],
+    "fields": [
+      "WS-CURR-CARD-NUM (CBTRN03C)",
+      "WS-ACCOUNT-TOTAL (CBTRN03C)",
+      "REPT-ACCOUNT-TOTAL (CVTRA07Y)"
+    ],
+    "test": {
+      "given": "card ...1001 with 125.00 and -200.00 followed by card ...1002",
+      "when": "the first card ...1002 record is reached",
+      "then": "'Account Total' with dots and '-         75.00' is written, then a dash line"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-040",
+    "slice": "posting",
+    "title": "Page break every 20 lines by exact multiple",
+    "rule": "Before each detail line, if the line counter is an exact multiple of 20, a page-total line and dash line are written, followed by the four header lines. The counter counts headers, details, account-total and page-total lines.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 127,
+        "end": 132
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 282,
+        "end": 285
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 293,
+        "end": 304
+      }
+    ],
+    "fields": [
+      "WS-LINE-COUNTER (CBTRN03C)",
+      "WS-PAGE-SIZE (CBTRN03C)"
+    ],
+    "test": {
+      "given": "the line counter at 20 when the 17th detail is about to be written (4 headers + 16 details)",
+      "when": "the detail is reported",
+      "then": "'Page Total' line, dash line and 4 header lines are written first, then the detail"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-POST-041",
+    "slice": "posting",
+    "title": "Page totals roll into the grand total",
+    "rule": "Writing a page-total line adds the page total to the grand total and resets the page total to zero. The grand total is printed once, at end of file, as 'Grand Total' with dots and the amount edited +ZZZ,ZZZ,ZZZ.ZZ.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 293,
+        "end": 304
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 318,
+        "end": 322
+      },
+      {
+        "file": "app/cpy/CVTRA07Y.cpy",
+        "start": 50,
+        "end": 66
+      }
+    ],
+    "fields": [
+      "WS-PAGE-TOTAL (CBTRN03C)",
+      "WS-GRAND-TOTAL (CBTRN03C)",
+      "REPT-PAGE-TOTAL, REPT-GRAND-TOTAL (CVTRA07Y)"
+    ],
+    "test": {
+      "given": "a single page with page total +84.00",
+      "when": "end of file is reached",
+      "then": "the last three lines are the 'Page Total' line ending '+         84.00', a dash line, and the 'Grand Total' line ending '+         84.00'"
+    },
+    "fixtures": [
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-042",
+    "slice": "posting",
+    "title": "End of file adds the last amount again",
+    "rule": "At end of file the record area still holds the last transaction; its amount is displayed ('TRAN-AMT ' and 'WS-PAGE-TOTAL' lines on SYSOUT) and then added a second time to the page and account totals before the final page and grand totals are written. Totals are therefore overstated by the last transaction's amount.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 197,
+        "end": 203
+      }
+    ],
+    "fields": [
+      "TRAN-AMT (CVTRA05Y)",
+      "WS-PAGE-TOTAL (CBTRN03C)",
+      "WS-ACCOUNT-TOTAL (CBTRN03C)"
+    ],
+    "test": {
+      "given": "one reported transaction of 42.00",
+      "when": "end of file is reached",
+      "then": "SYSOUT shows 'TRAN-AMT 00000004200+' and 'WS-PAGE-TOTAL00000004200+', and the page and grand totals print +84.00"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category"
+    ]
+  },
+  {
+    "id": "BR-POST-043",
+    "slice": "posting",
+    "title": "Last account's total is never printed",
+    "rule": "Account totals are written only on a card-number change, and the end-of-file branch writes page and grand totals only, so the final card in the report never gets an 'Account Total' line.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 181,
+        "end": 184
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 197,
+        "end": 203
+      }
+    ],
+    "fields": [
+      "WS-ACCOUNT-TOTAL (CBTRN03C)"
+    ],
+    "test": {
+      "given": "two cards in the report",
+      "when": "the report completes",
+      "then": "exactly one 'Account Total' line appears (for the first card)"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed"
+    ]
+  },
+  {
+    "id": "BR-POST-044",
+    "slice": "posting",
+    "title": "Report SYSOUT start and end messages",
+    "rule": "CBTRN03C displays 'START OF EXECUTION OF PROGRAM CBTRN03C' at start and 'END OF EXECUTION OF PROGRAM CBTRN03C' after closing its files. It sets no return code, so TRANREPT ends RC 0 even when POSTTRAN had rejects.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 160,
+        "end": 160
+      },
+      {
+        "file": "app/cbl/CBTRN03C.cbl",
+        "start": 208,
+        "end": 217
+      }
+    ],
+    "fields": [
+      "RETURN-CODE"
+    ],
+    "test": {
+      "given": "a posting run that ended RC 4",
+      "when": "TRANREPT runs",
+      "then": "STEP10R ends RC 0 and SYSOUT ends with 'END OF EXECUTION OF PROGRAM CBTRN03C'"
+    },
+    "fixtures": [
+      "fixtures/posting/p01-baseline-mixed",
+      "fixtures/posting/p02-invalid-card",
+      "fixtures/posting/p03-account-missing",
+      "fixtures/posting/p04-overlimit-reject",
+      "fixtures/posting/p05-expired-account",
+      "fixtures/posting/p06-credits-new-category",
+      "fixtures/posting/p07-empty-day"
+    ]
+  }
+]
