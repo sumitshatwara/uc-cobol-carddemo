@@ -1,0 +1,48 @@
+# CardDemo Java target.  Database: the estate's PostgreSQL 15 container, own database
+# carddemo_java (created by `make java-db`), published on localhost:${CARDDEMO_DB_PORT}.
+spring:
+  application:
+    name: carddemo
+  datasource:
+    url: jdbc:postgresql://${CARDDEMO_DB_HOST:localhost}:${CARDDEMO_DB_PORT:55432}/${CARDDEMO_DB_NAME:carddemo_java}?currentSchema=public
+    username: ${CARDDEMO_DB_USER:carddemo}
+    password: ${CARDDEMO_DB_PASSWORD:carddemo}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema; JPA only checks it
+    properties:
+      hibernate.jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+    default-schema: public              # history + BATCH_* in public; dataset tables are always schema-qualified (carddemo.*)
+    locations: classpath:db/migration   # common V001-V099, posting V100-V199, interest V200-V299, trantype V300-V399, online V400-V499
+  batch:
+    job:
+      enabled: false              # jobs are launched by ChainRunService, never at startup
+    jdbc:
+      initialize-schema: never    # BATCH_* tables come from Flyway V002
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${CARDDEMO_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+carddemo:
+  repo-root: ${CARDDEMO_REPO_ROOT:}      # blank = discover from the working directory
+  clock: "2022-07-05 10:00:00.00"         # overridden per chain from tools/runjcl/chains.json
+  parity:
+    python: ${CARDDEMO_PYTHON:python3}
+
+logging:
+  level:
+    root: WARN
+    com.carddemo: INFO
+    org.springframework.boot.web.embedded: INFO
+    org.springframework.context.support.PostProcessorRegistrationDelegate: ERROR

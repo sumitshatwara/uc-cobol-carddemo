@@ -1,0 +1,124 @@
+# Interest slice - test evidence (generated 2026-11-14T12:11Z)
+
+## 1. Unit layer: make test-unit
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.160 s -- in com.carddemo.common.CodecTest
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.038 s -- in com.carddemo.common.HarnessFormatTest
+[INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Tests run: 57, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.292 s -- in com.carddemo.interest.Cbact04cRulesTest
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.061 s -- in com.carddemo.interest.GoldenFixtureTest
+[INFO] Tests run: 64, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+## 2. Legacy oracle: make parity CHAIN=interest
+interest/i01-baseline [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+interest/i02-tie-half-cent [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+interest/i03-zero-rate-skipped [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i04-default-group-fallback [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i05-multi-category [legacy rerun]: PASS (3 records, 38 fields, 0 differences)
+interest/i06-negative-balance [legacy rerun]: PASS (2 records, 25 fields, 0 differences)
+interest/i07-nontie-rounding [legacy rerun]: PASS (4 records, 50 fields, 0 differences)
+
+## 3. Regression: make parity-java CHAIN=interest
+java interest/i01-baseline: MAXRC=0 (224 ms) -> work/java/interest/i01-baseline/actual
+java interest/i02-tie-half-cent: MAXRC=0 (65 ms) -> work/java/interest/i02-tie-half-cent/actual
+java interest/i03-zero-rate-skipped: MAXRC=0 (65 ms) -> work/java/interest/i03-zero-rate-skipped/actual
+java interest/i04-default-group-fallback: MAXRC=0 (61 ms) -> work/java/interest/i04-default-group-fallback/actual
+java interest/i05-multi-category: MAXRC=0 (58 ms) -> work/java/interest/i05-multi-category/actual
+java interest/i06-negative-balance: MAXRC=0 (62 ms) -> work/java/interest/i06-negative-balance/actual
+java interest/i07-nontie-rounding: MAXRC=0 (62 ms) -> work/java/interest/i07-nontie-rounding/actual
+interest/i01-baseline [java]: PASS (4 records, 50 fields, 0 differences)
+interest/i02-tie-half-cent [java]: PASS (4 records, 50 fields, 0 differences)
+interest/i03-zero-rate-skipped [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i04-default-group-fallback [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i05-multi-category [java]: PASS (3 records, 38 fields, 0 differences)
+interest/i06-negative-balance [java]: PASS (2 records, 25 fields, 0 differences)
+interest/i07-nontie-rounding [java]: PASS (4 records, 50 fields, 0 differences)
+report: work/parity/report-java.md
+
+### work/parity/report-java.md
+## interest / i01-baseline — java: **PASS**
+
+Checked 2 datasets, 4 records, 50 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i02-tie-half-cent — java: **PASS**
+
+Checked 2 datasets, 4 records, 50 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i03-zero-rate-skipped — java: **PASS**
+
+Checked 2 datasets, 2 records, 25 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i04-default-group-fallback — java: **PASS**
+
+Checked 2 datasets, 2 records, 25 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i05-multi-category — java: **PASS**
+
+Checked 2 datasets, 3 records, 38 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i06-negative-balance — java: **PASS**
+
+Checked 2 datasets, 2 records, 25 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+## interest / i07-nontie-rounding — java: **PASS**
+
+Checked 2 datasets, 4 records, 50 decoded fields, 1 SYSOUT files, 0 table snapshots, return codes.
+
+
+
+## 4. Half-even reference: make parity-naive CASE=i02-tie-half-cent (expected to FAIL)
+interest/i02-tie-half-cent: naive half-even reference wrote 2 interest transactions to work/parity/interest/i02-tie-half-cent/naive
+interest/i02-tie-half-cent [naive half-even reference]: FAIL (4 records, 50 fields, 2 differences)
+report: work/parity/report-naive.md
+make: *** [Makefile:73: parity-naive] Error 1
+exit=2
+| Where | Field | Expected (legacy) | Actual (candidate) |
+|---|---|---|---|
+| AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS rec 1 (ACCT-ID=2003) | `ACCT-CURR-BAL` | 1247.85 | 1247.86 |
+| AWS.M2.CARDDEMO.SYSTRAN.G0001V00 rec 1 (TRAN-ID=2022071800000001) | `TRAN-AMT` | 12.35 | 12.36 |
+
+Fields differing: `ACCT-CURR-BAL`, `TRAN-AMT`
+
+## 5. Functional layer: make test-e2e
+ Container uc-cobol-carddemo-estate-1 Running 
+ Container uc-cobol-carddemo-db-1 Running 
+ Container uc-cobol-carddemo-db-1 Waiting 
+ Container uc-cobol-carddemo-db-1 Healthy 
+ Container uc-cobol-carddemo-estate-1 Waiting 
+ Container uc-cobol-carddemo-db-1 Waiting 
+ Container uc-cobol-carddemo-estate-1 Healthy 
+ Container uc-cobol-carddemo-db-1 Healthy 
+mvn -f java/pom.xml -B -q -DskipTests package
+cd ui && (test -d node_modules || npm ci --no-audit --no-fund)
+cd ui && npm run build
+
+> carddemo-console@1.0.0 build
+> tsc -b && vite build
+
+vite v5.4.11 building for production...
+transforming...
+✓ 45 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.28 kB
+dist/assets/index-D0ltdQ1z.css    4.31 kB │ gzip:  1.46 kB
+dist/assets/index-BXS_wly8.js   221.48 kB │ gzip: 70.87 kB
+✓ built in 985ms
+cd ui && npx playwright test
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/console.spec.ts:6:1 › console lists the four batch chains (279ms)
+  ✓  2 [chromium] › e2e/console.spec.ts:14:1 › a chain shows its JCL steps and fixture cases (279ms)
+  ✓  3 [chromium] › e2e/console.spec.ts:22:1 › parity reports screen renders (187ms)
+  ✓  4 [chromium] › e2e/interest.spec.ts:16:1 › [interest] i02-tie-half-cent: RC 0, interest truncated to 12.35 for account 2003, parity PASS (1.6s)
+  ✓  5 [chromium] › e2e/interest.spec.ts:53:1 › [interest] i04-default-group-fallback: DEFAULT rate used and fallback lines in SYSOUT (641ms)
+  ✓  6 [chromium] › e2e/interest.spec.ts:64:1 › [interest] i03-zero-rate-skipped: zero-rate category posts nothing (568ms)
+
+  6 passed (11.3s)

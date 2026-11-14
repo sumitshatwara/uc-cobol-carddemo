@@ -11,6 +11,9 @@ services:
       interval: 3s
       timeout: 3s
       retries: 20
+    ports:
+      # Java target (java/, `make parity-java`, `make serve`) reaches the database from the host
+      - "127.0.0.1:${CARDDEMO_DB_PORT:-55432}:5432"
     volumes:
       - carddemo-db:/var/lib/postgresql/data
       - ./db/postgres:/docker-entrypoint-initdb.d:ro
