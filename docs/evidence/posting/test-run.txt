@@ -1,0 +1,91 @@
+# Posting slice - test evidence (POSTTRAN/TRANREPT on Spring Batch)
+
+## 1. Unit layer: make test-unit
+Running com.carddemo.common.CodecTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.203 s -- in com.carddemo.common.CodecTest
+Running com.carddemo.common.HarnessFormatTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.044 s -- in com.carddemo.common.HarnessFormatTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0
+Running com.carddemo.posting.GoldenFixtureTest
+Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.272 s -- in com.carddemo.posting.GoldenFixtureTest
+Running com.carddemo.posting.PostTranRulesTest
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.129 s -- in com.carddemo.posting.PostTranRulesTest
+Running com.carddemo.posting.TranReptRulesTest
+Tests run: 15, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.053 s -- in com.carddemo.posting.TranReptRulesTest
+Tests run: 51, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+
+## 2. Legacy oracle: make parity CHAIN=posting (GnuCOBOL estate)
+posting/p01-baseline-mixed [legacy rerun]: PASS (23 records, 92 fields, 0 differences)
+posting/p02-invalid-card [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p03-account-missing [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p04-overlimit-reject [legacy rerun]: PASS (12 records, 44 fields, 0 differences)
+posting/p05-expired-account [legacy rerun]: PASS (14 records, 60 fields, 0 differences)
+posting/p06-credits-new-category [legacy rerun]: PASS (18 records, 67 fields, 0 differences)
+posting/p07-empty-day [legacy rerun]: PASS (2 records, 16 fields, 0 differences)
+report: work/parity/report.md
+
+## 3. Regression layer: make parity-java CHAIN=posting
+java posting/p01-baseline-mixed: MAXRC=0 (377 ms) -> work/java/posting/p01-baseline-mixed/actual
+java posting/p02-invalid-card: MAXRC=4 (163 ms) -> work/java/posting/p02-invalid-card/actual
+java posting/p03-account-missing: MAXRC=4 (160 ms) -> work/java/posting/p03-account-missing/actual
+java posting/p04-overlimit-reject: MAXRC=4 (124 ms) -> work/java/posting/p04-overlimit-reject/actual
+java posting/p05-expired-account: MAXRC=4 (163 ms) -> work/java/posting/p05-expired-account/actual
+java posting/p06-credits-new-category: MAXRC=0 (144 ms) -> work/java/posting/p06-credits-new-category/actual
+java posting/p07-empty-day: MAXRC=0 (115 ms) -> work/java/posting/p07-empty-day/actual
+posting/p01-baseline-mixed [java]: PASS (23 records, 92 fields, 0 differences)
+posting/p02-invalid-card [java]: PASS (12 records, 44 fields, 0 differences)
+posting/p03-account-missing [java]: PASS (12 records, 44 fields, 0 differences)
+posting/p04-overlimit-reject [java]: PASS (12 records, 44 fields, 0 differences)
+posting/p05-expired-account [java]: PASS (14 records, 60 fields, 0 differences)
+posting/p06-credits-new-category [java]: PASS (18 records, 67 fields, 0 differences)
+posting/p07-empty-day [java]: PASS (2 records, 16 fields, 0 differences)
+report: work/parity/report-java.md
+
+### work/parity/report-java.md (excerpt)
+## posting / p01-baseline-mixed — java: **PASS**
+
+Checked 5 datasets, 23 records, 92 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p02-invalid-card — java: **PASS**
+
+Checked 5 datasets, 12 records, 44 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p03-account-missing — java: **PASS**
+
+Checked 5 datasets, 12 records, 44 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p04-overlimit-reject — java: **PASS**
+
+Checked 5 datasets, 12 records, 44 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p05-expired-account — java: **PASS**
+
+Checked 5 datasets, 14 records, 60 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p06-credits-new-category — java: **PASS**
+
+Checked 5 datasets, 18 records, 67 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+## posting / p07-empty-day — java: **PASS**
+
+Checked 5 datasets, 2 records, 16 decoded fields, 2 SYSOUT files, 0 table snapshots, return codes.
+
+
+
+## 4. Functional layer: make test-e2e (Playwright, Chromium)
+Running 5 tests using 1 worker
+
+  ✓  1 [chromium] › e2e/console.spec.ts:6:1 › console lists the four batch chains (356ms)
+  ✓  2 [chromium] › e2e/console.spec.ts:14:1 › a chain shows its JCL steps and fixture cases (295ms)
+  ✓  3 [chromium] › e2e/console.spec.ts:22:1 › parity reports screen renders (196ms)
+  ✓  4 [chromium] › e2e/posting.spec.ts:15:1 › [posting] p04-overlimit-reject: RC 4 on STEP15, reject reason 102, parity PASS (1.8s)
+  ✓  5 [chromium] › e2e/posting.spec.ts:42:1 › [posting] p01-baseline-mixed: everything posts, RC 0, report with account totals, parity PASS (833ms)
+
+  5 passed (12.3s)
