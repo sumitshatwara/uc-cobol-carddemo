@@ -1,0 +1,1570 @@
+[
+  {
+    "id": "BR-INT-001",
+    "slice": "interest",
+    "title": "Start and end banners",
+    "rule": "The program writes `START OF EXECUTION OF PROGRAM CBACT04C` to SYSOUT before opening any file and `END OF EXECUTION OF PROGRAM CBACT04C` after all files are closed on a normal run.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 181,
+        "end": 181
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 230,
+        "end": 230
+      }
+    ],
+    "fields": [],
+    "test": {
+      "given": "any valid set of input files",
+      "when": "INTCALC STEP15 runs to completion",
+      "then": "the first SYSOUT line is `START OF EXECUTION OF PROGRAM CBACT04C` and the last is `END OF EXECUTION OF PROGRAM CBACT04C`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-002",
+    "slice": "interest",
+    "title": "Run parameter supplies the transaction-id prefix",
+    "rule": "The JCL passes a 10-character PARM (`2022071800`) that the program receives as PARM-DATE. It is not validated (PARM-LENGTH is never checked) and its only use is as the first 10 characters of every generated transaction id; it is not used as the posting date or for timestamps.",
+    "category": "linkage",
+    "sources": [
+      {
+        "file": "app/jcl/INTCALC.jcl",
+        "start": 22,
+        "end": 22
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 175,
+        "end": 180
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 476,
+        "end": 480
+      }
+    ],
+    "fields": [
+      "PARM-LENGTH (CBACT04C LINKAGE)",
+      "PARM-DATE (CBACT04C LINKAGE)",
+      "TRAN-ID (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "EXEC PGM=CBACT04C,PARM='2022071800' and a frozen clock of 2022-07-05 10:00:00.00",
+      "when": "the first interest transaction is written",
+      "then": "TRAN-ID starts with `2022071800` while TRAN-ORIG-TS shows `2022-07-05-10.00.00.000000` (the PARM date is not the timestamp date)"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-003",
+    "slice": "interest",
+    "title": "Files and open modes",
+    "rule": "Five files are opened in order: transaction-category balances (TCATBALF) input, card cross-reference (XREFFILE) input, disclosure groups (DISCGRP) input, account master (ACCTFILE) input-output, and the interest transaction file (TRANSACT, a new SYSTRAN GDG generation) output. Any status other than `00` on open stops the run.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 28,
+        "end": 56
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 182,
+        "end": 186
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 234,
+        "end": 323
+      },
+      {
+        "file": "app/jcl/INTCALC.jcl",
+        "start": 27,
+        "end": 41
+      }
+    ],
+    "fields": [
+      "TCATBALF-STATUS",
+      "XREFFILE-STATUS",
+      "DISCGRP-STATUS",
+      "ACCTFILE-STATUS",
+      "TRANFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "all five datasets exist and are catalogued",
+      "when": "the program starts",
+      "then": "all five opens return `00` and processing begins; the new SYSTRAN generation is G0001V00 in a fresh harness run"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-004",
+    "slice": "interest",
+    "title": "Open failure messages",
+    "rule": "If a file fails to open the program displays a file-specific message, the formatted file status (BR-INT-045) and abends (BR-INT-047). Messages: `ERROR OPENING TRANSACTION CATEGORY BALANCE`, `ERROR OPENING CROSS REF FILE` immediately followed by the 2-character status, `ERROR OPENING DALY REJECTS FILE` (for DISCGRP), `ERROR OPENING ACCOUNT MASTER FILE`, `ERROR OPENING TRANSACTION FILE`.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 234,
+        "end": 250
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 252,
+        "end": 268
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 270,
+        "end": 286
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 289,
+        "end": 305
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 307,
+        "end": 323
+      }
+    ],
+    "fields": [
+      "TCATBALF-STATUS",
+      "XREFFILE-STATUS",
+      "DISCGRP-STATUS",
+      "ACCTFILE-STATUS",
+      "TRANFILE-STATUS",
+      "APPL-RESULT (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the DISCGRP dataset is missing so OPEN returns status `35`",
+      "when": "the program opens DISCGRP",
+      "then": "SYSOUT shows `ERROR OPENING DALY REJECTS FILE`, `FILE STATUS IS: NNNN0035`, `ABENDING PROGRAM` and the step abends (no interest is posted)"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-005",
+    "slice": "interest",
+    "title": "Balances are read sequentially in key order",
+    "rule": "Transaction-category balance records are read one at a time in ascending key order: account id, then transaction type code, then category code. Each read is moved into TRAN-CAT-BAL-RECORD.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 28,
+        "end": 32
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 61,
+        "end": 67
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 188,
+        "end": 191
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 325,
+        "end": 335
+      }
+    ],
+    "fields": [
+      "TRANCAT-ACCT-ID",
+      "TRANCAT-TYPE-CD",
+      "TRANCAT-CD",
+      "TRAN-CAT-BAL (CVTRA01Y)"
+    ],
+    "test": {
+      "given": "TCATBALF rows for account 2007 with keys (01,0001) and (01,0002)",
+      "when": "the file is processed",
+      "then": "(01,0001) is processed before (01,0002) and interest transactions 000001 and 000002 are written in that order"
+    },
+    "fixtures": [
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-006",
+    "slice": "interest",
+    "title": "End of balance file",
+    "rule": "File status `10` on the balance file is end of file: the END-OF-FILE switch is set to `Y` and the main loop stops.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 137,
+        "end": 137
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 188,
+        "end": 191
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 330,
+        "end": 340
+      }
+    ],
+    "fields": [
+      "END-OF-FILE",
+      "APPL-RESULT (CBACT04C WORKING-STORAGE)",
+      "TCATBALF-STATUS"
+    ],
+    "test": {
+      "given": "TCATBALF with two records",
+      "when": "the third READ returns status `10`",
+      "then": "END-OF-FILE becomes `Y`, no third record is processed and the program proceeds to close the files"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-007",
+    "slice": "interest",
+    "title": "Balance file read error",
+    "rule": "Any balance-file read status other than `00` or `10` displays `ERROR READING TRANSACTION CATEGORY FILE`, the formatted file status, and abends.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 325,
+        "end": 348
+      }
+    ],
+    "fields": [
+      "TCATBALF-STATUS",
+      "IO-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the TCATBALF read returns status `30` (permanent I/O error)",
+      "when": "the next balance record is read",
+      "then": "SYSOUT shows `ERROR READING TRANSACTION CATEGORY FILE`, `FILE STATUS IS: NNNN0030`, `ABENDING PROGRAM` and the step abends"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-008",
+    "slice": "interest",
+    "title": "Each balance record is echoed to SYSOUT",
+    "rule": "Every balance record successfully read is counted and displayed on SYSOUT as its raw 50-byte image (key, zoned signed balance with overpunch sign, and the 22-byte blank filler).",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 191,
+        "end": 193
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL-RECORD (CVTRA01Y)",
+      "WS-RECORD-COUNT (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "balance record account 2001, type 01, category 0001, balance 1000.00",
+      "when": "the record is read",
+      "then": "SYSOUT shows `000000020010100010000010000{` followed by 22 spaces"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-009",
+    "slice": "interest",
+    "title": "Account break detection",
+    "rule": "When the account id on the balance record differs from the previous one, an account break occurs: the previous account is updated (except on the very first record), the interest accumulator is reset, and the new account and its card cross-reference are read. Records for the same account do not re-read the account.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 194,
+        "end": 206
+      }
+    ],
+    "fields": [
+      "TRANCAT-ACCT-ID (CVTRA01Y)",
+      "WS-LAST-ACCT-NUM",
+      "WS-FIRST-TIME (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "balance records for accounts 2001 then 2002",
+      "when": "the record for 2002 is read",
+      "then": "account 2001 is rewritten with its interest, then account 2002 and its card are read"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline"
+    ]
+  },
+  {
+    "id": "BR-INT-010",
+    "slice": "interest",
+    "title": "First record does not trigger an update",
+    "rule": "On the first balance record WS-FIRST-TIME is `Y`; it is switched to `N` and no account update is performed because there is no previous account.",
+    "category": "control-flow",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 170,
+        "end": 170
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 195,
+        "end": 199
+      }
+    ],
+    "fields": [
+      "WS-FIRST-TIME (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "a fresh run where the first balance record is for account 2001",
+      "when": "the first record is processed",
+      "then": "no REWRITE is issued before account 2001 is read; WS-FIRST-TIME becomes `N`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-011",
+    "slice": "interest",
+    "title": "Interest accumulator reset per account",
+    "rule": "The account's running interest total is set to zero at every account break, before the new account's categories are processed.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 169,
+        "end": 169
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 200,
+        "end": 200
+      }
+    ],
+    "fields": [
+      "WS-TOTAL-INT (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "account 2001 accrued 10.00 and the next record is for account 2002",
+      "when": "the account break is processed",
+      "then": "WS-TOTAL-INT is 0.00 before account 2002's interest is added, so 2002 does not inherit 2001's interest"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline"
+    ]
+  },
+  {
+    "id": "BR-INT-012",
+    "slice": "interest",
+    "title": "Account lookup by balance account id",
+    "rule": "At each account break the account master is read by random key equal to the balance record's account id; the record is kept in ACCOUNT-RECORD until the next break.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 41,
+        "end": 45
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 201,
+        "end": 203
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 372,
+        "end": 383
+      }
+    ],
+    "fields": [
+      "TRANCAT-ACCT-ID (CVTRA01Y)",
+      "ACCT-ID",
+      "ACCT-GROUP-ID",
+      "ACCT-CURR-BAL (CVACT01Y)"
+    ],
+    "test": {
+      "given": "TCATBALF row for account 2006 and an ACCTDATA row 2006 in group PLATINUM",
+      "when": "the account break for 2006 is processed",
+      "then": "ACCOUNT-RECORD holds account 2006 with ACCT-GROUP-ID `PLATINUM`"
+    },
+    "fixtures": [
+      "fixtures/interest/i04-default-group-fallback"
+    ]
+  },
+  {
+    "id": "BR-INT-013",
+    "slice": "interest",
+    "title": "Missing account abends",
+    "rule": "If the balance record's account id is not on the account master the program displays `ACCOUNT NOT FOUND: ` followed by the 11-digit id, then `ERROR READING ACCOUNT FILE`, the formatted status, and abends.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 373,
+        "end": 390
+      }
+    ],
+    "fields": [
+      "FD-ACCT-ID (CBACT04C FD)",
+      "ACCTFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "a TCATBALF row for account 2099 with no ACCTDATA row 2099",
+      "when": "the account break for 2099 is processed",
+      "then": "SYSOUT shows `ACCOUNT NOT FOUND: 00000002099`, `ERROR READING ACCOUNT FILE`, `FILE STATUS IS: NNNN0023`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-014",
+    "slice": "interest",
+    "title": "Card lookup by account id (alternate key)",
+    "rule": "At each account break the card cross-reference is read by its alternate key (account id) through the AIX path to obtain the card number used on the interest transactions.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 34,
+        "end": 39
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 204,
+        "end": 205
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 393,
+        "end": 395
+      },
+      {
+        "file": "app/jcl/INTCALC.jcl",
+        "start": 29,
+        "end": 32
+      }
+    ],
+    "fields": [
+      "XREF-ACCT-ID",
+      "XREF-CARD-NUM (CVACT03Y)"
+    ],
+    "test": {
+      "given": "CARDXREF row card 4000000000002001 for account 2001",
+      "when": "the account break for 2001 is processed",
+      "then": "the interest transaction for 2001 carries TRAN-CARD-NUM `4000000000002001`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline"
+    ]
+  },
+  {
+    "id": "BR-INT-015",
+    "slice": "interest",
+    "title": "Missing card cross-reference abends",
+    "rule": "If no cross-reference exists for the account the program displays `ACCOUNT NOT FOUND: ` followed by the account id (the same text as the account-file message), then `ERROR READING XREF FILE`, the formatted status, and abends.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 394,
+        "end": 412
+      }
+    ],
+    "fields": [
+      "FD-XREF-ACCT-ID (CBACT04C FD)",
+      "XREFFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "account 2011 exists on ACCTDATA and TCATBALF but has no CARDXREF row",
+      "when": "the account break for 2011 is processed",
+      "then": "SYSOUT shows `ACCOUNT NOT FOUND: 00000002011`, `ERROR READING XREF FILE`, `FILE STATUS IS: NNNN0023`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-016",
+    "slice": "interest",
+    "title": "Accounts without balance rows are untouched",
+    "rule": "Only accounts that appear on TCATBALF are read or rewritten; any other account master record keeps every field unchanged, including its cycle credit and debit.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 194,
+        "end": 206
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 350,
+        "end": 356
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-BAL",
+      "ACCT-CURR-CYC-CREDIT",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)"
+    ],
+    "test": {
+      "given": "ACCTDATA has account 2050 with cycle credit 100.00 and no TCATBALF rows",
+      "when": "the run completes",
+      "then": "account 2050 still has cycle credit 100.00 and its original balance"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-017",
+    "slice": "interest",
+    "title": "Disclosure-group key",
+    "rule": "The interest rate is looked up in the disclosure-group file using the account's group id, the balance record's transaction type code and the balance record's category code.",
+    "category": "data-access",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 47,
+        "end": 51
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 210,
+        "end": 213
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 415,
+        "end": 416
+      }
+    ],
+    "fields": [
+      "ACCT-GROUP-ID (CVACT01Y)",
+      "TRANCAT-TYPE-CD",
+      "TRANCAT-CD (CVTRA01Y)",
+      "DIS-ACCT-GROUP-ID",
+      "DIS-TRAN-TYPE-CD",
+      "DIS-TRAN-CAT-CD",
+      "DIS-INT-RATE (CVTRA02Y)"
+    ],
+    "test": {
+      "given": "account 2002 in group STANDARD with a type 01 / category 0001 balance; DISCGRP STANDARD/01/0001 = 18.50",
+      "when": "the rate is looked up",
+      "then": "DIS-INT-RATE is 18.50 and interest 2400.00 * 18.50 / 1200 = 37.00 is posted"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-018",
+    "slice": "interest",
+    "title": "Fallback to the DEFAULT disclosure group",
+    "rule": "If no disclosure-group row exists for the account's group (status `23`), the program displays `DISCLOSURE GROUP RECORD MISSING` and `TRY WITH DEFAULT GROUP CODE`, replaces only the group id with `DEFAULT` (type and category are kept) and reads again.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 416,
+        "end": 420
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 422,
+        "end": 422
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 436,
+        "end": 439
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 443,
+        "end": 444
+      }
+    ],
+    "fields": [
+      "FD-DIS-ACCT-GROUP-ID (CBACT04C FD)",
+      "DIS-INT-RATE (CVTRA02Y)",
+      "ACCT-GROUP-ID (CVACT01Y)"
+    ],
+    "test": {
+      "given": "account 2006 in group PLATINUM (no DISCGRP rows) with a type 01 / category 0001 balance of 1000.00; DEFAULT/01/0001 = 21.00",
+      "when": "the rate is looked up",
+      "then": "SYSOUT shows the two fallback lines, the DEFAULT rate 21.00 is used and a 17.50 interest transaction is written"
+    },
+    "fixtures": [
+      "fixtures/interest/i04-default-group-fallback"
+    ]
+  },
+  {
+    "id": "BR-INT-019",
+    "slice": "interest",
+    "title": "Accounts in the DEFAULT group use it directly",
+    "rule": "An account whose group id is already `DEFAULT` finds its row on the first read, so no fallback messages are shown.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 416,
+        "end": 422
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 436,
+        "end": 436
+      }
+    ],
+    "fields": [
+      "ACCT-GROUP-ID (CVACT01Y)",
+      "DIS-ACCT-GROUP-ID (CVTRA02Y)"
+    ],
+    "test": {
+      "given": "account 2010 in group DEFAULT with a 777.77 type 01 / category 0001 balance; DEFAULT/01/0001 = 21.00",
+      "when": "the rate is looked up",
+      "then": "13.61 is posted and SYSOUT has no `DISCLOSURE GROUP RECORD MISSING` line"
+    },
+    "fixtures": [
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-020",
+    "slice": "interest",
+    "title": "Disclosure-group read error",
+    "rule": "A disclosure-group read status other than `00` or `23` displays `ERROR READING DISCLOSURE GROUP FILE`, the formatted status, and abends.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 422,
+        "end": 435
+      }
+    ],
+    "fields": [
+      "DISCGRP-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the DISCGRP read returns status `30`",
+      "when": "a rate is looked up",
+      "then": "SYSOUT shows `ERROR READING DISCLOSURE GROUP FILE`, `FILE STATUS IS: NNNN0030`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-021",
+    "slice": "interest",
+    "title": "Missing DEFAULT group row abends",
+    "rule": "If the DEFAULT group has no row for the type/category either, the program displays `ERROR READING DEFAULT DISCLOSURE GROUP`, the formatted status, and abends; there is no further fallback.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 443,
+        "end": 460
+      }
+    ],
+    "fields": [
+      "FD-DISCGRP-KEY (CBACT04C FD)",
+      "DISCGRP-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "account in group PLATINUM with a type 04 / category 0001 balance and no PLATINUM or DEFAULT row for 04/0001",
+      "when": "the rate is looked up",
+      "then": "SYSOUT shows `DISCLOSURE GROUP RECORD MISSING`, `TRY WITH DEFAULT GROUP CODE`, `ERROR READING DEFAULT DISCLOSURE GROUP`, `FILE STATUS IS: NNNN0023`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-022",
+    "slice": "interest",
+    "title": "Zero-rate categories are skipped",
+    "rule": "When the resolved interest rate is zero, no interest is computed and no transaction is written for that balance record; the account is still processed for its other categories.",
+    "category": "validation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 214,
+        "end": 217
+      }
+    ],
+    "fields": [
+      "DIS-INT-RATE (CVTRA02Y)",
+      "TRAN-CAT-BAL (CVTRA01Y)"
+    ],
+    "test": {
+      "given": "account 2005 (GOLD) with a type 01 balance 1000.00 at 12.00 % and a type 02 balance -300.00 at 0.00 %",
+      "when": "the account is processed",
+      "then": "exactly one transaction (10.00, TRAN-ID 2022071800000001) is written; nothing is written for type 02"
+    },
+    "fixtures": [
+      "fixtures/interest/i03-zero-rate-skipped"
+    ]
+  },
+  {
+    "id": "BR-INT-023",
+    "slice": "interest",
+    "title": "Monthly interest formula",
+    "rule": "Monthly interest for a balance record = category balance x annual rate (percent) / 1200.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 462,
+        "end": 465
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "DIS-INT-RATE (CVTRA02Y)",
+      "WS-MONTHLY-INT (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "balance 1000.00 and rate 12.00",
+      "when": "interest is computed",
+      "then": "WS-MONTHLY-INT = 10.00"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-024",
+    "slice": "interest",
+    "title": "Interest is truncated, not rounded",
+    "rule": "The COMPUTE has no ROUNDED phrase, so the result is truncated to two decimals (fractions of a cent are dropped). An exact half cent is therefore cut down, where a half-even or half-up rule would round it up.",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 168,
+        "end": 168
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 464,
+        "end": 465
+      }
+    ],
+    "fields": [
+      "WS-MONTHLY-INT (CBACT04C WORKING-STORAGE)",
+      "TRAN-AMT (CVTRA05Y)",
+      "ACCT-CURR-BAL (CVACT01Y)"
+    ],
+    "test": {
+      "given": "account 2003 (GOLD) with balance 1235.50 at 12.00 % (exact value 12.355)",
+      "when": "interest is computed",
+      "then": "TRAN-AMT = 12.35 (half-even would give 12.36) and the rewritten ACCT-CURR-BAL = 1235.50 + 12.35 = 1247.85"
+    },
+    "fixtures": [
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-025",
+    "slice": "interest",
+    "title": "Non-tie sub-cent remainders",
+    "rule": "Any fraction of a cent is dropped, whether it is below or above half a cent (12.357 also becomes 12.35, where half-even would give 12.36). When the dropped part is below half a cent, truncation and half-even agree.",
+    "category": "rounding",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 464,
+        "end": 465
+      }
+    ],
+    "fields": [
+      "WS-MONTHLY-INT (CBACT04C WORKING-STORAGE)",
+      "TRAN-AMT (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "balance 1000.33 at 18.50 % (15.42175) and balance 777.77 at 21.00 % (13.610975)",
+      "when": "interest is computed",
+      "then": "TRAN-AMT = 15.42 and 13.61"
+    },
+    "fixtures": [
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-026",
+    "slice": "interest",
+    "title": "Negative balances produce negative interest",
+    "rule": "A credit (negative) category balance is not excluded: it produces a negative interest amount, which is written as a negative transaction and (if the account is updated) reduces the balance. Truncation is toward zero.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 464,
+        "end": 467
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 490,
+        "end": 490
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "WS-MONTHLY-INT (CBACT04C WORKING-STORAGE)",
+      "TRAN-AMT (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "account 2008 with a balance of -300.00 at 12.00 %",
+      "when": "interest is computed",
+      "then": "a transaction with TRAN-AMT -3.00 is written (zoned `0000000030}`); for -1235.50 at 12.00 % the amount would be -12.35, not -12.36"
+    },
+    "fixtures": [
+      "fixtures/interest/i06-negative-balance"
+    ]
+  },
+  {
+    "id": "BR-INT-027",
+    "slice": "interest",
+    "title": "Interest accumulated per account",
+    "rule": "Each category's monthly interest is added to the account's running total, which is applied to the account balance at the next account break.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 467,
+        "end": 467
+      }
+    ],
+    "fields": [
+      "WS-MONTHLY-INT",
+      "WS-TOTAL-INT (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "account 2007 with category interest 10.00 and 7.50 followed by a record for another account",
+      "when": "the account break occurs",
+      "then": "WS-TOTAL-INT = 17.50 is added to account 2007's balance"
+    },
+    "fixtures": [
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-028",
+    "slice": "interest",
+    "title": "Zero balance with a non-zero rate still posts",
+    "rule": "Only the rate is tested; a zero category balance with a non-zero rate produces a 0.00 interest transaction.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 214,
+        "end": 216
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 464,
+        "end": 468
+      }
+    ],
+    "fields": [
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "DIS-INT-RATE (CVTRA02Y)",
+      "TRAN-AMT (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "a balance record of 0.00 in GOLD/01/0001 (12.00 %)",
+      "when": "the record is processed",
+      "then": "a transaction with TRAN-AMT 0.00 and the next TRAN-ID suffix is written"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-029",
+    "slice": "interest",
+    "title": "Silent overflow on large amounts",
+    "rule": "Interest and balance arithmetic has no ON SIZE ERROR clause; a result that does not fit the receiving field (9 integer digits for interest, 10 for the account balance) loses its high-order digits without any message.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 168,
+        "end": 169
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 352,
+        "end": 352
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 464,
+        "end": 467
+      }
+    ],
+    "fields": [
+      "WS-MONTHLY-INT",
+      "WS-TOTAL-INT (CBACT04C WORKING-STORAGE)",
+      "ACCT-CURR-BAL (CVACT01Y)"
+    ],
+    "test": {
+      "given": "a balance of 999,999,999.99 at 9,999.99 % (about 8.3 billion of interest)",
+      "when": "interest is computed",
+      "then": "WS-MONTHLY-INT keeps only the low-order 9 integer digits and the run continues with RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-030",
+    "slice": "interest",
+    "title": "Fees calculation is a stub",
+    "rule": "A fee step is performed after each interest calculation but contains no logic, so no fees are charged and no fee transactions are written.",
+    "category": "calculation",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 216,
+        "end": 216
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 518,
+        "end": 520
+      }
+    ],
+    "fields": [],
+    "test": {
+      "given": "any balance record with a non-zero rate",
+      "when": "1400-COMPUTE-FEES is performed",
+      "then": "nothing changes; only the interest transaction is written"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-031",
+    "slice": "interest",
+    "title": "One interest transaction per non-zero-rate balance",
+    "rule": "A separate transaction is written for every balance record with a non-zero rate, so an account with several interest-bearing categories gets several transactions.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 215,
+        "end": 215
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 468,
+        "end": 468
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 473,
+        "end": 473
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 500,
+        "end": 500
+      }
+    ],
+    "fields": [
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "account 2007 with purchases 1000.00 at 12.00 % and cash advances 500.00 at 18.00 %",
+      "when": "the account is processed",
+      "then": "two transactions are written: 10.00 and 7.50"
+    },
+    "fixtures": [
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-032",
+    "slice": "interest",
+    "title": "Transaction id format",
+    "rule": "TRAN-ID is the 10-character PARM-DATE followed by a 6-digit sequence number that starts at 000001 and increases by one for every interest transaction in the run (it does not restart per account).",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 173,
+        "end": 173
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 474,
+        "end": 480
+      }
+    ],
+    "fields": [
+      "PARM-DATE (CBACT04C LINKAGE)",
+      "WS-TRANID-SUFFIX (CBACT04C WORKING-STORAGE)",
+      "TRAN-ID (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "PARM `2022071800` and two accounts each with one interest-bearing balance",
+      "when": "both transactions are written",
+      "then": "TRAN-IDs are `2022071800000001` and `2022071800000002`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-033",
+    "slice": "interest",
+    "title": "Fixed classification of interest transactions",
+    "rule": "Every interest transaction has type code `01`, category code 0005 and source `System` regardless of the balance category it was computed from.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 482,
+        "end": 484
+      }
+    ],
+    "fields": [
+      "TRAN-TYPE-CD",
+      "TRAN-CAT-CD",
+      "TRAN-SOURCE (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "a cash-advance balance (type 01, category 0002)",
+      "when": "its interest transaction is written",
+      "then": "TRAN-TYPE-CD = `01`, TRAN-CAT-CD = 0005 and TRAN-SOURCE = `System` (padded to 10)"
+    },
+    "fixtures": [
+      "fixtures/interest/i05-multi-category"
+    ]
+  },
+  {
+    "id": "BR-INT-034",
+    "slice": "interest",
+    "title": "Transaction description",
+    "rule": "TRAN-DESC is the text `Int. for a/c ` followed by the 11-digit account id from the account master, padded with spaces to 100 characters.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 485,
+        "end": 489
+      }
+    ],
+    "fields": [
+      "ACCT-ID (CVACT01Y)",
+      "TRAN-DESC (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "account 2001",
+      "when": "its interest transaction is written",
+      "then": "TRAN-DESC = `Int. for a/c 00000002001`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-035",
+    "slice": "interest",
+    "title": "Amount, merchant and card fields",
+    "rule": "TRAN-AMT is the truncated monthly interest; merchant id is 0, merchant name, city and zip are blank, and the card number is the one found on the cross-reference for the account.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 490,
+        "end": 495
+      }
+    ],
+    "fields": [
+      "WS-MONTHLY-INT (CBACT04C WORKING-STORAGE)",
+      "TRAN-AMT",
+      "TRAN-MERCHANT-ID",
+      "TRAN-MERCHANT-NAME",
+      "TRAN-MERCHANT-CITY",
+      "TRAN-MERCHANT-ZIP",
+      "TRAN-CARD-NUM (CVTRA05Y)",
+      "XREF-CARD-NUM (CVACT03Y)"
+    ],
+    "test": {
+      "given": "account 2006 with card 4000000000002006 and 17.50 of interest",
+      "when": "its interest transaction is written",
+      "then": "TRAN-AMT 17.50, TRAN-MERCHANT-ID 000000000, merchant text fields blank, TRAN-CARD-NUM `4000000000002006`"
+    },
+    "fixtures": [
+      "fixtures/interest/i04-default-group-fallback"
+    ]
+  },
+  {
+    "id": "BR-INT-036",
+    "slice": "interest",
+    "title": "Transaction timestamps",
+    "rule": "Origin and processing timestamps are both set from the current system date-time in DB2 format `YYYY-MM-DD-HH.MM.SS.hh0000` (hundredths of a second followed by `0000`).",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 140,
+        "end": 165
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 496,
+        "end": 498
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 613,
+        "end": 626
+      }
+    ],
+    "fields": [
+      "COBOL-TS",
+      "DB2-FORMAT-TS (CBACT04C WORKING-STORAGE)",
+      "TRAN-ORIG-TS",
+      "TRAN-PROC-TS (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "the harness clock frozen at 2022-07-05 10:00:00.00",
+      "when": "an interest transaction is written",
+      "then": "TRAN-ORIG-TS = TRAN-PROC-TS = `2022-07-05-10.00.00.000000`"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-037",
+    "slice": "interest",
+    "title": "Transaction write error",
+    "rule": "If the interest transaction cannot be written the program displays `ERROR WRITING TRANSACTION RECORD`, the formatted status, and abends.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 500,
+        "end": 515
+      }
+    ],
+    "fields": [
+      "TRANFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the SYSTRAN generation runs out of space (status `34`)",
+      "when": "an interest transaction is written",
+      "then": "SYSOUT shows `ERROR WRITING TRANSACTION RECORD`, `FILE STATUS IS: NNNN0034`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-038",
+    "slice": "interest",
+    "title": "Zoned signed output encoding",
+    "rule": "Amounts in this slice are zoned decimal (no COMP-3); the sign is overpunched on the last digit using the EBCDIC convention (`{`..`I` positive, `}`..`R` negative). Output fields must be byte-identical including that sign.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 490,
+        "end": 490
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 352,
+        "end": 352
+      }
+    ],
+    "fields": [
+      "TRAN-AMT (CVTRA05Y)",
+      "ACCT-CURR-BAL (CVACT01Y)",
+      "TRAN-CAT-BAL (CVTRA01Y)",
+      "DIS-INT-RATE (CVTRA02Y)"
+    ],
+    "test": {
+      "given": "interest of 12.35, 12.34 and -3.00",
+      "when": "the transactions are written",
+      "then": "TRAN-AMT is encoded `0000000123E`, `0000000123D` and `0000000030}`"
+    },
+    "fixtures": [
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i06-negative-balance"
+    ]
+  },
+  {
+    "id": "BR-INT-039",
+    "slice": "interest",
+    "title": "Account balance update and cycle reset",
+    "rule": "At an account break the previous account's total interest is added to its current balance, its current-cycle credit and debit are set to zero, and the account record is rewritten. No other account field changes.",
+    "category": "state-change",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 350,
+        "end": 356
+      }
+    ],
+    "fields": [
+      "WS-TOTAL-INT (CBACT04C WORKING-STORAGE)",
+      "ACCT-CURR-BAL",
+      "ACCT-CURR-CYC-CREDIT",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)"
+    ],
+    "test": {
+      "given": "account 2001 with balance 1000.00, cycle credit 1000.00, 10.00 interest, followed by account 2002",
+      "when": "the break to 2002 is processed",
+      "then": "account 2001 is rewritten with ACCT-CURR-BAL 1010.00 and cycle credit and debit 0.00"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-040",
+    "slice": "interest",
+    "title": "Accounts with only zero-rate categories are still reset",
+    "rule": "An account whose categories all have zero rates is still rewritten at the next account break: the balance is unchanged (plus 0.00) but cycle credit and debit are zeroed.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 194,
+        "end": 200
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 214,
+        "end": 214
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 350,
+        "end": 356
+      }
+    ],
+    "fields": [
+      "WS-TOTAL-INT (CBACT04C WORKING-STORAGE)",
+      "ACCT-CURR-CYC-CREDIT",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)"
+    ],
+    "test": {
+      "given": "account 2005 with only a type 02 balance (0.00 % rate), cycle debit 300.00, followed by account 2006",
+      "when": "the break to 2006 is processed",
+      "then": "account 2005 keeps its balance, cycle debit becomes 0.00, and no transaction is written for it"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-041",
+    "slice": "interest",
+    "title": "Account rewrite error",
+    "rule": "If the account rewrite fails the program displays `ERROR RE-WRITING ACCOUNT FILE`, the formatted status, and abends.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 356,
+        "end": 370
+      }
+    ],
+    "fields": [
+      "ACCTFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the account rewrite returns status `22` or another non-`00` value",
+      "when": "an account break is processed",
+      "then": "SYSOUT shows `ERROR RE-WRITING ACCOUNT FILE`, `FILE STATUS IS: NNNN00xx`, `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-042",
+    "slice": "interest",
+    "title": "Last account on the balance file is never updated",
+    "rule": "The update of an account happens only at the next account break. When the end of the balance file is reached the loop condition stops the loop before the ELSE branch that would update the final account can run, so the last account keeps its old balance and cycle amounts, although its interest transactions are written.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 188,
+        "end": 222
+      }
+    ],
+    "fields": [
+      "END-OF-FILE (CBACT04C WORKING-STORAGE)",
+      "ACCT-CURR-BAL",
+      "ACCT-CURR-CYC-CREDIT",
+      "ACCT-CURR-CYC-DEBIT (CVACT01Y)"
+    ],
+    "test": {
+      "given": "TCATBALF has rows only for accounts 2001 (10.00 interest) and 2002 (37.00 interest)",
+      "when": "the run completes",
+      "then": "account 2001 becomes 1010.00 with cycle amounts zeroed; account 2002 stays at 2400.00 with cycle credit 2400.00, yet both interest transactions are on SYSTRAN"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-043",
+    "slice": "interest",
+    "title": "Empty balance file",
+    "rule": "If TCATBALF has no records, the first read hits end of file: no account is read or rewritten, the SYSTRAN generation is created empty, SYSOUT contains only the start and end banners, and the step ends with RC 0.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 188,
+        "end": 191
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 325,
+        "end": 340
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 224,
+        "end": 232
+      }
+    ],
+    "fields": [
+      "END-OF-FILE (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "an empty TCATBALF and any account master",
+      "when": "the run completes",
+      "then": "0 interest transactions, account master unchanged, RC 0"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-044",
+    "slice": "interest",
+    "title": "Close files and close errors",
+    "rule": "On normal completion all five files are closed. A close failure displays `ERROR CLOSING TRANSACTION BALANCE FILE`, `ERROR CLOSING CROSS REF FILE`, `ERROR CLOSING DISCLOSURE GROUP FILE`, `ERROR CLOSING ACCOUNT FILE` or `ERROR CLOSING TRANSACTION FILE`, the formatted status, and abends.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 224,
+        "end": 228
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 522,
+        "end": 611
+      }
+    ],
+    "fields": [
+      "TCATBALF-STATUS",
+      "XREFFILE-STATUS",
+      "DISCGRP-STATUS",
+      "ACCTFILE-STATUS",
+      "TRANFILE-STATUS (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "the TRANSACT close returns a non-`00` status",
+      "when": "the files are closed",
+      "then": "SYSOUT shows `ERROR CLOSING TRANSACTION FILE`, the status line and `ABENDING PROGRAM`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-045",
+    "slice": "interest",
+    "title": "File status display format",
+    "rule": "Error paths print `FILE STATUS IS: NNNN` followed by a 4-character status: for a numeric status not starting with 9 it is `00` plus the 2-digit status; for a status starting with `9` or non-numeric it is the first status character followed by the binary value of the second byte as 3 digits.",
+    "category": "sysout",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 122,
+        "end": 131
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 635,
+        "end": 648
+      }
+    ],
+    "fields": [
+      "IO-STATUS",
+      "IO-STATUS-04",
+      "TWO-BYTES-BINARY (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "a file status of `23`",
+      "when": "9910-DISPLAY-IO-STATUS runs",
+      "then": "SYSOUT shows `FILE STATUS IS: NNNN0023`"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-046",
+    "slice": "interest",
+    "title": "Normal completion return code",
+    "rule": "On a normal run the program returns with GOBACK without setting RETURN-CODE, so the step ends with RC 0.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 232,
+        "end": 232
+      }
+    ],
+    "fields": [],
+    "test": {
+      "given": "any valid fixture input",
+      "when": "INTCALC runs",
+      "then": "rc.json records maxrc 0 for INTCALC"
+    },
+    "fixtures": [
+      "fixtures/interest/i01-baseline",
+      "fixtures/interest/i02-tie-half-cent",
+      "fixtures/interest/i03-zero-rate-skipped",
+      "fixtures/interest/i04-default-group-fallback",
+      "fixtures/interest/i05-multi-category",
+      "fixtures/interest/i06-negative-balance",
+      "fixtures/interest/i07-nontie-rounding"
+    ]
+  },
+  {
+    "id": "BR-INT-047",
+    "slice": "interest",
+    "title": "Abend routine",
+    "rule": "Every unrecoverable error ends in 9999-ABEND-PROGRAM, which displays `ABENDING PROGRAM` and calls the Language Environment service CEE3ABD with abend code 999 and timing 0 (a U0999 abend on z/OS). Off-host the harness stand-in prints its own abend line and ends the step with RC 12.",
+    "category": "return-code",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 628,
+        "end": 632
+      }
+    ],
+    "fields": [
+      "ABCODE",
+      "TIMING (CBACT04C WORKING-STORAGE)"
+    ],
+    "test": {
+      "given": "any error path (for example a missing account)",
+      "when": "9999-ABEND-PROGRAM runs",
+      "then": "SYSOUT shows `ABENDING PROGRAM` and no `END OF EXECUTION` banner; z/OS: user abend U0999; harness: step RC 12"
+    },
+    "fixtures": []
+  },
+  {
+    "id": "BR-INT-048",
+    "slice": "interest",
+    "title": "No rollback on abend",
+    "rule": "Accounts rewritten before an abend stay updated, because each rewrite is committed individually. On z/OS the SYSTRAN generation is allocated DISP=(NEW,CATLG,DELETE), so on abend the interest transactions written so far are discarded while the account updates remain.",
+    "category": "edge-case",
+    "sources": [
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 350,
+        "end": 356
+      },
+      {
+        "file": "app/cbl/CBACT04C.cbl",
+        "start": 628,
+        "end": 632
+      },
+      {
+        "file": "app/jcl/INTCALC.jcl",
+        "start": 37,
+        "end": 41
+      }
+    ],
+    "fields": [
+      "ACCT-CURR-BAL (CVACT01Y)",
+      "TRAN-RECORD (CVTRA05Y)"
+    ],
+    "test": {
+      "given": "accounts 2001, 2002, 2099 on TCATBALF where 2099 is missing from the account master",
+      "when": "the run abends at account 2099",
+      "then": "accounts 2001 (at the 2002 break) and 2002 (at the start of the 2099 break) stay rewritten with their interest, while on z/OS the SYSTRAN generation holding their interest transactions is deleted"
+    },
+    "fixtures": []
+  }
+]
